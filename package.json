@@ -44,7 +44,7 @@
     "express": "^4.18.2",
     "prettier": "^2.7.1",
     "rollup": "^3.9.1",
-    "rollup-plugin-vue": "^5.0.0",
+    "rollup-plugin-vue": "^6.0.0",
     "vue": "^2.7.10",
     "vuetify": "^2.6.12"
   }
