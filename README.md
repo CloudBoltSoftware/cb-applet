@@ -24,6 +24,10 @@ Waiting to document until after implementation is settled.
 TODO: List the dependencies and what they do
 Waiting to document until after Vue 3 upgrade.
 
+NOTE: Vue2 requires rollup-plugin-vue v5, wheras the newest is v6.
+v6 has some `npm audit` issues we'll have to live with for now.
+See more at https://github.com/vuejs/rollup-plugin-vue/issues/363
+
 ## Documentation
 
 TODO: links to vue, vuetify, etc. docs.

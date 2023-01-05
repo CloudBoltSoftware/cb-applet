@@ -27,12 +27,4 @@ export default {
     // https://github.com/rollup/plugins/tree/master/packages/node-resolve
     nodeResolve(),
   ],
-
-  external: [
-    // These packages will be loaded by the CUI. Excluding them makes the bundle smaller.
-    // Remove only if you get version requirement clashes between this applet and the CUI.
-    "@cloudbolt/cb-api-helper",
-    "vue",
-    "vuetify",
-  ],
 };

@@ -5,17 +5,23 @@
     <p>Area: {{ area }}</p>
     <p>User: {{ JSON.stringify(user) }}</p>
     <p>Context: {{ JSON.stringify(context) }}</p>
-    <p>API: {{ JSON.stringify(api) }}</p>
+    <p>API passed in?: {{ Boolean(api) }}</p>
   </div>
 </template>
 
 <script>
 import camelCase from "camelcase";
+// import { VCard } from "vuetify/lib/components/VCard";
 
 export default {
   // The name should be skipped when it is the same as the file name.
   // However, this component needs one so the component name isn't just "Main".
   name: "HelloWorld",
+
+  // The components object is used to import other components to use in the template
+  // components: {
+  //   VCard,
+  // },
 
   /** Props are provided by the CUI when loading this component. */
   props: {
