@@ -5,8 +5,9 @@
     <p>Area: {{ area }}</p>
     <NestedComponent info="Hello World!" />
     <p>User: {{ user.username }}</p>
-    <p>Context: {{ JSON.stringify(context) }}</p>
-    <p>API passed in?: {{ Boolean(api) }}</p>
+    <p>Context passed in? {{ Object.keys(context).length > 0 }}</p>
+    <p>API passed in?: {{ Object.keys(api).length > 0 }}</p>
+    <p>Resource id: {{ (context.resource || {}).id }}</p>
   </div>
 </template>
 

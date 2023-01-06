@@ -1,9 +1,8 @@
 <template>
-  <p>Nested: {{info}}</p>
+  <p>Nested: {{ info }}</p>
 </template>
 
 <script>
-
 export default {
   props: {
     info: {
@@ -12,3 +11,4 @@ export default {
     },
   },
 };
+</script>
