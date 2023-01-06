@@ -3,7 +3,8 @@
     <h1>{{ message }}</h1>
     <p>Page: {{ page }}</p>
     <p>Area: {{ area }}</p>
-    <p>User: {{ JSON.stringify(user) }}</p>
+    <NestedComponent info="Hello World!" />
+    <p>User: {{ user.username }}</p>
     <p>Context: {{ JSON.stringify(context) }}</p>
     <p>API passed in?: {{ Boolean(api) }}</p>
   </div>
@@ -11,17 +12,24 @@
 
 <script>
 import camelCase from "camelcase";
-// import { VCard } from "vuetify/lib/components/VCard";
+import NestedComponent from "./NestedComponent.vue";
 
 export default {
   // The name should be skipped when it is the same as the file name.
   // However, this component needs one so the component name isn't just "Main".
-  name: "HelloWorld",
+  // So we'll use a PascalCase version of the package name.
+  // TODO: Generate this from the npm package name
+  name: "MyApplet",
 
-  // The components object is used to import other components to use in the template
-  // components: {
-  //   VCard,
-  // },
+  // The components object is used to add other components to use in the template
+  // Vuetify components are auto-added by a vite plugin
+  // See all vuetify components at https://vuetifyjs.com/en/components/
+  // WARNING: using Vuetify components causes the applet to fail to import in the cui
+  // TODO: after spending a while trying to get this to work, I'm putting it off
+  //   until after the Vue3 upgrade - it should be different and much easier then.
+  components: {
+    NestedComponent,
+  },
 
   /** Props are provided by the CUI when loading this component. */
   props: {
