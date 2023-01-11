@@ -1,5 +1,6 @@
 <template>
-  <div>
+  <div class="ml-4" v-if="area === 'preNavItems'">HelloWorld in the nav</div>
+  <div v-else>
     <h1>{{ message }}</h1>
     <p>Page: {{ page }}</p>
     <p>Area: {{ area }}</p>

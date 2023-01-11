@@ -22,11 +22,12 @@ export default defineConfig({
   build: {
     // https://vitejs.dev/guide/build.html#library-mode
     lib: {
+      formats: ["es"],
       // Could also be a dictionary or array of multiple entry points
       entry: resolve(__dirname, "src/TheApplet.vue"),
       name: pascalPackageName,
       // the proper extensions will be added automatically
-      fileName: pascalPackageName,
+      fileName: "main",
     },
 
     rollupOptions: {

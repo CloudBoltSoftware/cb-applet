@@ -5,9 +5,29 @@
     "icon": "xui/cui-applet.png",
     "met_description": "Hello World applet for extending the CloudBolt CUI",
     "met_label": "CUI Applet Hello World",
+    "met_id": "APL-12345",
+    "met_is_applet": true,
+    "met_entry_point": "static/main.js",
     "met_maximum_version_required": "",
     "met_minimum_version_required": "2023.1.1",
-    "met_routing": {}
+    "met_required_ui_extensions": [
+      {
+        "name": "cui",
+        "minimum_version": "2023.1.0",
+        "maximum_version": ""
+      }
+    ],
+    "met_targets": {
+      "cui": {
+        "resourceDetail": [
+          "preWidgets",
+          "postActions"
+        ],
+        "all": [
+          "preNavItems"
+        ]
+      }
+    }
   },
   "private": true,
   "version": "0.0.0",
