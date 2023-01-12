@@ -20,7 +20,6 @@
     "met_targets": {
       "cui": {
         "resourceDetail": [
-          "preWidgets",
           "postActions"
         ],
         "all": [

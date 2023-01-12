@@ -1,7 +1,8 @@
 <template>
-  <div class="ml-4" v-if="area === 'preNavItems'">HelloWorld in the nav</div>
+  <div class="ml-4" v-if="area === 'preNavItems'">HelloWorld nav</div>
   <div v-else>
     <h1>{{ message }}</h1>
+    <img :src="imageUrl" alt="Vue logo" />
     <p>Page: {{ page }}</p>
     <p>Area: {{ area }}</p>
     <NestedComponent info="Hello World!" />
@@ -14,6 +15,7 @@
 
 <script>
 import camelCase from "camelcase";
+import imageUrl from "./assets/cb_logo_255x60.png";
 import NestedComponent from "./NestedComponent.vue";
 
 export default {
@@ -81,6 +83,7 @@ export default {
     // The setup function should return anything that the template needs (apart from props)
     return {
       message,
+      imageUrl,
     };
   },
 };
