@@ -1,12 +1,12 @@
-import vue from "@vitejs/plugin-vue2";
+import vue from "@vitejs/plugin-vue";
 import camelCase from "camelcase";
 import { resolve } from "path";
-import { VuetifyResolver } from "unplugin-vue-components/resolvers";
-import Components from "unplugin-vue-components/vite";
 import { defineConfig } from "vite";
+import { nodeResolve } from "@rollup/plugin-node-resolve";
 
 // The name of the applet from package.json in PascalCase.
-const pascalPackageName = camelCase(process.env.npm_package_name, {
+const PACKAGE_NAME = process.env.npm_package_name;
+const pascalPackageName = camelCase(PACKAGE_NAME, {
   pascalCase: true,
 });
 
@@ -15,33 +15,32 @@ export default defineConfig({
   plugins: [
     // The base Vue plugin
     vue(),
-    // Automatically import all Vuetify components into all Vue file
-    Components({ resolvers: [VuetifyResolver()] }),
+
+    // Resolves node modules. See for more information:
+    // https://github.com/rollup/plugins/tree/master/packages/node-resolve
+    nodeResolve(),
   ],
 
   build: {
     // https://vitejs.dev/guide/build.html#library-mode
     lib: {
+      // ES Modules are the browser's native module format.
+      // This lets us use the native import() function to load this module.
       formats: ["es"],
-      // Could also be a dictionary or array of multiple entry points
+      // name: pascalPackageName,
       entry: resolve(__dirname, "src/TheApplet.vue"),
-      name: pascalPackageName,
-      // the proper extensions will be added automatically
       fileName: "main",
     },
 
     rollupOptions: {
-      // make sure to externalize deps that shouldn't be bundled
-      // into your library
-      external: ["vue", "vuetify/lib"],
-      output: {
-        // Provide global variables to use in the UMD build
-        // for externalized deps
-        globals: {
-          vue: "Vue",
-          "vuetify/lib": "Vuetify",
-        },
-      },
+      // make sure to externalize deps that shouldn't be bundled into your component.
+      external: ["vue"],
+      // output: {
+      //   // Provide global variables to use in the UMD build for externalized deps
+      //   globals: {
+      //     vue: "Vue",
+      //   },
+      // },
     },
   },
 });

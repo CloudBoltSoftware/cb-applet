@@ -2,10 +2,10 @@
   "name": "cui-applet",
   "xuiConfig": {
     "name": "cui-applet",
+    "id": "APL-12345678",
     "icon": "xui/cui-applet.png",
     "met_description": "Hello World applet for extending the CloudBolt CUI",
     "met_label": "CUI Applet Hello World",
-    "met_id": "APL-12345",
     "met_is_applet": true,
     "met_entry_point": "static/main.js",
     "met_maximum_version_required": "",
@@ -55,18 +55,21 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {
-    "@cloudbolt/cb-api-helper": "^0.5.0",
-    "@cloudbolt/cb-xui-packager": "^1.0.0",
-    "@vitejs/plugin-vue2": "^2.2.0",
+    "@cloudbolt/cb-api-helper": "^0.5.8",
+    "@cloudbolt/cb-xui-packager": "^1.0.5",
+    "@rollup/plugin-node-resolve": "^15.0.2",
+    "@vitejs/plugin-vue": "^4.0.0",
     "camelcase": "^7.0.1",
-    "eslint": "^8.23.1",
-    "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-vue": "^9.4.0",
+    "eslint": "^8.35.0",
+    "eslint-config-prettier": "^8.6.0",
+    "eslint-plugin-jsdoc": "^40.0.0",
+    "eslint-plugin-storybook": "^0.6.11",
+    "eslint-plugin-vue": "^9.9.0",
+    "eslint-plugin-vue-scoped-css": "^2.4.0",
+    "eslint-plugin-vuejs-accessibility": "^2.1.0",
     "express": "^4.18.2",
     "prettier": "^2.7.1",
-    "unplugin-vue-components": "^0.22.12",
-    "vite": "^4.0.4",
-    "vue": "^2.7.10",
-    "vuetify": "^2.6.12"
+    "vite": "^4.1.4",
+    "vue": "^3.2.47"
   }
 }

@@ -1,14 +1,12 @@
 <template>
-  <p>Nested: {{ info }}</p>
+  <p>Nested: {{ nestedMessage }}</p>
 </template>
 
-<script>
-export default {
-  props: {
-    info: {
-      type: String,
-      required: true,
-    },
+<script setup>
+defineProps({
+  nestedMessage: {
+    type: String,
+    required: true,
   },
-};
+});
 </script>
