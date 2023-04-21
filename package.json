@@ -7,7 +7,7 @@
     "met_description": "Hello World applet for extending the CloudBolt CUI",
     "met_label": "CUI Applet Hello World",
     "met_is_applet": true,
-    "met_entry_point": "static/main.js",
+    "met_entry_point": "static/main.es.js",
     "met_maximum_version_required": "",
     "met_minimum_version_required": "2023.1.1",
     "met_required_ui_extensions": [
@@ -35,12 +35,10 @@
   "files": [
     "dist"
   ],
-  "main": "dist/CuiApplet.umd.cjs",
-  "module": "dist/CuiApplet.js",
+  "module": "dist/main.es.js",
   "exports": {
     ".": {
-      "import": "./dist/CuiApplet.js",
-      "require": "./dist/CuiApplet.umd.cjs"
+      "import": "./dist/main.es.js"
     }
   },
   "scripts": {
@@ -58,7 +56,7 @@
     "@cloudbolt/cb-api-helper": "^0.5.8",
     "@cloudbolt/cb-xui-packager": "^1.0.5",
     "@rollup/plugin-node-resolve": "^15.0.2",
-    "@vitejs/plugin-vue": "^4.0.0",
+    "@vitejs/plugin-vue": "^4.1.0",
     "camelcase": "^7.0.1",
     "eslint": "^8.35.0",
     "eslint-config-prettier": "^8.6.0",
