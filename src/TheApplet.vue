@@ -11,7 +11,7 @@
     <p>User: {{ username }}</p>
     <p>Context keys passed in {{ Object.keys(context) }}</p>
     <p>API passed in?: {{ Object.keys(api).length > 0 }}</p>
-    <!-- <SyncFusionComponent :api="api" /> -->
+    <SyncFusionComponent :api="api" />
   </div>
 </template>
 
@@ -35,7 +35,7 @@ import imageUrl from "./assets/cb_logo_255x60.png";
 
 // Import other components to use in the template
 import NestedComponent from "./NestedComponent.vue";
-// import SyncFusionComponent from "./SyncFusionComponent.vue";
+import SyncFusionComponent from "./SyncFusionComponent.vue";
 
 /**
  * Props values are provided by the CUI when loading this component.

@@ -4,34 +4,11 @@ import { nodeResolve } from "@rollup/plugin-node-resolve";
 import { exec } from "child_process";
 
 /**
- * When building the vue library and keeping vue as an external dependency,
- * the import statements in the vue files are not resolved correctly. Specifically,
- * we attempt to import 'createElementVNode' from 'vue' but it is not found.
- * In the CUI build, vite seems to strip off this export, or else not rename it
- * correctly from createBaseVNode.
- *
- * This is an absolutely terrible hack to fix the issue for now. There is some
- * subtle version mismatch, bug, or interplay between vite, vue, and rollup that
- * does this. It's only a problem when vue is external. 🤷
- */
-function vueImportCorrector() {
-  return {
-    name: "vue-import-corrector",
-    transform(src, id) {
-      if (id.endsWith(".vue")) {
-        console.log("TRANSFORMING");
-        return src.replace(/createElementVNode/g, "createBaseVNode");
-      }
-    },
-  };
-}
-
-/**
- * Run a script after each build. This also works for changes with build --watch.
+ * Run a script after each build. This works on all changes with build --watch too.
  * @param {object} options
  * @param {string} options.script terminal script to run after each build
  */
-function postBuildPlugin(options) {
+function postBuildScriptRunner(options) {
   return {
     name: "post-build-plugin",
     apply: "build",
@@ -48,19 +25,16 @@ function postBuildPlugin(options) {
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
-    // The base Vue plugin
+    // The base Vue plugin for the dev server
+    // TODO: Create an index.html file that's good for developing with.
     vue(),
 
-    // Resolves node modules. See for more information:
+    // Resolves installed node modules. See for more information:
     // https://github.com/rollup/plugins/tree/master/packages/node-resolve
     nodeResolve(),
 
-    // Corrects the import statements in the vue files with a dirty hack.
-    // TODO: Diagnosis and fix the root cause of the issue.
-    // vueImportCorrector(),
-
-    // Run a script after each build. This triggers the xui bundler.
-    postBuildPlugin({ script: "npm run post-build" }),
+    // Triggers the xui bundler.
+    postBuildScriptRunner({ script: "npm run post-build" }),
   ],
 
   build: {
@@ -69,16 +43,23 @@ export default defineConfig({
     // https://vitejs.dev/guide/build.html#library-mode
     lib: {
       // ES Modules are the browser's native module format.
-      // This lets us use the native import() function to load this module.
+      // It's what the CUI uses to load the component
       formats: ["es"],
+
+      // The root component the CUI should load.
       entry: "src/TheApplet.vue",
+
+      // The name of the js bundle the CUI will use to load the component.
       fileName: (format) => `main.${format}.js`,
     },
 
     rollupOptions: {
-      // make sure to externalize deps that shouldn't be bundled into your component.
+      // Externalized dependencies that shouldn't be bundled into your component.
+      // These are provided by the CUI, routing the bare imports like 'vue' to the
+      // URLs for the CUI's own dependencies via an import map.
       external: [
         "vue",
+        "vuetify",
         "@syncfusion/ej2-vue-base",
         "@syncfusion/ej2-vue-grids",
         "@syncfusion/ej2-layouts",
