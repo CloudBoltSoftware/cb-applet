@@ -23,7 +23,8 @@
           "postActions"
         ],
         "all": [
-          "preNavItems"
+          "preNavItems",
+          "header"
         ]
       }
     }
@@ -42,9 +43,9 @@
     }
   },
   "scripts": {
-    "build": "npm run build:js && npm run build:xui",
-    "build:js": "vite build",
-    "build:xui": "xui",
+    "build": "vite build",
+    "post-build": "xui",
+    "build:watch": "vite build --watch --onSuccess 'npm run build:xui'",
     "check:format": "prettier --check .",
     "check:lint": "eslint --ext .js,.vue --ignore-path .gitignore src",
     "co:login": "aws sso login && aws codeartifact login --tool npm --repository cloudbolt-npm --domain cloudbolt --domain-owner 499620025628 --namespace @cloudbolt",
@@ -52,12 +53,18 @@
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore --fix src",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "dependencies": {
+    "@syncfusion/ej2-vue-base": "^21.1.41",
+    "@syncfusion/ej2-vue-grids": "^21.1.41",
+    "@syncfusion/ej2-vue-layouts": "^21.1.37",
+    "camelcase": "^7.0.1",
+    "vuetify": "^3.1.15"
+  },
   "devDependencies": {
     "@cloudbolt/cb-api-helper": "^0.5.8",
     "@cloudbolt/cb-xui-packager": "^1.0.5",
     "@rollup/plugin-node-resolve": "^15.0.2",
     "@vitejs/plugin-vue": "^4.1.0",
-    "camelcase": "^7.0.1",
     "eslint": "^8.35.0",
     "eslint-config-prettier": "^8.6.0",
     "eslint-plugin-jsdoc": "^40.0.0",

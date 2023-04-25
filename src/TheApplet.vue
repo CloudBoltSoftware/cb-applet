@@ -1,41 +1,41 @@
 <template>
   <div class="ml-4" v-if="area === 'preNavItems'">HelloWorld nav</div>
   <div v-else>
-    <h1>{{ message }}</h1>
-    <img :src="imageUrl" alt="Vue logo" />
+    <h2>CB Applet Hello World Example</h2>
+    {{ message }}
+    <NestedComponent nested-message="Hello World!" />
+    <img :src="imageUrl" alt="CloudBolt logo" />
     <p>Page: {{ page }}</p>
     <p>Area: {{ area }}</p>
-    <NestedComponent nested-message="Hello World!" />
+    <p>Time: {{ time }}</p>
     <p>User: {{ username }}</p>
-    <p>Context passed in? {{ Object.keys(context).length > 0 }}</p>
+    <p>Context keys passed in {{ Object.keys(context) }}</p>
     <p>API passed in?: {{ Object.keys(api).length > 0 }}</p>
-    <p>Resource id: {{ (context.resource || {}).id }}</p>
+    <!-- <SyncFusionComponent :api="api" /> -->
   </div>
 </template>
 
-<script>
-export default {
-  // The name should be skipped when it is the same as the file name.
-  // However, this component needs one so the component name isn't just "Main".
-  // So we'll use a PascalCase version of the package name.
-  // Also the <script setup> syntax doesn't support the name property, so it's added here.
-  // If you prefer using the vue options api, you can delete the <script setup> block and
-  // use this object instead. Read more at https://vuejs.org/guide/introduction.html#api-styles.
-  // TODO: Generate this name from the npm package name
-  // name: "MyApplet",
-};
-</script>
-
 <script setup>
 // Import any 3rd party libraries you'd like to use
-import camelCase from "camelcase";
-import { computed, defineProps } from "vue";
+import camelCase from "camelCase";
+import {
+  computed,
+  defineProps,
+  onBeforeMount,
+  onBeforeUnmount,
+  onBeforeUpdate,
+  onMounted,
+  onUnmounted,
+  onUpdated,
+  ref,
+} from "vue";
 
 // Import any assets you'd like to reference
 import imageUrl from "./assets/cb_logo_255x60.png";
 
 // Import other components to use in the template
 import NestedComponent from "./NestedComponent.vue";
+// import SyncFusionComponent from "./SyncFusionComponent.vue";
 
 /**
  * Props values are provided by the CUI when loading this component.
@@ -73,10 +73,24 @@ const props = defineProps({
   },
 });
 
-// Demonstrating using a third-party library
-const message = camelCase("hello-world");
-console.log(message);
+// Some lifecycle hooks
+// See https://vuejs.org/guide/essentials/lifecycle.html#registering-lifecycle-hooks
+console.log("I run on setup");
+onBeforeMount(() => console.log("I run before the component is mounted"));
+onMounted(() => console.log("I run after the component is mounted"));
+onBeforeUpdate(() => console.log("I run before the component is updated"));
+onUpdated(() => console.log("I run after the component is updated"));
+onBeforeUnmount(() => console.log("I run before the component is unmounted"));
+onUnmounted(() => console.log("I run after the component is unmounted"));
 
-// Demonstrating using a computed property, reactive to changes in props
+// Using a third-party library
+const greeting = camelCase("hello-world");
+const message = `The string "${greeting}" is processed by an external library`;
+
+// Using a computed property, reactive to changes in props and data
 const username = computed(() => props.user.username);
+
+const currentDateTime = ref(new Date());
+setInterval(() => (currentDateTime.value = new Date()), 1000);
+const time = computed(() => currentDateTime.value.toLocaleTimeString());
 </script>
