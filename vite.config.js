@@ -2,6 +2,7 @@ import vue from "@vitejs/plugin-vue";
 import { defineConfig } from "vite";
 import { nodeResolve } from "@rollup/plugin-node-resolve";
 import { spawn } from "child_process";
+import vuetify, { transformAssetUrls } from "vite-plugin-vuetify";
 
 /**
  * Run a script after each build. This works on all changes with build --watch too.
@@ -35,9 +36,17 @@ function postBuildScriptRunner(options) {
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
-    // The base Vue plugin for the dev server
     // TODO: Create an index.html file that's good for developing with.
-    vue(),
+    // Transform .vue files into .js files.
+    vue({
+      template: {
+        // https://github.com/vuetifyjs/vuetify-loader/tree/next/packages/vite-plugin#image-loading
+        transformAssetUrls,
+      },
+    }),
+
+    // More setup in src/plugins/vuetify/index.js
+    vuetify(),
 
     // Resolves installed node modules. See for more information:
     // https://github.com/rollup/plugins/tree/master/packages/node-resolve
@@ -67,29 +76,9 @@ export default defineConfig({
       // Externalized dependencies that shouldn't be bundled into your component.
       // These are provided by the CUI, routing the bare imports like 'vue' to the
       // URLs for the CUI's own dependencies via an import map.
-      external: [
-        "vue",
-        "vuetify",
-        "@syncfusion/ej2-base",
-        "@syncfusion/ej2-buttons",
-        "@syncfusion/ej2-calendars",
-        "@syncfusion/ej2-compression",
-        "@syncfusion/ej2-data",
-        "@syncfusion/ej2-dropdowns",
-        "@syncfusion/ej2-excel-export",
-        "@syncfusion/ej2-file-utils",
-        "@syncfusion/ej2-grids",
-        "@syncfusion/ej2-icons",
-        "@syncfusion/ej2-inputs",
-        "@syncfusion/ej2-lists",
-        "@syncfusion/ej2-navigations",
-        "@syncfusion/ej2-notifications",
-        "@syncfusion/ej2-pdf-export",
-        "@syncfusion/ej2-popups",
-        "@syncfusion/ej2-splitbuttons",
-        "@syncfusion/ej2-vue-base",
-        "@syncfusion/ej2-vue-grids",
-      ],
+      // This regex test will match any package in the @syncfusion scope, as well as
+      // vue and vuetify.
+      external: (id) => /^(@syncfusion\/.+|vue|vuetify)$/.test(id),
     },
   },
 });

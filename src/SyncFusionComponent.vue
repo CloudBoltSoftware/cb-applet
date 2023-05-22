@@ -47,4 +47,4 @@ const fetchData = async () => {
 onBeforeMount(fetchData);
 </script>
 
-<style></style>
+<style scoped></style>
