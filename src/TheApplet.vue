@@ -1,43 +1,11 @@
-<template>
-  <div class="ml-4" v-if="area.includes('Nav')">HelloWorld nav</div>
-  <div v-else class="border-red">
-    <h2>CB Applet Hello World Example</h2>
-    {{ message }}
-    <NestedComponent nested-message="Hello World!" />
-    <img :src="imageUrl" alt="CloudBolt logo" />
-    <p>Page: {{ page }}</p>
-    <p>Area: {{ area }}</p>
-    <p>Time: {{ time }}</p>
-    <p>User: {{ username }}</p>
-    <p>Context keys passed in {{ Object.keys(context) }}</p>
-    <p>API passed in?: {{ Object.keys(api).length > 0 }}</p>
-    <VuetifyComponent />
-    <SyncFusionComponent :api="api" />
-  </div>
-</template>
-
 <script setup>
-// Import any 3rd party libraries you'd like to use
-import camelCase from "camelCase";
-import {
-  computed,
-  defineProps,
-  onBeforeMount,
-  onBeforeUnmount,
-  onBeforeUpdate,
-  onMounted,
-  onUnmounted,
-  onUpdated,
-  ref,
-} from "vue";
+// Vue components (and thus CB Applets) don't actually need to display anything. They can just
+// perform some action. This example will report the page, area, and context where the component
+// is being rendered to the console. Since we set it up to render everywhere in package.json's
+// xuiConfig.met_targets, then this applet will report to the console the page, area, and context
+// of every target in the CUI.
 
-// Import any assets you'd like to reference
-import imageUrl from "./assets/cb_logo_255x60.png";
-
-// Import other components to use in the template
-import NestedComponent from "./NestedComponent.vue";
-import SyncFusionComponent from "./SyncFusionComponent.vue";
-import VuetifyComponent from "./VuetifyComponent.vue";
+import { watchEffect } from "vue";
 
 /**
  * Props values are provided by the CUI when loading this component.
@@ -75,30 +43,11 @@ const props = defineProps({
   },
 });
 
-// Some lifecycle hooks
-// See https://vuejs.org/guide/essentials/lifecycle.html#registering-lifecycle-hooks
-console.log("I run on setup");
-onBeforeMount(() => console.log("I run before the component is mounted"));
-onMounted(() => console.log("I run after the component is mounted"));
-onBeforeUpdate(() => console.log("I run before the component is updated"));
-onUpdated(() => console.log("I run after the component is updated"));
-onBeforeUnmount(() => console.log("I run before the component is unmounted"));
-onUnmounted(() => console.log("I run after the component is unmounted"));
-
-// Using a third-party library
-const greeting = camelCase("hello-world");
-const message = `The string "${greeting}" is processed by an external library`;
-
-// Using a computed property, reactive to changes in props and data
-const username = computed(() => props.user.username);
-
-const currentDateTime = ref(new Date());
-setInterval(() => (currentDateTime.value = new Date()), 1000);
-const time = computed(() => currentDateTime.value.toLocaleTimeString());
+const reportTarget = () => {
+  const { page, area, context } = props;
+  console.log(`Target: page "${page}", area "${area}", context:`, context);
+};
+watchEffect(reportTarget);
 </script>
 
-<style scoped lang="scss">
-.border-red {
-  border: 1px solid red;
-}
-</style>
+<style scoped lang="scss"></style>

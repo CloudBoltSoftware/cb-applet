@@ -1,11 +1,11 @@
 {
-  "name": "cui-applet",
+  "name": "cui-applet-locator",
   "xuiConfig": {
-    "name": "cui-applet",
-    "id": "APL-12345678",
+    "name": "cui-applet-locator",
+    "id": "APL-locator8",
     "icon": "xui/src/cui-applet.png",
-    "met_description": "Hello World applet for extending the CloudBolt CUI",
-    "met_label": "CUI Applet Hello World",
+    "met_description": "Applet to locate Targets around the CUI",
+    "met_label": "Locator applet",
     "met_is_applet": true,
     "met_entry_point": "static/main.es.js",
     "met_maximum_version_required": "",
@@ -19,11 +19,8 @@
     ],
     "met_targets": {
       "cui": {
-        "catalog": [
-          "prePageContent"
-        ],
         "all": [
-          "preNavItems"
+          "all"
         ]
       }
     }
