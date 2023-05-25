@@ -1,9 +1,12 @@
 {
-  "name": "cui-applet",
+  "name": "cui-applet-hello-world",
   "xuiConfig": {
-    "name": "cui-applet",
-    "id": "APL-12345678",
-    "icon": "xui/cui-applet.png",
+    "name": "cui-applet-hello-world",
+    "id": "APL-hello678",
+    "icon": "xui/src/cui-applet.png",
+    "exclude": [
+      "xui/src/.gitignore"
+    ],
     "met_description": "Hello World applet for extending the CloudBolt CUI",
     "met_label": "CUI Applet Hello World",
     "met_is_applet": true,
@@ -19,11 +22,8 @@
     ],
     "met_targets": {
       "cui": {
-        "catalog": [
-          "prePageContent"
-        ],
         "all": [
-          "preNavItems"
+          "headerLoggedIn"
         ]
       }
     }
