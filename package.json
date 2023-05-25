@@ -1,11 +1,11 @@
 {
-  "name": "cui-applet",
+  "name": "cui-applet-kitchen-sink",
   "xuiConfig": {
-    "name": "cui-applet",
-    "id": "APL-12345678",
+    "name": "cui-applet-kitchen-sink",
+    "id": "APL-kitchen8",
     "icon": "xui/src/cui-applet.png",
-    "met_description": "Hello World applet for extending the CloudBolt CUI",
-    "met_label": "CUI Applet Hello World",
+    "met_description": "Kitchen Sink applet with various minor examples for extending the CloudBolt CUI",
+    "met_label": "Kitchen Sink",
     "met_is_applet": true,
     "met_entry_point": "static/main.es.js",
     "met_maximum_version_required": "",
@@ -19,11 +19,9 @@
     ],
     "met_targets": {
       "cui": {
-        "catalog": [
-          "prePageContent"
-        ],
-        "all": [
-          "preNavItems"
+        "resources": [
+          "prePageContent",
+          "postPageContent"
         ]
       }
     }

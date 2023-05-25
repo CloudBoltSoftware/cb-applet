@@ -1,7 +1,7 @@
 <template>
   <VMenu>
     <template v-slot:activator="{ props }">
-      <VBtn color="primary" v-bind="props"> Activator slot </VBtn>
+      <VBtn color="primary" v-bind="props"> Vuetify Menu Button </VBtn>
     </template>
     <VList>
       <VListItem v-for="(item, index) in items" :key="index" :value="index">

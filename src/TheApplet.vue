@@ -1,7 +1,9 @@
 <template>
-  <div class="ml-4" v-if="area.includes('Nav')">HelloWorld nav</div>
+  <div class="ml-4" v-if="area == 'prePageContent'">
+    <h2>Kitchen Sink Above</h2>
+  </div>
   <div v-else class="border-red">
-    <h2>CB Applet Hello World Example</h2>
+    <h2>Kitchen Sink Below</h2>
     {{ message }}
     <NestedComponent nested-message="Hello World!" />
     <img :src="imageUrl" alt="CloudBolt logo" />
