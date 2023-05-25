@@ -1,5 +1,5 @@
 <template>
-  <div class="ml-4" v-if="area === 'preNavItems'">HelloWorld nav</div>
+  <div class="ml-4" v-if="area.includes('Nav')">HelloWorld nav</div>
   <div v-else class="border-red">
     <h2>CB Applet Hello World Example</h2>
     {{ message }}
