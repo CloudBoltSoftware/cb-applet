@@ -3,7 +3,7 @@
   "xuiConfig": {
     "name": "cui-applet",
     "id": "APL-12345678",
-    "icon": "xui/cui-applet.png",
+    "icon": "xui/src/cui-applet.png",
     "met_description": "Hello World applet for extending the CloudBolt CUI",
     "met_label": "CUI Applet Hello World",
     "met_is_applet": true,
