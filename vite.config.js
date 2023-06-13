@@ -1,65 +1,50 @@
 import vue from "@vitejs/plugin-vue";
 import { defineConfig } from "vite";
 import { nodeResolve } from "@rollup/plugin-node-resolve";
-import { spawn } from "child_process";
 import vuetify, { transformAssetUrls } from "vite-plugin-vuetify";
+import { postBuildScriptRunner } from "./src/plugins/build/postBuildScriptRunner";
 
 /**
- * Run a script after each build. This works on all changes with build --watch too.
- * @param {object} options
- * @param {string} options.script terminal script to run after each build
- * @param {string} [options.apply='build'] vite plugin apply option
- * @param {string} [options.enforce='post'] vite plugin enforce option
- * @param {string} [options.hook='closeBundle'] vite plugin hook option
+ * This is the Vite configuration file. It's used to configure the Vite bundler.
+ * https://vitejs.dev/config/
  */
-function postBuildScriptRunner(options) {
-  return {
-    name: "post-build-plugin",
-    apply: options.apply || "build",
-    enforce: options.enforce || "post",
-    // By default, run on the closeBundle hook. This is after each build has written
-    // its files to disk. This ensures all the `dist` files are available to the script.
-    async [options.hook || "closeBundle"]() {
-      console.log(`Running post build script: "${options.script}"`);
-      const [command, ...args] = options.script.split(" ");
-      const child = spawn(command, args, { stdio: "inherit" });
-      child.on("error", (error) => console.error(error));
-      child.on("close", (code) =>
-        console.log(
-          `post build script "${options.script}" exited with code ${code}`
-        )
-      );
-    },
-  };
-}
-
-// https://vitejs.dev/config/
 export default defineConfig({
+  /**
+   * Plugins extend Vite. Each can be configured with options.
+   * https://vitejs.dev/guide/using-plugins.html
+   */
   plugins: [
-    // Transform .vue files into .js files.
+    // Handle .vue files
     vue({
+      // https://github.com/vuetifyjs/vuetify-loader/tree/master/packages/vite-plugin#image-loading
       template: {
-        // https://github.com/vuetifyjs/vuetify-loader/tree/next/packages/vite-plugin#image-loading
         transformAssetUrls,
       },
     }),
 
-    // Add Vuetify Components, directives, etc.
+    // Add Vuetify Components, directives, etc. This is required for Vuetify to work.
     vuetify(),
 
     // Resolves installed node modules into the bundler. See for more information:
     // https://github.com/rollup/plugins/tree/master/packages/node-resolve
     nodeResolve(),
 
-    // Triggers the custom xui bundler.
+    // Runs a script that triggers the custom xui bundler when a build finishes.
     postBuildScriptRunner({ script: "npm run post-build" }),
   ],
 
+  /**
+   * Build-time configuration.
+   * https://vitejs.dev/config/build-options.html
+   */
   build: {
-    // https://vitejs.dev/guide/build.html#library-mode
+    /**
+     * Applets are essentially packaged Vue components. Putting Vite into library mode
+     * builds a library of 1 component that can be loaded by the CUI.
+     * https://vitejs.dev/guide/build.html#library-mode
+     */
     lib: {
-      // ES Modules are the browser's native module format.
-      // It's what the CUI uses to load the component
+      // CloudBolt loads Applets as ES Modules - the browser's native module format.
       formats: ["es"],
 
       // The root component the CUI should load.
@@ -67,17 +52,18 @@ export default defineConfig({
 
       // The name of the js bundle the CUI will use to load the component.
       // This should match package.json's "module" field and "xuiConfig.met_entry_point"
-      fileName: (format) => `main.${format}.js`,
+      fileName: "main.es",
     },
 
     rollupOptions: {
-      // Externalized dependencies that shouldn't be bundled into your component.
-      // These are provided by the CUI, and this configuration shouldn't change unless
-      // the CUI begins providing more dependencies.
-      // This is used for routing the bare imports like 'vue' to the URLs for the CUI's
-      // own dependencies via an import map.
-      // This regex test will match any package in the @syncfusion scope, as well as
-      // vue and vuetify.
+      /**
+       * CloudBolt provides many of this applet's dependencies via an import map.
+       * This allows multiple applets to share the same dependencies, users to not
+       * have to download the same dependencies multiple times, and for the CUI to
+       * centralize the version of dependencies it uses.
+       * This configuration shouldn't change unless CloudBolt changes the import map
+       * to provide more/fewer/different dependencies.
+       */
       external: (id) => /^(@syncfusion\/.+|vue|vuetify)$/.test(id),
     },
   },

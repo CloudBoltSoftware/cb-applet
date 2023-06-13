@@ -1,16 +1,24 @@
 # CB Applet
 
-CB Applets extend the CloudBolt CUI using Vue.js with Vuetify and Syncfusion component libraries. They can target specific pages and areas of the CUI to render custom components. They receive data from the CUI via props, including the current page and area, an authenticated api accessor object, logged in user information, and any contextual data passed back from the CUI.
+CB Applets extend the CloudBolt UI using Vue.js with Vuetify and Syncfusion component libraries. Currently this only works for the Consumer UI (aka CUI). Applets can target multiple/specific areas/pages to render custom components. They receive data from CloudBolt via props and are developed using modern, standard UI development workflows.
 
 This project can be used as a starting point for CloudBolt customers who want to develop their own Applets.
 
 ## Getting Started
 
-With Node.js installed, clone this repo locally and run `npm install` to install dependencies. Build a production version of the applet with the command `npm run build`. This will create a zip file in the `xui/dist` folder that can be uploaded to CloudBolt via the UI Extensions interface.
+1. Install Node.js (see `.nvmrc` for the reccomended version).
+1. Clone this repo locally.
+1. Run `npm install` to install dependencies.
+1. Set a unique name and ID for the applet in `package.json` (see the [Metadata Configuration](#metadata-packagejson-configuration) section below).
+1. Build a production version of the applet with the command `npm run build`.
+1. Upload the built zip from the `xui/dist` folder to CloudBolt in the Admin UI Extensions interface.
+1. Visit the CUI to see your new Applet at the top of the page. Congratulations! You've built and installed a CB Applet from scratch!
 
-If you've never written a Vue.js app before, it is recommended that you read the [Vue.js documentation](https://.vuejs.org/guide/introduction.html) (or at least a little of it) before continuing. It's a powerful, approachable framework that is easy to learn.
+## Customizing the Applet
 
-Conventions in this project are based on the [Vue.js style guide](https://vuejs.org/style-guide/). It is recommended that you read it before continuing. Though you are welcome to adapt it as you wish, we use the Composition API and the `<script setup>` syntax.
+The main component is [TheApplet.vue](./src/TheApplet.vue). Start there to see some inline documentation for the highlights of CB Applets and Vue features. If you've never written a Vue app before, reference the [Vue.js documentation](https://.vuejs.org/guide/introduction.html) as you go. It's a powerful, approachable framework that is easy to learn.
+
+Conventions in this project are based on the [Vue.js style guide](https://vuejs.org/style-guide/) using the Composition API and the `<script setup>` syntax. This is vue's recommended approach for new projects.
 
 ## Development Cycle
 
@@ -24,12 +32,14 @@ The repo has been set up with some basic developer tooling as well:
 - [Prettier](https://prettier.io/) for code formatting (`npm run format`)
 - [Vite](https://vitejs.dev/) for bundling (`npm run build`)
 
-TODO: In the near future, we will support `npm run dev` to create a hot-reloading development environment. To do so, we will add a proper index.html and add `vite dev` to the npm scripts to allow for a standalone dev environment. Alternately, we may create a set of instructions for using native browser dev tools to load the locally created applet from the `dist` folder. Or possibly another approach.
-See [One potential approach here](https://vitejs.dev/guide/build.html#library-mode)
+TODO: In the near future, we will support a smoother development cycle with hot-reloading and no need to re-upload the Applet while iterating. Top options we're considering:
 
-### package.json configuration
+- Use vite's dev mode to create a hot-reloading development environment.
+- Use native browser dev tools to load the locally created applet from the `dist` folder.
 
-Near the top of package.json is `xuiConfig`. This is used for metadata in the built Applet zip file. It looks something like this:
+### Metadata (package.json) configuration
+
+Near the top of package.json is `xuiConfig`. This is used for metadata in the built Applet zip file. Some fields should not be changed for xui bundling to work - others must be updated for each new Applet. A fragment of the file looks something like this:
 
 ```json
 {
@@ -68,23 +78,23 @@ Near the top of package.json is `xuiConfig`. This is used for metadata in the bu
 
 Fields of note:
 
-- Configurable:
+- Configurable Fields:
   - `name`: Should be unique to this applet and contain only alphanumerics and `-` characters. Used as a programatic reference to the base component name. The page may throw warnings if they are not unique.
-  - `id`: **MUST BE UNIQUE** to this applet. It should be in the form `APL-xxxxxxxx` where x alphanumeric. The applet will overwrite any existing applet with the same id. This is used as a programatic reference to the applet.
+  - `id`: **MUST BE UNIQUE** to this applet. It should be in the form `APL-xxxxxxxx` where x is alphanumeric. The applet will overwrite any existing applet with the same id when uploading applets. This is used as a programatic reference to the applet.
   - `icon`: The relative path of the icon file to use on the management page in the HUI.
   - `met_description`: The description seen on the management page in the HUI.
   - `met_label`: The label seen on the management page in the HUI.
-  - `met_minimum_version_required`: The minimum CloudBolt version compatible with this Applet.
-  - `met_maximum_version_required`: The maximum CloudBolt version compatible with this Applet.
-  - `met_required_ui_extensions`: The UI extensions required for this Applet to function. See the example above for the required format.
-  - `met_targets`: Where you want this applet to be loaded. See the example above and the extra note below.
-- Not Configurable (leave as-is):
+  - `met_minimum_version_required`: The optional minimum CloudBolt version compatible with this Applet.
+  - `met_maximum_version_required`: The optional maximum CloudBolt version compatible with this Applet.
+  - `met_required_ui_extensions`: The UI extensions required for this Applet to function. See the example above for the required format (NOTE: versions are optional).
+  - `met_targets`: Which applications, pages, and page areas you want to load this applet. See the example above and the extra note below. \*
+- Non-Configurable Fields (leave as-is):
   - `met_is_applet`: **MUST** be `true`.
   - `met_entry_point`: **MUST** be `static/main.es.js`
 
-#### `met_targets` note
+#### \* `met_targets` note
 
-CloudBolt applications interpret this field to determine where to render applets. For the CUI, the following format should be used:
+CloudBolt applications interpret this field to determine where to render applets. The CUI uses the following format:
 
 ```json
 {
@@ -103,23 +113,38 @@ There will be a documented list of targets for the CUI in official documentation
 
 ### Files
 
-TODO: List main files and what they do
-Waiting to document until after implementation is settled.
+- `dist`: The output of Vite's build process.
+- `node_modules`: The output of `npm install`.
+- `src`: The source code for the applet.
+  - `plugins`: Any plugin configuration. Starts with a single custom Vite plugin to automate bundling the xui.
+  - `TheApplet.vue`: The main applet component.
+  - `NestedComponent.vue`: A component that is nested inside the main applet component.
+- `xui`:
+  - `dist`: The output of the xui bundling process. The zip in here is what you upload to CloudBolt.
+  - `src`: Used as a staging directory when bundling the xui.
+- `.eslintrc.js`: Configuration for ESLint.
+- `.gitignore`: Files to ignore in git.
+- `.nvmrc`: Node version information.
+- `index.html`: The HTML used by Vite for dev mode (not used in the bundled applet).
+- `jsconfig.json`: Configuration for VSCode's intellisense.
+- `package.json`: Configuration for npm and the xui metadata.
+- `package-lock.json`: Lock file for npm (don't edit this directly).
+- `README.md`: This file.
+- `vite.config.js`: Configuration for Vite.
 
 ### Dependencies
 
-TODO: List the dependencies and what they do
-Waiting to document until after the implementation is settled.
+We use a few libraries to make development easier and add features to the applet. These are listed in `package.json` ande are installed with `npm install ...`. The most important ones are:
 
-## Documentation
+- `@syncfusion/*`: [Syncfusion](https://ej2.syncfusion.com/vue/documentation/introduction/) component library. Enterprise-level components.
+- `vuetify`: [Vuetify](https://vuetifyjs.com/en/introduction/why-vuetify/#guide) component library. Community-level components.
+- `vue`: [Vue](https://vuejs.org/guide/introduction.html) Used to build the applet.
+- `vite`: [Vite](https://vitejs.dev/guide/) Used to build the applet.
+- `eslint`: [ESLint](https://eslint.org/docs/user-guide/getting-started) Linting to help keep code clean. Run it with `npm run lint`.
+- `prettier`: [Prettier](https://prettier.io/docs/en/index.html) Code formatting to help keep code clean. Run it with `npm run format`.
+- `@cloudbolt/api-helper`: [CloudBolt API Helper](https://github.com/CloudBoltSoftware/api-helper) A library to make API calls to CloudBolt easier.
 
-- [Vue](https://vuejs.org/guide/introduction.html)
-- [Vuetify](https://vuetifyjs.com/en/introduction/why-vuetify/#guide)
-- [Syncfusion](https://ej2.syncfusion.com/vue/documentation/introduction/)
-- [Vite](https://vitejs.dev/guide/)
-- [ESLint](https://eslint.org/docs/user-guide/getting-started)
-- [Prettier](https://prettier.io/docs/en/index.html)
+In addition to these, you're welcome to add anything you want to the applet or the development environment. Some recommendations are:
 
-## Reccomendations for more tools/libraries to use in advanced applets
-
-TODO: Recommend pinia, vitest, etc.
+- `pinia`: [Pinia](https://pinia.esm.dev/) A Vue state management library for complex application state.
+- `vitest`: [Vitest](https://vitest.dev/) A fast testing suite that re-uses the vite setup and is api-compatible with Jest.
