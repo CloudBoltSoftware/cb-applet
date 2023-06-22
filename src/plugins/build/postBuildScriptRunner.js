@@ -2,6 +2,10 @@ import { spawn } from "child_process";
 
 /**
  * Run a script after each build. This works on all changes with build --watch too.
+ *
+ * This is a custom plugin for Vite that helps automate some build-time tasks.
+ * Do not modify or remove this file unless you know what you're doing.
+ *
  * @param {object} options
  * @param {string} options.script terminal script to run after each build
  * @param {string} [options.apply='build'] vite plugin apply option

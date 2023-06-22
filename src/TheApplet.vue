@@ -50,9 +50,8 @@
 <script setup>
 /**
  * Import any libraries, assets, and other components you'd like to use.
- * `defineProps` and a few vue utilities are already imported for you.
- * Everything else should be explicitly imported rather than relying on
- * global imports to make sure everything is bundled correctly.
+ * The <script setup> syntax automatically imports defineProps and other define* macros.
+ * Everything else should be explicitly imported to make sure everything is bundled correctly.
  */
 import camelCase from "camelCase";
 import {
@@ -82,11 +81,12 @@ const message = `The string "${greeting}" is processed by an installed npm packa
  * https://jsdoc.app/
  *
  * It's used here to define the props that CloudBolt passes to your applet. This will give you
- * autocomplete for the props in your IDE. This is especially helpful for `user` and `api`.
+ * autocomplete for the props in your IDE. This is especially helpful for `user` and `api` that
+ * have nested properties.
  *
  * @typedef {object} Props
  * @property {User} Props.user - User details
- * @property {ReturnType<import("@cloudbolt/cb-api-helper").createApi>} Props.api - The authenticated API instance
+ * @property {ReturnType<import("@cloudbolt/js-sdk").createApi>} Props.api - The authenticated API instance
  * @property {string} Props.page - The currently loaded page name
  * @property {string} Props.area - The page area where the component is being rendered
  * @property {object} Props.context - Individual Applet targets might pass in contextual information that only makes sense for applets in that context.
