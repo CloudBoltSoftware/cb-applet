@@ -50,9 +50,6 @@
     "test": "echo \"Error: no test specified. CloudBolt suggest using vitest.\" && exit 1"
   },
   "dependencies": {
-    "@syncfusion/ej2-vue-base": "^21.1.41",
-    "@syncfusion/ej2-vue-grids": "^21.1.41",
-    "@syncfusion/ej2-vue-layouts": "^21.1.37",
     "camelcase": "^7.0.1",
     "vuetify": "^3.1.15"
   },

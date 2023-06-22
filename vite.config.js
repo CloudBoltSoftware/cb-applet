@@ -57,14 +57,14 @@ export default defineConfig({
 
     rollupOptions: {
       /**
-       * CloudBolt provides many of this applet's dependencies via an import map.
+       * CloudBolt provides some of this applet's dependencies via an import map.
        * This allows multiple applets to share the same dependencies, users to not
        * have to download the same dependencies multiple times, and for the CUI to
        * centralize the version of dependencies it uses.
        * This configuration shouldn't change unless CloudBolt changes the import map
        * to provide more/fewer/different dependencies.
        */
-      external: (id) => /^(@syncfusion\/.+|vue|vuetify)$/.test(id),
+      external: (id) => /^(vue|vuetify)$/.test(id),
     },
   },
 });

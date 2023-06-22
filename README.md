@@ -1,6 +1,6 @@
 # CB Applet
 
-CB Applets extend the CloudBolt UI using Vue.js with Vuetify and Syncfusion component libraries. Currently this only works for the Consumer UI (aka CUI). Applets can target multiple/specific areas/pages to render custom components. They receive data from CloudBolt via props and are developed using modern, standard UI development workflows.
+CB Applets extend the CloudBolt UI using Vue.js with Vuetify component library. Currently this only works for the Consumer UI (aka CUI). Applets can target multiple/specific areas/pages to render custom components. They receive data from CloudBolt via props and are developed using modern, standard UI development workflows.
 
 This project can be used as a starting point for CloudBolt customers who want to develop their own Applets.
 
@@ -136,7 +136,6 @@ There will be a documented list of targets for the CUI in official documentation
 
 We use a few libraries to make development easier and add features to the applet. These are listed in `package.json` ande are installed with `npm install ...`. The most important ones are:
 
-- `@syncfusion/*`: [Syncfusion](https://ej2.syncfusion.com/vue/documentation/introduction/) component library. Enterprise-level components.
 - `vuetify`: [Vuetify](https://vuetifyjs.com/en/introduction/why-vuetify/#guide) component library. Community-level components.
 - `vue`: [Vue](https://vuejs.org/guide/introduction.html) Used to build the applet.
 - `vite`: [Vite](https://vitejs.dev/guide/) Used to build the applet.
