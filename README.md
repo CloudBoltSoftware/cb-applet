@@ -1,12 +1,12 @@
 # CB Applet
 
-CB Applets extend the CloudBolt UI using Vue.js with Vuetify component library. Currently this only works for the Consumer UI (aka CUI). Applets can target multiple/specific areas/pages to render custom components. They receive data from CloudBolt via props and are developed using modern, standard UI development workflows.
+CB Applets extend the CloudBolt UI using Vue.js with Vuetify component library. Currently these only work for the Consumer UI (aka CUI). Applets can target multiple/specific areas/pages to render custom components. They receive data from CloudBolt via props and are developed using modern, standard UI development workflows.
 
 This project can be used as a starting point for CloudBolt customers who want to develop their own Applets.
 
 ## Getting Started
 
-1. Install Node.js (see `.nvmrc` for the reccomended version).
+1. Install Node.js (see `.nvmrc` for the recommended version).
 1. Clone this repo locally.
 1. Run `npm install` to install dependencies.
 1. Set a unique name and ID for the applet in `package.json` (see the [Metadata Configuration](#metadata-packagejson-configuration) section below).

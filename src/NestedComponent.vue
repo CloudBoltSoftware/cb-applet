@@ -16,7 +16,7 @@ import { onMounted, ref } from "vue";
 import { VProgressCircular } from "vuetify/components";
 
 /**
- * Unfortunately Vue doesn't propogate the api type to nested components when using JSDoc
+ * Unfortunately Vue doesn't propagate the api type to nested components when using JSDoc
  * type definitions. We can work around this by using the `import()` function to import them.
  * This is optional, but helpfully keeps autocomplete working in the nested component.
  *
