@@ -47,7 +47,7 @@
     "check:lint": "eslint --ext .js,.vue --ignore-path .gitignore src",
     "format": "prettier . --write",
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore --fix src",
-    "test": "echo \"Error: no test specified. CloudBolt suggest using vitest.\" && exit 1"
+    "test": "echo \"Error: no test runner specified. CloudBolt suggests using vitest.\" && exit 1"
   },
   "dependencies": {
     "camelcase": "^7.0.1",
