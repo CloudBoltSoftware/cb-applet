@@ -100,14 +100,35 @@ CloudBolt applications interpret this field to determine where to render applets
 {
   "cui": {
     "pageName": ["target1", "target2"],
+    "anotherPageName": ["all"],
     "all": ["target3"]
   }
 }
 ```
 
-In this example, the page called `pageName` will have the applet rendered in the `target1` and `target2` targets. All pages will have the applet rendered in the `target3` target if the page has a `target3`.
+In this example, the page called `pageName` will render in the `target1` and `target2` targets. the page called `anotherPageName` will render the applet in all targets. All pages will have the applet rendered in the `target3` target if the page has a `target3`. This is especially useful for cross-app additions, like footers or navigation items added to every page.
 
-There will be a documented list of targets for the CUI in official documentation. However, all targets are discoverable by creating a simple applet that runs console.logs out the `page` and `area` props of the `TheApplet` component and setting the `met_targets` to `{"cui": {"all": ["all"]}}`.
+There will be a list of targets for the CUI in official documentation. However, all targets are discoverable by creating a simple applet that runs console.logs out the `page` and `area` props of the `TheApplet` component and setting the `met_targets` to `{"cui": {"all": ["all"]}}`.
+
+One exception to this target discoverability is represented by this example:
+
+```json
+{
+  "cui": {
+    "resourceDetailsTabs": [
+      {
+        "resourceTypes": ["service"],
+        "label": "Additional Info"
+      }
+    ]
+  }
+}
+```
+
+`resourceDetailsTabs` is a special target that will render the applet as a tab on the resource details page. It should be an array of a single configuration object with two optional fields:
+
+- `resourceTypes` is an array of resource type names that the tab should be rendered for (defaults to `['all']`).
+- `label` is the label that will be displayed on the tab (defaults to the applet's `met_label`).
 
 ## Repo Contents
 
