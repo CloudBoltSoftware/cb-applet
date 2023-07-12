@@ -16,14 +16,9 @@ import { onMounted, ref } from "vue";
 import { VProgressCircular } from "vuetify/components";
 
 /**
- * Unfortunately Vue doesn't propagate the api type to nested components when using JSDoc
- * type definitions. We can work around this by using the `import()` function to import them.
- * This is optional, but helpfully keeps autocomplete working in the nested component.
- *
  * @typedef {object} Props
  * @property {ReturnType<import("@cloudbolt/js-sdk").createApi>} Props.api - The authenticated API instance
  */
-
 /** @type {Props} */
 const props = defineProps({
   api: {
@@ -70,6 +65,7 @@ async function fetchVersion() {
 onMounted(fetchVersion);
 </script>
 
+<!-- These styles won't affect anything outside this component -->
 <style scoped>
 p {
   font-size: 1.5em;
