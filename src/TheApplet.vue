@@ -24,12 +24,10 @@
     Vuetify is a great UI library that's included in the CUI.
     For more information on this class and others: https://vuetifyjs.com/en/styles/spacing/
   -->
-  <div v-else-if="isVcenterService" class="ma-3">
+  <div v-else class="ma-3">
     <!-- We're binding the api prop to MainVue (see more in the `script` section and in MainView.vue) -->
     <MainView :api="api" />
   </div>
-
-  <div v-else>Not a VCenter Service</div>
 </template>
 
 <!--
@@ -42,7 +40,6 @@
  * The <script setup> syntax automatically imports defineProps and other defineStuff macros.
  * Everything else should be explicitly imported to make sure everything is bundled correctly.
  */
-import { computed } from "vue";
 import MainView from "./MainView.vue";
 import NavbarView from "./NavbarView.vue";
 
@@ -150,9 +147,5 @@ const props = defineProps({
  */
 console.log(
   `This applet is being loaded on the ${props.page} page in the ${props.area} area by ${props.user.username}`
-);
-
-const isVcenterService = computed(
-  () => props.context?.resource?.blueprint === "VCenter Service"
 );
 </script>
