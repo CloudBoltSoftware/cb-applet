@@ -3,6 +3,7 @@ import { defineConfig } from "vite";
 import { nodeResolve } from "@rollup/plugin-node-resolve";
 import vuetify, { transformAssetUrls } from "vite-plugin-vuetify";
 import { postBuildScriptRunner } from "./src/plugins/build/postBuildScriptRunner";
+import { chromeDevtoolsOverrides } from "./src/plugins/build/chromeDevToolOverrides";
 
 /**
  * This is the Vite configuration file. It's used to configure the Vite bundler.
@@ -28,6 +29,9 @@ export default defineConfig({
     // Resolves installed node modules into the bundler. See for more information:
     // https://github.com/rollup/plugins/tree/master/packages/node-resolve
     nodeResolve(),
+
+    // If in dev mode, copies the built applet to folders for Chrome Devtools Overrides
+    chromeDevtoolsOverrides(),
 
     // Runs a script that triggers the custom xui bundler when a build finishes.
     postBuildScriptRunner({ script: "npm run post-build" }),
