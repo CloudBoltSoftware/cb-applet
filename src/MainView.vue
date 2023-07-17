@@ -29,15 +29,15 @@
 <script setup>
 import camelCase from "camelCase";
 import {
-  computed,
-  defineProps,
-  onBeforeMount,
-  onBeforeUnmount,
-  onBeforeUpdate,
-  onMounted,
-  onUnmounted,
-  onUpdated,
-  ref,
+computed,
+defineProps,
+onBeforeMount,
+onBeforeUnmount,
+onBeforeUpdate,
+onMounted,
+onUnmounted,
+onUpdated,
+ref,
 } from "vue";
 import NestedComponent from "./NestedComponent.vue";
 import imageUrl from "./assets/cb_logo_255x60.png";

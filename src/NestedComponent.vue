@@ -60,9 +60,31 @@ async function fetchVersion() {
     console.error(error);
   }
 }
+async function fetchInboundWebHook() {
+  try {
+    // Use the ID provided by the URL of your webhook.
+    // This value must be  
+    // Ex. /api/v3/cmp/inboundWebHooks/IWH-f7gfst8e/run/
+    const webHookId = 'IWH-f7gfst8e'
+    // Optional Parameters Object 
+    const options = {value: 'Your parameters'}
+    // Another Async call to the api
+    // Use `.then()` and `.catch()` to handle the response
+    // https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Asynchronous/Promises
+    const webHook = await props.api.v3.cmp.inboundWebHooks.runGet(webHookId, options)
+    // Logging the response for this example
+    console.log(webHook)
+  } catch (error) {
+    // When using API calls, it's a good idea to catch errors and meaningfully display them.
+    // In this case, we'll just log the error to the console.
+    console.error(error);
+  }
+}
 
 // Run the function when the component is mounted.
 onMounted(fetchVersion);
+// Uncomment to run this command once you provide the ID
+onMounted(fetchInboundWebHook)
 </script>
 
 <!-- These styles won't affect anything outside this component -->
