@@ -17,7 +17,7 @@
     {{ message + "!" }}
   </p>
   <p>Time: {{ time }}</p>
-  
+
   <!-- 
     Prepend props like "api" with `:` to bind them to child components. `:` is short for `v-bind:`.
     -->

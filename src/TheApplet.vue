@@ -27,7 +27,7 @@
   <div v-else class="ma-3">
     <!-- We're binding the api prop to MainVue (see more in the `script` section and in MainView.vue) -->
     <MainView :api="api" />
-    <!-- We're binding the api and context prop to ResourceDetailView -->
+    <!-- We're binding the api and context prop to ResourceDetailView and conditionally rendering on resource detail tabs-->
     <ResourceDetailView v-if="area.includes('tab') && page.includes('resourceDetailsTabs')" :api="api" :context="context"/>
   </div>
 </template>
