@@ -27,6 +27,8 @@
   <div v-else class="ma-3">
     <!-- We're binding the api prop to MainVue (see more in the `script` section and in MainView.vue) -->
     <MainView :api="api" />
+    <!-- We're binding the api and context prop to ResourceDetailView -->
+    <ResourceDetailView v-if="area.includes('tab') && page.includes('resourceDetailsTabs')" :api="api" :context="context"/>
   </div>
 </template>
 
@@ -42,6 +44,7 @@
  */
 import MainView from "./MainView.vue";
 import NavbarView from "./NavbarView.vue";
+import ResourceDetailView from "./ResourceDetailView.vue";
 
 /**
  * JSDoc is a great way to document your code and help your IDE provide better autocomplete.

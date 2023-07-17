@@ -2,14 +2,14 @@
     <!-- 
     VCard comes from Vuetify: https://vuetifyjs.com/en/components/cards/
     and provide a great way to wrap related content together
-    max-width and the margin class "mb-2" provide simple css customization
+    max-width and the vuetify margin class "mb-2" provide simple css customization
   -->
   <VCard
     :loading="apiResponseLoading"
     title="API Examples"
     max-width="25%"
     class="mb-2">
-    <VCardActions>
+    <VCardActions class="d-flex flex-column">
       <!-- API Example for Inbound Webhooks -->
       <SimpleButton 
         text="Fetch Inbound Webhook" 
@@ -61,7 +61,7 @@ async function fetchInboundWebHook() {
     // https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Asynchronous/Promises
     const webHook = await props.api.v3.cmp.inboundWebHooks.runGet(webHookId, options)
     // Logging the response for this example
-    console.log(webHook)
+    console.log({webHook})
     apiResponseLoading.value = false;
   } catch (error) {
     // When using API calls, it's a good idea to catch errors and meaningfully display them.
