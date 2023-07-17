@@ -1,7 +1,7 @@
 <template>
     <!-- 
     VCard comes from Vuetify: https://vuetifyjs.com/en/components/cards/
-    and provide a great way to wrap content together
+    and provide a great way to wrap related content together
     max-width and the margin class "mb-2" provide simple css customization
   -->
   <VCard
@@ -22,10 +22,7 @@
 
 <script setup>
 /**
- * Vuetify has a rich ecosystem of pre-built components that you can use in your applets.
- * We use them throughout the CloudBolt UI, so they'll help your applet fit in.
- * This one in particular is a simple loading spinner.
- * https://vuetifyjs.com/en/components/progress-circular/
+ * Here we are using our custom SimpleButton in multiple iterations
  */
 import { ref } from "vue";
 import SimpleButton from "./SimpleButton.vue";
