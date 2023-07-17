@@ -3,9 +3,7 @@
 </template>
 
 <script setup>
-import {
-defineProps,
-} from "vue";
+import { defineProps } from "vue";
 import NestedExamples from "./NestedExamples.vue";
 
 /**
@@ -15,7 +13,7 @@ import NestedExamples from "./NestedExamples.vue";
  */
 
 /** @type {Props} */
-const props = defineProps({
+defineProps({
   api: {
     type: Object,
     required: true,
@@ -24,17 +22,15 @@ const props = defineProps({
    * Additional contextual information for an applet in a Resource panel
    * console.log(props.context) to see what's available for your applet.
    **/
-   context: {
+  context: {
     type: Object,
     default: () => ({}),
   },
 });
-
 </script>
 
 <!-- 
   The `style` is where you write your CSS. "scoped" styles only apply to this component - not even 
   child components will be affected. This is a great way to make sure your styles don't leak out.
 -->
-<style scoped>
-</style>
+<style scoped></style>

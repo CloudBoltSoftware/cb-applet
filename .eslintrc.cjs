@@ -2,17 +2,17 @@
 module.exports = {
   // This tells eslint to use this file for all files in this directory and subdirectories.
   root: true,
-  
+
   // This tells eslint which global variables and features are available.
   env: {
     browser: true,
     node: true,
   },
-  
+
   // These are sets of linting rules to use by default.
   extends: [
     // This plugin checks for common vue errors in your code.
-    "plugin:vue/recommended", 
+    "plugin:vue/recommended",
 
     // This plugin checks for common js errors in your code.
     "eslint:recommended",
@@ -48,8 +48,11 @@ module.exports = {
         math: "never",
       },
     ],
-    
+
     // Allows for vuetify syntax with v-slot modifiers
     "vue/valid-v-slot": ["error", { allowModifiers: true }],
+
+    // Allows for multiple root elements in a component
+    "vue/no-multiple-template-root": "off",
   },
 };
