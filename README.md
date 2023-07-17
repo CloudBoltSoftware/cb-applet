@@ -20,22 +20,43 @@ The main component is [TheApplet.vue](./src/TheApplet.vue). Start there to see s
 
 Conventions in this project are based on the [Vue.js style guide](https://vuejs.org/style-guide/) using the Composition API and the `<script setup>` syntax. This is vue's recommended approach for new projects.
 
-## Development Cycle
+## Development
 
-After any change, re-build the applet with `npm run build`. Then, upload the zip file to CloudBolt via the UI Extensions interface. Refresh the `cui` to see your changes.
+Build the applet with `npm run build`. Then, upload the zip file to CloudBolt via the UI Extensions interface. Refresh the `cui` to see your changes.
 
-You can put auto-build on changes with the command `npm run build -- --watch`.
+### Dev Mode
+
+When developing, it's useful to have the applet auto-build and to see your changes locally without having to upload the zip to CloudBolt or affect other users. This workflow replaces a live version of the applet with a local version using Chrome's devtools.
+
+Prerequisites:
+
+- Google Chrome
+- An environment variable "VITE_CB_URL" set to the url for your cloudbolt instance. The easiest way to do this is by creating a file in this project root called `.env.local` with the line: `export VITE_CB_URL=https://my.cloudbolt.url`
+- A version of this applet must be uploaded to CloudBolt and enabled for your user.
+
+Run the script `npm run build:dev`. This watches for file changes and auto-builds the applet when changes are saved. It then copies files to subfolders in `xui/src/tmp/devtools`. To use use these files:
+
+1. In Chrome, navigate to the CUI.
+1. Open the devtools and navigate to the Sources tab's Overrides panel.
+1. Click "Select folder for overrides".
+1. Select the `xui/src/tmp/devtools` folder.
+1. Click "Allow" when prompted.
+1. Navigate to the CUI and refresh the page.
+
+You should see your local version of the applet. You can now make changes to the applet and see them reflected in the CUI upon a page refresh without having to upload a new zip to CloudBolt.
+
+See [this article](https://developer.chrome.com/blog/new-in-devtools-65/#overrides) for more information on how Chrome overrides work.
+
+NOTE: This does not automatically upload the applet to CloudBolt. You will need to do that manually once you are done with your changes.
+
+### Development Tooling
 
 The repo has been set up with some basic developer tooling as well:
 
+- Dev Mode (see above) (`npm run build:dev [url]`)
 - [ESLint](https://eslint.org/) for linting (`npm run lint`)
 - [Prettier](https://prettier.io/) for code formatting (`npm run format`)
 - [Vite](https://vitejs.dev/) for bundling (`npm run build`)
-
-TODO: In the near future, we will support a smoother development cycle with hot-reloading and no need to re-upload the Applet while iterating. Top options we're considering:
-
-- Use vite's dev mode to create a hot-reloading development environment.
-- Use native browser dev tools to load the locally created applet from the `dist` folder.
 
 ### Metadata (package.json) configuration
 
