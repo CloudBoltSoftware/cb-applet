@@ -39,6 +39,7 @@ import {
   onUpdated,
   ref,
 } from "vue";
+import ACounter from "./ACounter.vue";
 import NestedComponent from "./NestedComponent.vue";
 import imageUrl from "./assets/cb_logo_255x60.png";
 
