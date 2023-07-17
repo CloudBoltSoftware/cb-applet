@@ -80,8 +80,9 @@ import NavbarView from "./NavbarView.vue";
  */
 const props = defineProps({
   /**
-   * User details
-   * See the in-ide documentation or the above JSDoc typedef for more details.
+   * User details (as a pinia store instance)
+   * (see https://pinia.vuejs.org/introduction.html for more information on pinia stores)
+   * See the in-ide documentation, the above JSDoc typedef, or console.log the prop for more details.
    */
   user: {
     type: Object,
@@ -116,6 +117,16 @@ const props = defineProps({
   area: {
     type: String,
     default: "",
+  },
+
+  /**
+   * Theme Information (as a pinia store instance)
+   * (see https://pinia.vuejs.org/introduction.html for more information on pinia stores)
+   * console.log the prop for more details.
+   */
+  theme: {
+    type: Object,
+    default: () => ({}),
   },
 
   /**

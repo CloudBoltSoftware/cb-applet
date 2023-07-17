@@ -162,7 +162,7 @@ We use a few libraries to make development easier and add features to the applet
 - `vite`: [Vite](https://vitejs.dev/guide/) Used to build the applet.
 - `eslint`: [ESLint](https://eslint.org/docs/user-guide/getting-started) Linting to help keep code clean. Run it with `npm run lint`.
 - `prettier`: [Prettier](https://prettier.io/docs/en/index.html) Code formatting to help keep code clean. Run it with `npm run format`.
-- `@cloudbolt/api-helper`: [CloudBolt API Helper](https://github.com/CloudBoltSoftware/api-helper) A library to make API calls to CloudBolt easier.
+- `@cloudbolt/js-sdk`: [CloudBolt JS SDK](https://github.com/CloudBoltSoftware/js-sdk) A library to make API calls to CloudBolt easier.
 
 In addition to these, you're welcome to add anything you want to the applet or the development environment. Some recommendations are:
 
