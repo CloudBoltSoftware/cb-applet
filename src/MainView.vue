@@ -1,4 +1,9 @@
 <template>
+  <!-- 
+    If you prepend an attribute with `:` (short for `v-bind:`), vue will treat the attribute's
+    value as javascript. This loads the imageUrl as imported in the below `script` section.
+  -->
+  <img :src="imageUrl" alt="CloudBolt logo" />
   <h2>CB Applet Hello World Example</h2>
   <p>
     This is a simple example of a CloudBolt Applet. It's a Vue component that is
@@ -6,23 +11,18 @@
     CloudBolt.
 
     <!-- 
-        Use double-curly-braces to render a variable from the `script` section in the template. 
-        You can use any valid javascript expression in the double-curly-braces.
-       -->
+      Use double-curly-braces to render a variable from the `script` section in the template. 
+      You can use any valid javascript expression in the double-curly-braces.
+      -->
     {{ message + "!" }}
   </p>
-
-  <!-- 
-      If you prepend an attribute with `:` (short for `v-bind:`), vue will treat the attribute's
-      value as javascript. This loads the imageUrl as imported in the below `script` section.
-    -->
-  <img :src="imageUrl" alt="CloudBolt logo" />
   <p>Time: {{ time }}</p>
 
   <!-- 
-      Prepend props like "api" with `:` to bind them to child components. `:` is short for `v-bind:`.
-     -->
+    Prepend props like "api" with `:` to bind them to child components. `:` is short for `v-bind:`.
+    -->
   <NestedComponent :api="api" />
+  <NestedExamples :api="api" />
   <ACounter />
 </template>
 
@@ -41,6 +41,7 @@ ref,
 } from "vue";
 import ACounter from "./ACounter.vue";
 import NestedComponent from "./NestedComponent.vue";
+import NestedExamples from "./NestedExamples.vue";
 import imageUrl from "./assets/cb_logo_255x60.png";
 
 /**
