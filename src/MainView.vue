@@ -1,5 +1,5 @@
 <template>
-  <h2>CB Applet Hello World Example</h2>
+  <h2>CB Applet Hello World Example - Locally Delivered!</h2>
   <p>
     This is a simple example of a CloudBolt Applet. It's a Vue component that is
     loaded into the CloudBolt UI and can be used to add functionality to
@@ -39,6 +39,7 @@ import {
   onUpdated,
   ref,
 } from "vue";
+import ACounter from "./ACounter.vue";
 import NestedComponent from "./NestedComponent.vue";
 import imageUrl from "./assets/cb_logo_255x60.png";
 
