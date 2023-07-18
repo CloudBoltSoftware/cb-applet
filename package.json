@@ -22,7 +22,8 @@
         "resourceDetailsTabs": [
           {
             "resourceTypes": [
-              "service", "server"
+              "service",
+              "server"
             ],
             "label": "Additional Info"
           }
@@ -50,6 +51,7 @@
   },
   "scripts": {
     "build": "vite build",
+    "build:dev": "vite build --watch --mode development",
     "post-build": "xui",
     "check:format": "prettier --check .",
     "check:lint": "eslint --ext .js,.vue --ignore-path .gitignore src",
@@ -71,6 +73,7 @@
     "eslint-plugin-vue": "^9.9.0",
     "eslint-plugin-vue-scoped-css": "^2.4.0",
     "eslint-plugin-vuejs-accessibility": "^2.1.0",
+    "load-pkg": "^4.0.0",
     "prettier": "^2.8.8",
     "sass": "^1.62.1",
     "vite": "^4.3.9",

@@ -20,12 +20,12 @@ export function postBuildScriptRunner(options) {
     // By default, run on the writeBundle hook. This is after each build has written
     // its files to disk. This ensures all the `dist` files are available to the script.
     async [options.hook || "writeBundle"]() {
-      console.log(`Running post build script: "${options.script}"`);
+      this.info(`Running post build script: "${options.script}"`);
       const [command, ...args] = options.script.split(" ");
       const child = spawn(command, args, { stdio: "inherit" });
       child.on("error", (error) => console.error(error));
       child.on("close", (code) =>
-        console.log(
+        this.info(
           `post build script "${options.script}" exited with code ${code}`
         )
       );
