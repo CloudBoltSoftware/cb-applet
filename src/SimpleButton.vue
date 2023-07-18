@@ -5,7 +5,13 @@
     The `@click`s are a examples of how you bind js functions to events on elements.
     See more: https://vuejs.org/guide/essentials/event-handling.html
   -->
-  <VBtn :disabled="disabled" :text="buttonText" @click="buttonAction" class="d-block my-1" variant="outlined"></VBtn>
+  <VBtn
+    :disabled="disabled"
+    :text="buttonText"
+    class="d-block my-1"
+    variant="outlined"
+    @click="buttonAction"
+  ></VBtn>
 </template>
 
 <script setup>
@@ -21,11 +27,11 @@ import { computed } from "vue";
 const props = defineProps({
   text: {
     type: String,
-    required: true
+    required: true,
   },
   buttonAction: {
     type: Function,
-    required: true
+    required: true,
   },
   disabled: {
     type: Boolean,
@@ -33,10 +39,11 @@ const props = defineProps({
   },
   disabledText: {
     type: String,
-    default: ''
-  }
+    default: "",
+  },
 });
 
-const buttonText = computed(()=> props.disabled && props.disabledText ? props.disabledText : props.text)
-
+const buttonText = computed(() =>
+  props.disabled && props.disabledText ? props.disabledText : props.text
+);
 </script>

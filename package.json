@@ -22,7 +22,8 @@
         "resourceDetailsTabs": [
           {
             "resourceTypes": [
-              "service"
+              "service",
+              "server"
             ],
             "label": "Additional Info"
           }
