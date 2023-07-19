@@ -46,9 +46,9 @@
  * The <script setup> syntax automatically imports defineProps and other defineStuff macros.
  * Everything else should be explicitly imported to make sure everything is bundled correctly.
  */
-import MainView from "./MainView.vue";
-import NavbarView from "./NavbarView.vue";
-import ResourceDetailView from "./ResourceDetailView.vue";
+import MainView from "./MainView/MainView.vue";
+import NavbarView from "./NavbarView/NavbarView.vue";
+import ResourceDetailView from "./ResourceDetailView/ResourceDetailView.vue";
 
 /**
  * JSDoc is a great way to document your code and help your IDE provide better autocomplete.

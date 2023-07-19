@@ -43,6 +43,8 @@ const props = defineProps({
   },
 });
 
+// Value set is the regular text unless the disabled text exists and the button is disabled.
+// As a `computed` value, this will update reactively following these rules
 const buttonText = computed(() =>
   props.disabled && props.disabledText ? props.disabledText : props.text
 );
