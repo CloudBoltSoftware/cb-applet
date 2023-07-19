@@ -8,7 +8,7 @@ import fs from "fs/promises";
  * This is a custom plugin for Vite that helps automate dev-mode.
  * Do not modify or remove this file unless you know what you're doing.
  */
-export function chromeDevtoolsOverrides(options) {
+export function chromeDevtoolsOverrides() {
   let cbUrl = "";
   let xuiName = "";
 
