@@ -21,9 +21,8 @@
   <!-- 
     Prepend props like "api" with `:` to bind them to child components. `:` is short for `v-bind:`.
     -->
-  <NestedComponent :api="api" />
-  <NestedExamples :api="api" />
-  <ACounter />
+  <VersionInfo :api="api" />
+  <CounterComponent />
 </template>
 
 <script setup>
@@ -39,10 +38,9 @@ import {
   onUpdated,
   ref,
 } from "vue";
-import ACounter from "./ACounter.vue";
-import NestedComponent from "./NestedComponent.vue";
-import NestedExamples from "./NestedExamples.vue";
-import imageUrl from "./assets/cb_logo_255x60.png";
+import imageUrl from "../assets/cb_logo_255x60.png";
+import CounterComponent from "./CounterComponent.vue";
+import VersionInfo from "./VersionInfo.vue";
 
 /**
  * @typedef {object} Props

@@ -1,10 +1,13 @@
 <template>
-  <NestedExamples :api="api" />
+  <ApiExamples :api="api" :resource="context.resource" />
 </template>
 
 <script setup>
 import { defineProps } from "vue";
-import NestedExamples from "./NestedExamples.vue";
+import ApiExamples from "./ApiExamples.vue";
+/**
+ * Recommend starting at src/MainView/MainView.vue for a more in-depth explanation of component parts
+ */
 
 /**
  * @typedef {object} Props
@@ -19,8 +22,7 @@ defineProps({
     required: true,
   },
   /**
-   * Additional contextual information for an applet in a Resource panel
-   * console.log(props.context) to see what's available for your applet.
+   * Additional contextual information for an applet in a Resource panel. Contains the current resource info
    **/
   context: {
     type: Object,
@@ -28,9 +30,3 @@ defineProps({
   },
 });
 </script>
-
-<!-- 
-  The `style` is where you write your CSS. "scoped" styles only apply to this component - not even 
-  child components will be affected. This is a great way to make sure your styles don't leak out.
--->
-<style scoped></style>
