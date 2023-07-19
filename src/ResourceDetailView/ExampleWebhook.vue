@@ -25,14 +25,14 @@ const props = defineProps({
 /**
  * This emit code snippet will be repeated in all the API Examples
  * Emits allow the nested component to communicate values to the parent component
- * The emits are named in the `defineEMits` statement,
+ * The emits are named in the `defineEmits` statement,
  * then called by the correct name and passed the relevant values to be handled in the parent component
  */
 const emit = defineEmits(["update:responseLoading", "update:lastResponse"]);
 /**
  * Use the ID provided by the URL of your webhook (Start at /actions/inbound_web_hooks/).
  * Ex. /api/v3/cmp/inboundWebHooks/IWH-f7gfst8e/run/ results in webHookId = 'IWH-f7gfst8e'
- * Using the ref here allows disabling the ApiActionButton component when value is not set
+ * Change this code to use your own webhook ID. The template above uses this value to enable the button.
  */
 const webHookId = "";
 async function fetchInboundWebHook() {

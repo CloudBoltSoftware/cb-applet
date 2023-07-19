@@ -14,8 +14,8 @@ import ApiActionButton from "./ApiActionButton.vue";
 /**
  * @typedef {object} Props
  * @property {ReturnType<import("@cloudbolt/js-sdk").createApi>} Props.api - The authenticated API instance
- * @property {ReturnType<import("@cloudbolt/js-sdk").createApi>} Props.resourceId - The Id of the current resource
- * @property {ReturnType<import("@cloudbolt/js-sdk").createApi>} Props.isServer - Boolean describing if the current resource is a server. Enables button
+ * @property {string} Props.resourceId - The Id of the current resource
+ * @property {boolean} Props.isServer - Boolean describing if the current resource is a server. Enables button
  */
 /** @type {Props} */
 const props = defineProps({
