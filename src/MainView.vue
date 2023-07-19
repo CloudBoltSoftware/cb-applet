@@ -22,7 +22,6 @@
     Prepend props like "api" with `:` to bind them to child components. `:` is short for `v-bind:`.
     -->
   <NestedComponent :api="api" />
-  <NestedExamples :api="api" />
   <ACounter />
 </template>
 
@@ -41,7 +40,6 @@ import {
 } from "vue";
 import ACounter from "./ACounter.vue";
 import NestedComponent from "./NestedComponent.vue";
-import NestedExamples from "./NestedExamples.vue";
 import imageUrl from "./assets/cb_logo_255x60.png";
 
 /**

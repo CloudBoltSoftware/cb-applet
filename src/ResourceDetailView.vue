@@ -1,5 +1,5 @@
 <template>
-  <NestedExamples :api="api" />
+  <NestedExamples :api="api" :resource="context.resource"/>
 </template>
 
 <script setup>
@@ -28,9 +28,3 @@ defineProps({
   },
 });
 </script>
-
-<!-- 
-  The `style` is where you write your CSS. "scoped" styles only apply to this component - not even 
-  child components will be affected. This is a great way to make sure your styles don't leak out.
--->
-<style scoped></style>
