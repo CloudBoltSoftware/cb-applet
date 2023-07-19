@@ -34,7 +34,7 @@ const emit = defineEmits(["update:responseLoading", "update:lastResponse"]);
  * Ex. /api/v3/cmp/inboundWebHooks/IWH-f7gfst8e/run/ results in webHookId = 'IWH-f7gfst8e'
  * Using the ref here allows disabling the ApiActionButton component when value is not set
  */
-const webHookId = "IWH-f7gfst8e";
+const webHookId = "";
 async function fetchInboundWebHook() {
   try {
     /**

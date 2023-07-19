@@ -49,6 +49,11 @@
 import MainView from "./MainView/MainView.vue";
 import NavbarView from "./NavbarView/NavbarView.vue";
 import ResourceDetailView from "./ResourceDetailView/ResourceDetailView.vue";
+/**
+ * Note the current folder and file structure has been created for this example (organized around the view).
+ * Please feel free to adjust this as you create your own applet
+ * Just make sure that the component imports still correctly reference the right files
+ */
 
 /**
  * JSDoc is a great way to document your code and help your IDE provide better autocomplete.

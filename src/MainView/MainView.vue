@@ -21,26 +21,26 @@
   <!-- 
     Prepend props like "api" with `:` to bind them to child components. `:` is short for `v-bind:`.
     -->
-  <NestedComponent :api="api" />
-  <ACounter />
+  <VersionInfo :api="api" />
+  <CounterComponent />
 </template>
 
 <script setup>
 import camelCase from "camelCase";
 import {
-  computed,
-  defineProps,
-  onBeforeMount,
-  onBeforeUnmount,
-  onBeforeUpdate,
-  onMounted,
-  onUnmounted,
-  onUpdated,
-  ref,
+computed,
+defineProps,
+onBeforeMount,
+onBeforeUnmount,
+onBeforeUpdate,
+onMounted,
+onUnmounted,
+onUpdated,
+ref,
 } from "vue";
 import imageUrl from "../assets/cb_logo_255x60.png";
-import ACounter from "./CounterComponent.vue";
-import NestedComponent from "./VersionInfo.vue";
+import CounterComponent from "./CounterComponent.vue";
+import VersionInfo from "./VersionInfo.vue";
 
 /**
  * @typedef {object} Props
