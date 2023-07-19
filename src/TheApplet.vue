@@ -46,6 +46,7 @@
  * The <script setup> syntax automatically imports defineProps and other defineStuff macros.
  * Everything else should be explicitly imported to make sure everything is bundled correctly.
  */
+import { onUnmounted, ref } from "vue";
 import MainView from "./MainView.vue";
 import NavbarView from "./NavbarView.vue";
 import ResourceDetailView from "./ResourceDetailView.vue";
@@ -155,4 +156,57 @@ const props = defineProps({
 console.log(
   `This applet is being loaded on the ${props.page} page in the ${props.area} area by ${props.user.username}`
 );
+
+/**
+ * While props are how data is passed down the heirarchy, events are how data is passed up.
+ * You can emit events from components and listen for them in the parent component.
+ * https://vuejs.org/guide/essentials/event-handling.html
+ *
+ * Just like there's a set of props that CloudBolt passes into Applets, there's a set of events
+ * that Applets can emit that CloudBolt listens for:
+ */
+const emit = defineEmits([
+  /**
+   * This is used to remove the applet from the page along with other content related to this applet,
+   * such as the navigation tab for the page resourceDetailsTabs.
+   *
+   * This is useful for applets that are only relevant in certain contexts when you want to run arbitrary
+   * code in context to determine if the applet should be removed, possibly async. If you only want to
+   * hide the applet itself, it's usually easier to use a ref and v-if in the template.
+   *
+   * This event takes no arguments.
+   */
+  "remove",
+  /**
+   * This is used to show a loading indicator on the applet and on other content related to this applet,
+   * such as the navigation tab for the page resourceDetailsTabs.
+   *
+   * This is useful for applets that are only relevant in certain contexts when you want to indicate that
+   * the applet is loading, possibly async.
+   *
+   * This event takes two arguments:
+   *  - One boolean to indicate if the applet is loading
+   *  - One optional object of properties to pass to the loading indicator
+   *    See options at https://vuetifyjs.com/en/api/v-progress-circular/
+   */
+  "loading",
+]);
+
+/**
+ * Example for how to emit the events. (uses `ref` - read more about that in MainView.vue)
+ * Change shouldRemove to `true` to see it in action.
+ */
+const shouldRemove = false;
+const delay = 5 * 1000;
+const removeTimeout = ref(null);
+if (shouldRemove) {
+  emit("loading", true, { color: "red", class: "ma-3" });
+
+  removeTimeout.value = setTimeout(() => {
+    console.log(`Removing the applet after a ${delay}ms Delay!`);
+    emit("loading", false);
+    emit("remove");
+  }, delay);
+}
+onUnmounted(() => clearTimeout(removeTimeout.value));
 </script>
