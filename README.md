@@ -17,6 +17,10 @@ This project can be used as a starting point for CloudBolt customers who want to
 1. Upload the built zip from the `xui/dist` folder to CloudBolt in the Admin UI Extensions interface.
 1. Visit the CUI to see your new Applet at the top of the page. Congratulations! You've built and installed a CB Applet from scratch!
 
+## Getting Help
+
+The main support forum for CB Applets is hosted in Github [Discussions](https://github.com/CloudBoltSoftware/cb-applet/discussions) within this repo. Ask questions, request enhancements, share best practices, and discuss applets with CloudBolt and the CloudBolt community.
+
 ## Customizing the Applet
 
 The main component is [TheApplet.vue](./src/TheApplet.vue). Start there to see some inline documentation for the highlights of CB Applets and Vue features. If you've never written a Vue app before, reference the [Vue.js documentation](https://.vuejs.org/guide/introduction.html) as you go. It's a powerful, approachable framework that is easy to learn.
