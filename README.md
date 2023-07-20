@@ -7,7 +7,10 @@ This project can be used as a starting point for CloudBolt customers who want to
 ## Getting Started
 
 1. Install Node.js (see `.nvmrc` for the recommended version).
-1. Clone this repo locally.
+1. Create a copy of this repo. Three options:
+   - Create a local clone of this repo
+   - Use [Github's template feature](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-repository-from-a-template) to create a new repo
+   - [Fork this repo](https://docs.github.com/en/get-started/quickstart/fork-a-repo) to create a new linked repo. (This is recommended in order to easily receive future changes from this repo) 
 1. Run `npm install` to install dependencies.
 1. Set a unique name and ID for the applet in `package.json` (see the [Metadata Configuration](#metadata-packagejson-configuration) section below).
 1. Build a production version of the applet with the command `npm run build`.
