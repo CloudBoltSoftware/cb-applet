@@ -1,12 +1,12 @@
 <template>
-  <BasicTextCard v-if="datadogParam" :info="datadogParam"/>
+  <ConditionalExample :api="api" :resource="context.resource"/>
   <ApiExamples :api="api" :resource="context.resource" />
 </template>
 
 <script setup>
-import { computed, defineProps } from "vue";
+import { defineProps } from "vue";
 import ApiExamples from "./ApiExamples.vue";
-import BasicTextCard from "./BasicTextCard.vue";
+import ConditionalExample from "./ConditionalExample.vue";
 /**
  * Recommend starting at src/MainView/MainView.vue for a more in-depth explanation of component parts
  */
@@ -18,7 +18,7 @@ import BasicTextCard from "./BasicTextCard.vue";
  */
 
 /** @type {Props} */
-const props = defineProps({
+defineProps({
   api: {
     type: Object,
     required: true,
@@ -32,12 +32,4 @@ const props = defineProps({
   },
 });
 
-/**
- * Leveraging information provided by the resource context to create a conditionals for an example.  
- * You can always console.log(props.context) to see what is available to work with.
- * This reactive value will check the resource context being passed for a custom parameter added to the resource 
- * whose name matches the desired value of "Datadog Parameter", and then displays this information in another VCard component
- * Custom Parameters can be created at `admin/customfields/` then added to the resource on the Parameters tab
- */
-const datadogParam = computed(() => props.context.resource?.groupedAttributesMap?.parameters?.attributes.filter((each) => each.label === "Datadog Parameter")[0])
 </script>
