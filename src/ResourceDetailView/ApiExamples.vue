@@ -18,7 +18,7 @@
       Last API Response:
       <!-- 
       Double brackets to render the `lastResponseDisplay` if it exists, using our custom css "code_block"
-      defined in the scoped styles at the end of the fil
+      defined in the scoped styles at the end of the file
       -->
       <p v-if="lastResponseDisplay" class="code_block">
         {{ lastResponseDisplay }}

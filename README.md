@@ -180,6 +180,7 @@ One exception to this target discoverability is represented by this example:
 - `package-lock.json`: Lock file for npm (don't edit this directly).
 - `README.md`: This file.
 - `vite.config.js`: Configuration for Vite.
+- `.vscode/extensions.json`: If using VS Code editor, this file includes a list of helpful extension suggestions
 
 ### Dependencies
 

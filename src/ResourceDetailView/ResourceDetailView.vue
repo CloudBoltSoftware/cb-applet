@@ -1,10 +1,12 @@
 <template>
+  <ConditionalExample :api="api" :resource="context.resource"/>
   <ApiExamples :api="api" :resource="context.resource" />
 </template>
 
 <script setup>
 import { defineProps } from "vue";
 import ApiExamples from "./ApiExamples.vue";
+import ConditionalExample from "./ConditionalExample.vue";
 /**
  * Recommend starting at src/MainView/MainView.vue for a more in-depth explanation of component parts
  */
@@ -29,4 +31,5 @@ defineProps({
     default: () => ({}),
   },
 });
+
 </script>
