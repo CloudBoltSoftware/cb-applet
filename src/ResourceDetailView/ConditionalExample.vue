@@ -21,19 +21,26 @@
       The first two chips will alternately render different chips, the third alternates the details of a single chip 
       -->
       <VChip v-if="isServerOn" prepend-icon="mdi-checkbox-marked-circle" size="small">Server is on</VChip>
-      <VChip v-if="!isServerOn" prepend-icon="mdi-alert-circle" size="small">Server is off</VChip>
+      <VChip v-else prepend-icon="mdi-alert-circle" size="small">Server is off</VChip>
 
       <VChip v-if="isUserAdmin" prepend-icon="mdi-checkbox-marked-circle" size="small">User is admin</VChip>
-      <VChip v-if="!isUserAdmin" prepend-icon="mdi-alert-circle" size="small">User is not admin</VChip>
+      <VChip v-else prepend-icon="mdi-alert-circle" size="small">User is not admin</VChip>
 
       <VChip :prepend-icon="datadogParam ? 'mdi-checkbox-marked-circle' : 'mdi-alert-circle'" size="small">
         {{ datadogParam ? 'Datadog param exists' : 'Datadog param does not exist' }}
       </VChip>
     </VChipGroup>
     <!-- 
-    The vuetify padding class "mx-2" provide simple css margin to the left and right of the group
+    Look inside `BasicTextCard` for a brief explanation of this use of Vue `template` (and Vue Slots)
     -->
-    <BasicTextCard v-if="isServerOn && isUserAdmin && datadogParam" :info="datadogParam"  class="mx-2"/>
+    <BasicTextCard v-if="isServerOn && isUserAdmin && datadogParam" :title="datadogParam.label"> 
+      <template #default>
+        <!-- 
+        The vuetify margin class ""ma-3" provides a simple css margin to all sides of the paragraph
+        -->
+        <p class="ma-3">{{ datadogParam.value }}</p>
+      </template>
+    </BasicTextCard>
   </VCard>
 </template>
 

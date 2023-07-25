@@ -3,19 +3,22 @@
     VCard comes from Vuetify: https://vuetifyjs.com/en/components/cards/
     and provide a great way to wrap related content together.
     The "tonal" variant is a built-in customization to change the overall card appearance
+    The vuetify margin class "mx-2" provides a simple css margin to the left and right
   -->
   <VCard
-    :title="info.label"
-    class="mb-2"
+    :title="title"
+    class="mb-2 mx-2"
     variant="tonal"
   >
-  <!-- 
-  VCardText slot sits below the header and can be considered the main body of the card
-  -->
-    <VCardText>
-    <!-- Double brackets to simply render the `info.value` -->
-    {{ info.value}}
-    </VCardText>
+    <!-- 
+    Vue Slots provide a way to pass template fragments to components. https://vuejs.org/guide/components/slots.html
+    Any reusable component can be written to take full advantage of slots. You can set and use multiple slots and templates at the same time.
+    Instead of using the VCard sub components here, we can use the available Vuetify `slots` https://vuetifyjs.com/en/api/v-card/#slots
+    This will render whatever is passed inside the component to the default VCard slot. 
+    -->
+    <slot name="default">
+    <!-- Anything passed inside the default template when calling this component -->
+    </slot>
   </VCard>
 </template>
 
@@ -24,20 +27,20 @@
 /**
  * Unlike some of the other example components which focus on specific use cases, 
  * sometimes you will want to create generic components with reusability
- * As long as this component recieves an `info` object that has a `label` and `value` properties
- * it will render a consistent VCard result that can be used anywhere
+ * This component recieves a title string and has an optional slot for content
+ * and will render a consistently styled VCard result that can be used anywhere
  */
 
 /**
  * @typedef {object} Props
- * @property {object} Props.info - The simple info object provided to the component
+ * @property {object} Props.title - The simple title string provided to the component
 /** @type {Props} */
 
 defineProps({
-  info: {
-    type: Object,
+  title: {
+    type: String,
     required: true,
-  },
+  }
 });
 
 </script>
