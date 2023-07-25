@@ -85,7 +85,7 @@ const datadogParam = computed(() => props.resource?.groupedAttributesMap?.parame
 // This reactive value uses the already-provided resource context to check if the server is powered on. 
 const isServerOn = computed(() => props.resource?.powerStatus === "POWERON")
 // This reactive value will check our `currentUser` ref and determine if the user is a superAdmin
-const isUserAdmin = computed(() => currentUser.value.superAdmin === true)
+const isUserAdmin = computed(() => currentUser.value?.superAdmin === true)
 
 async function fetchUser() {
   try {
