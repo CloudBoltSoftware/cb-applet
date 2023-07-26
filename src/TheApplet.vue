@@ -17,12 +17,28 @@
   <NavbarView v-if="area.includes('Nav')" />
 
   <!-- 
-    v-else is v-if's counterpart, rendering if the v-if resolves to `false`
+    v-else-if is v-if's counterpart, rendering if the v-if resolves to `false`
     You can add directives to normal HTML elements too, like this div.
+
+    In this case, we're just rendering an empty div if the ref "removed" is true.
+    (see MainView.vue for more information on refs - they're vue's reactive variables)
+   -->
+  <div v-else-if="removed" />
+
+  <!-- 
+    Applets have access to any Vue component library you'd like to add. We suggest Vuetify,
+    which is included here and in the CUI and will make your applet look at home in the CUI.
+    It has a lot of great components, including this loading indicator.
+    See more in Vuetify's Documentation: https://vuetifyjs.com/en/components/progress-circular/
 
     This class (ma-3) is a Vuetify utility class that adds some spacing.
     Vuetify is a great UI library that's included in the CUI.
     For more information on this class and others: https://vuetifyjs.com/en/styles/spacing/
+   -->
+  <VProgressCircular v-else-if="loading" indeterminate class="ma-3" />
+
+  <!-- 
+    v-else is v-if's other counterpart, rendering if the v-if and v-if-else's all resolve to `false`
   -->
   <div v-else class="ma-3">
     <!-- We're binding the api prop to MainVue (see more in the `script` section and in MainView.vue) -->
@@ -47,6 +63,7 @@
  * Everything else should be explicitly imported to make sure everything is bundled correctly.
  */
 import { onUnmounted, ref } from "vue";
+import { VProgressCircular } from "vuetify/lib/components/index.mjs";
 import MainView from "./MainView/MainView.vue";
 import NavbarView from "./NavbarView/NavbarView.vue";
 import ResourceDetailView from "./ResourceDetailView/ResourceDetailView.vue";
@@ -165,52 +182,55 @@ console.log(
 /**
  * While props are how data is passed down the heirarchy, events are how data is passed up.
  * You can emit events from components and listen for them in the parent component.
+ * Think of them as custom version of HTML Dom events, like click or mouseover.
  * https://vuejs.org/guide/essentials/event-handling.html
  *
  * Just like there's a set of props that CloudBolt passes into Applets, there's a set of events
- * that Applets can emit that CloudBolt listens for:
+ * that Applets can emit that CloudBolt listens for. Currently, there is only one event:
  */
 const emit = defineEmits([
   /**
-   * This is used to remove the applet from the page along with other content related to this applet,
-   * such as the navigation tab for the page resourceDetailsTabs.
+   * This is used to configure the applet's tab and other content related to this applet. This is
+   * the counterpoint to the `context` prop. It's useful for running arbitrary code in context to
+   * determine if the applet should be configured, possibly asynchronously.
    *
-   * This is useful for applets that are only relevant in certain contexts when you want to run arbitrary
-   * code in context to determine if the applet should be removed, possibly async. If you only want to
-   * hide the applet itself, it's usually easier to use a ref and v-if in the template.
+   * This event takes one configuration object as an argument. The expected values can change depending
+   * on the page and area. To discover the possible values, emit `configure` event without an argument.
    *
-   * This event takes no arguments.
+   * A notable use of this is with the page ResourceDetailsTabs. The configuration object can include:
+   * - `loadingTab`: A boolean to indicate if the applet's tab is loading (defaults to false)
+   * - `visibleTab`: A boolean to indicate if the applet's tab is visible (defaults to true)
    */
-  "remove",
-  /**
-   * This is used to show a loading indicator on the applet and on other content related to this applet,
-   * such as the navigation tab for the page resourceDetailsTabs.
-   *
-   * This is useful for applets that are only relevant in certain contexts when you want to indicate that
-   * the applet is loading, possibly async.
-   *
-   * This event takes two arguments:
-   *  - One boolean to indicate if the applet is loading
-   *  - One optional object of properties to pass to the loading indicator
-   *    See options at https://vuetifyjs.com/en/api/v-progress-circular/
-   */
-  "loading",
+  "configure",
 ]);
 
 /**
- * Example for how to emit the events. (uses `ref` - read more about that in MainView.vue)
+ * Example for how to emit the configure event. (uses `ref` - read more about that in MainView.vue)
  * Change shouldRemove to `true` to see it in action.
  */
 const shouldRemove = false;
+
+// Set up some variables
+const removed = ref(false);
+const loading = ref(false);
 const delay = 5 * 1000;
 const removeTimeout = ref(null);
+
+// See what values are expected for the target/page by emitting it without an argument
+// The result will appear in the page's console.
+emit("configure");
+
+// Trigger the remove event after a delay
 if (shouldRemove) {
-  emit("loading", true, { color: "red", class: "ma-3" });
+  // Set up the loading indicator
+  emit("configure", { loadingTab: true });
+  loading.value = true;
 
   removeTimeout.value = setTimeout(() => {
-    console.log(`Removing the applet after a ${delay}ms Delay!`);
-    emit("loading", false);
-    emit("remove");
+    console.log(`Removing the applet's tab after a ${delay}ms Delay!`);
+    emit("configure", { loadingTab: false, visibleTab: false });
+    loading.value = false;
+    removed.value = true;
   }, delay);
 }
 onUnmounted(() => clearTimeout(removeTimeout.value));
