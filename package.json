@@ -19,6 +19,10 @@
     ],
     "met_targets": {
       "cui": {
+        "resourcesDetailsPaneDiskList": ["preTable", "postTable", "expandedCellFoot"],
+        "resourcesDetailsPaneNetworks": ["preTable", "postTable", "expandedCellHead"],
+        "resourceDetailsDiskList": ["preTable", "postTable", "expandedCellFoot"],
+        "resourceDetailsNetworks": ["preTable", "postTable", "expandedCellHead"],
         "resourceDetailsTabs": [
           {
             "resourceTypes": [
