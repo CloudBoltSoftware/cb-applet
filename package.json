@@ -19,6 +19,7 @@
     ],
     "met_targets": {
       "cui": {
+        "pageApplet": ["fullPage"],
         "resourcesDetailsPaneDiskList": ["preTable", "postTable", "expandedCellFoot"],
         "resourcesDetailsPaneNetworks": ["preTable", "postTable", "expandedCellHead"],
         "resourceDetailsDiskList": ["preTable", "postTable", "expandedCellFoot"],
