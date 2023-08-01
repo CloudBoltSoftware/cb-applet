@@ -19,7 +19,7 @@
     ],
     "met_targets": {
       "cui": {
-        "pageApplet": ["fullPage"],
+        "fullPage": [{"slug": "my-url"}],
         "resourcesDetailsPaneDiskList": ["preTable", "postTable", "expandedCellFoot"],
         "resourcesDetailsPaneNetworks": ["preTable", "postTable", "expandedCellHead"],
         "resourceDetailsDiskList": ["preTable", "postTable", "expandedCellFoot"],
