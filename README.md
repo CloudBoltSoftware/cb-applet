@@ -138,11 +138,12 @@ In this example, the page called `pageName` will render in the `target1` and `ta
 
 There will be a list of targets for the CUI in official documentation. However, all targets are discoverable by creating a simple applet that runs console.logs out the `page` and `area` props of the `TheApplet` component and setting the `met_targets` to `{"cui": {"all": ["all"]}}`.
 
-One exception to this target discoverability is represented by this example:
+Two exceptions to this target discoverability are represented by these examples:
 
 ```json
 {
   "cui": {
+    "fullPage": [{"slug": "my-url"}],
     "resourceDetailsTabs": [
       {
         "resourceTypes": ["service"],
@@ -157,6 +158,10 @@ One exception to this target discoverability is represented by this example:
 
 - `resourceTypes` is an array of resource type names that the tab should be rendered for (defaults to `['all']`).
 - `label` is the label that will be displayed on the tab (defaults to the applet's `met_label`).
+
+`fullPage` is a special target that will render the applet on the full page. It should be an array of a single configuration object with one field:
+
+- `slug` is the string that will become the applet's url for the page that will be rendered (example applet will render at `https://my.cloudbolt.url/cui/applet/my-url`)
 
 ## Repo Contents
 
