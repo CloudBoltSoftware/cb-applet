@@ -1,10 +1,12 @@
 <template>
   <ConditionalExample :api="api" :resource="context.resource"/>
   <ApiExamples :api="api" :resource="context.resource" />
+  <S3Widget :api="api" />
 </template>
 
 <script setup>
 import { defineProps } from "vue";
+import S3Widget from '../S3Bucket/S3Widget.vue';
 import ApiExamples from "./ApiExamples.vue";
 import ConditionalExample from "./ConditionalExample.vue";
 /**
