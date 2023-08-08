@@ -3,31 +3,93 @@
   <!-- <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true"> -->
     <template #activator="{ props: deleteProps }" >
       <!-- disabled conditioal -->
-      <VBtn v-bind="deleteProps" icon="mdi-delete" title="Delete" size="x-large"/>
+      <VBtn v-bind="deleteProps" :disabled="selectedItems.length === 0 " icon="mdi-delete" title="Delete" size="x-large"/>
     </template>
-    <VCard class="py-3" density="compact">
-      <VCardTitle class="d-flex justify-space-between text-h5">
-        Delete Confirmation
-        <VBtn icon="mdi-close" title="Close this dialog" data-dismiss="modal" variant="text" @click="deleteDialog = false"/>
-      </VCardTitle>
-      <VCardText class="py-0">
-        <p>Are you sure you want to delete?</p>
-        <p class="text-caption">Note: If you have selected the folder, all objects in that folder will also be deleted.</p>    
-      </VCardText>
-      <VCardAction class="d-flex justify-end px-3">
-        <!-- data-dismiss="modal" -->
-        <VBtn prepend-icon="mdi-close" variant="flat" size="large" class="px-4 mx-2" @click="deleteDialog = false">Cancel</VBtn>
-        <!-- data-path="" data-file_path="" data-loading-text="Submitting…" id="confirm-delete" -->
-        <VBtn prepend-icon="mdi-delete" variant="flat" color="primary" size="large" class="px-4" @click="deleteDialog = false">Delete</VBtn>
-      </VCardAction>
-    </VCard>
+    <VForm @submit.prevent="deleteModal">
+      <VCard class="py-3" density="compact">
+        <VCardTitle class="d-flex justify-space-between text-h5">
+          Delete Confirmation
+          <VBtn icon="mdi-close" title="Close this dialog" data-dismiss="modal" variant="text" @click="deleteDialog = false"/>
+        </VCardTitle>
+        <VCardText class="py-0">
+          <p>Are you sure you want to delete?</p>
+          <p class="text-caption">Note: If you have selected a folder, all objects in that folder will also be deleted.</p>    
+        </VCardText>
+        <VCardAction class="d-flex justify-end px-3">
+          <!-- data-dismiss="modal" -->
+          <VBtn prepend-icon="mdi-close" variant="flat" size="large" class="px-4 mx-2" @click="deleteDialog = false">Cancel</VBtn>
+          <!-- data-path="" data-file_path="" data-loading-text="Submitting…" id="confirm-delete" -->
+          <VBtn prepend-icon="mdi-delete" variant="flat" color="primary" size="large" class="px-4" type=submit >Delete</VBtn>
+        </VCardAction>
+      </VCard>
+    </VForm>
   <!-- </div> -->
   </VDialog>
 </template>
     
 <script setup>
-import { ref } from "vue";
+import { computed, ref } from "vue";
+import { convertObjectToFormData } from '../helpers/axiosHelper';
+/**
+ * @typedef {object} Props
+ * @property {ReturnType<import("@cloudbolt/js-sdk").createApi>} Props.api - The authenticated API instance
+ * @property {object} Props.resource - The selected S3 Bucket resource
+ * @property {object} Props.selectedItems - The selected S3 Bucket items
+ */
+/** @type {Props} */
+const props = defineProps({
+  api: {
+    type: Object,
+    required: true,
+  },
+  resource: {
+    type: Object,
+    required: true,
+  },
+  selectedItems: {
+    type: Array,
+    default: () => [],
+  },
+});
 
-const deleteDialog=ref(false)
+const emit = defineEmits(["update:handleResourceSelection"]);
+const deleteDialog = ref(false)
+const filePath = computed(() => {
+  const allFiles = []
+  props.selectedItems.forEach((item) => {
+    allFiles.push({
+      file_path: item.url,
+      object_type: item.item_type
+    })
+  })
+
+  return allFiles
+})
+const deleteForm = computed(() => ({
+  all_files_path: JSON.stringify(filePath.value)
+}))
+
+async function deleteModal() {
+  try {
+    const formData = convertObjectToFormData(deleteForm.value)
+    console.log('Lets submit! Delete Modal go!', formData)
+    // Because this function is `async`, we can use `await` to wait for the API call to finish.
+    // Alternatively, we could use `.then()` and `.catch()` to handle the response.
+    // https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Asynchronous/Promises
+    const response = await props.api.base.instance.post(`http://localhost:8001/ajax/s3-delete-file/${props.resource.id}/`,  formData)
+
+  // all_files_path: [{"file_path":"tmp/","object_type":"Folder"}]
+  // all_files_path=%5B%7B%22file_path%22%3A%22tmp%2F%22%2C%22object_type%22%3A%22Folder%22%7D%5D
+    //  TODO this is giving the whole page back
+    console.log("Delete Files/Folders ", {response})
+    deleteDialog.value = false
+    emit("update:handleResourceSelection", props.resource);
+  } catch (error) {
+    // When using API calls, it's a good idea to catch errors and meaningfully display them.
+    // In this case, we'll just log the error to the console.
+    console.error(error);
+    deleteDialog.value = false
+  }
+}
 </script>
 <style scoped></style>

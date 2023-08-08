@@ -9,14 +9,14 @@
       class="text-capitalize text-h6 pl-0 mb-2"
       active-color="primary"
     />
-    <VBtnGroup>
+    <VBtnGroup disabled>
       <VBtn icon="mdi-file-download" title="Download" disabled  size="x-large"/>
       <!-- <VBtn icon="mdi-delete" title="Delete" disabled size="large"/> -->
-      <DeleteModal />
+      <DeleteModal :api="api" :resource="resource" :selected-items="selectedItems" @update:handleResourceSelection="(val) => handleResourceSelection(val)" />
       <!-- <VBtn id="upload_btn" icon="mdi-file-upload" title="Upload New File" size="large"/> -->
-      <UploadModal />
+      <UploadModal :api="api" :resource="resource" :state="state" :handle-resource-selection="handleResourceSelection"/>
       <!-- <VBtn id="create_btn" icon="mdi-folder-plus" class="btn btn-link" title="Add New Folder" size="large"/> -->
-      <CreateModal />
+      <CreateModal :api="api" :resource="resource" :state="state" @update:handleResourceSelection="(val) => handleResourceSelection(val)"/>
       <VBtn v-if="flattenView" icon="mdi-folder-eye" title="Toggle Folder View" size="x-large" @click="flattenSelection"/>
       <VBtn v-else icon="mdi-view-headline"  title="Toggle List View" size="x-large" @click="flattenSelection" />
     </VBtnGroup>
@@ -27,28 +27,28 @@
           :items="state?.dir_list"
           :item-value="item => item"
           show-select
+          @update:model-value="(val) => selectedItems = val"
           >
           <template #[`item.name`]="{ item }">
             <td class="d-inline-flex">
-                <VIcon
-                  :icon="item.raw.item_type === 'Folder' ? 'mdi-folder' : 'mdi-file'"
-                />
-                <!-- is_file: true -->
-                <BucketButton 
-                v-if="item.raw.item_type === 'Folder'"
-                :id="resource.id"
-                :item="item.raw"
-                :api="api"
-                @update:updateResourceSelection="(val) => updateResourceSelection(val)"
-                />
-                <div v-else>{{ item.raw.name }}</div>
-
+              <VIcon
+                :icon="item.raw.is_file ? 'mdi-file' :  'mdi-folder' "
+                class="align-center"
+              />
+              <BucketButton 
+              v-if="!item.raw.is_file"
+              :id="resource.id"
+              :item="item.raw"
+              :api="api"
+              @update:updateResourceSelection="(val) => updateResourceSelection(val)"
+              />
+              <div v-else class="ml-2">{{ item.raw.name }}</div>
             </td>
           </template> 
           <template #[`item.actions`]="{ item }">
             <td v-if="item.raw.is_file" class="d-inline-flex">
               <VBtnGroup>
-                <RenameModal :api="api" :item="item.raw" />
+                <RenameModal :api="api" :item="item.raw" :resource="resource" :state="state" />
                 <OverviewModal :api="api" :item="item.raw" :location="location" :resource="resource" />
               </VBtnGroup>
             </td>
@@ -60,6 +60,7 @@
 
 <script setup>
 import { computed, ref } from "vue";
+import { convertObjectToFormData } from '../helpers/axiosHelper';
 import BucketButton from "./BucketButton.vue";
 import CreateModal from "./CreateModal.vue";
 import DeleteModal from "./DeleteModal.vue";
@@ -69,7 +70,11 @@ import UploadModal from "./UploadModal.vue";
 /**
  * @typedef {object} Props
  * @property {ReturnType<import("@cloudbolt/js-sdk").createApi>} Props.api - The authenticated API instance
- * @property {object} Props.resource - The selected S3 Bucket
+ * @property {string} Props.location - The selected S3 Bucket location
+ * @property {object} Props.resource - The selected S3 Bucket resource
+ * @property {object} Props.state - The selected S3 Bucket state
+ * @property {function} Props.updateResourceSelection - Function to replace the selected S3 Bucket resource
+ * @property {function} Props.handleResourceSelection - Function to fetch the selected S3 Bucket
  */
 /** @type {Props} */
 const props = defineProps({
@@ -93,10 +98,19 @@ const props = defineProps({
     type: Function,
     default: () => {},
   },
+  handleResourceSelection: {
+    type: Function,
+    default: () => {},
+  },
 });
 
-const flattenView = ref(false)
 const isLoading = ref(false)
+const selectedItems = ref()
+const flattenView = ref(false)
+const flattenForm = computed(() => ({
+  path: '',
+  flat: flattenView.value ? 'True' : 'False'
+}))
 
 const headers = [
   { title: 'Name', align: 'start', key: 'name' },
@@ -107,7 +121,6 @@ const headers = [
   { title: 'Actions', align: 'end', key: 'actions' },
 ]
 const breadcrumbs = computed(() => {
-  console.log(props.resource)
   let crumbsArray = [{
     title: props.resource.name,
     disabled: false,
@@ -124,7 +137,6 @@ const breadcrumbs = computed(() => {
       })
     }
   }
-  console.log({crumbsArray})
   // Disable the last link
   const lastLink = crumbsArray[crumbsArray.length-1]
   lastLink.disabled = true
@@ -132,18 +144,15 @@ const breadcrumbs = computed(() => {
   return crumbsArray
 })
 
-const flattenSelection = async (event) => {
-  console.l
-  console.log('flattenSelection', event)
-  // TODO Not able to unflatten currently
-  console.log('flattenView', flattenView.value)
+const flattenSelection = async () => {
+  flattenView.value = !flattenView.value
   try {
-    flattenView.value = !flattenView.value
-    const response3 = await props.api.base.instance.post(`http://localhost:8001/ajax/s3_browser_info/${props.resource.id}/`, 
-      `path=&flat=True`)
-    console.log({response3})
-    props.updateResourceSelection(response3.data);
+    const formData = convertObjectToFormData(flattenForm.value)
+    const flattenResponse = await props.api.base.instance.post(`http://localhost:8001/ajax/s3_browser_info/${props.resource.id}/`, formData)
+    props.updateResourceSelection(flattenResponse.data);
   } catch (error) {
+    // When using API calls, it's a good idea to catch errors and meaningfully display them.
+    // In this case, we'll just log the error to the console.
     console.log({error})
   }
 }

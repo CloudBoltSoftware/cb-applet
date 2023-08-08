@@ -94,7 +94,7 @@
               <VProgressCircular v-if="isLoading" indeterminate />
               <div v-else>
                 <!-- TODO: this BANNER is probably a conditional -->
-                <VBanner v-if="!versionInfo.status">
+                <VBanner v-if="!versionInfo">
                   <template #prepend>
                     <VIcon
                       color="error"
@@ -155,10 +155,11 @@
     
 <script setup>
 import { computed, ref } from "vue";
+import { convertObjectToFormData } from '../helpers/axiosHelper';
 
 /**
  * @typedef {Object} item
- * @property {String} owner_name source object globalId
+ * @property {String} owner_name
  * @property {String} last_modified
  * @property {String} size
  * @property {String} item_type
@@ -174,9 +175,9 @@ import { computed, ref } from "vue";
 /**
  * @typedef {object} Props
  * @property {ReturnType<import("@cloudbolt/js-sdk").createApi>} Props.api - The authenticated API instance
- * @property {object} Props.item - The selected S3 Bucket
- * @property {string} Props.location - The selected S3 Bucket
- * @property {object} Props.resource - The selected S3 Bucket
+ * @property {object} Props.item - The selected S3 Bucket item
+ * @property {string} Props.location - The selected S3 Bucket location
+ * @property {object} Props.resource - The selected S3 Bucket resource
  */
 /** @type {Props} */
 
@@ -200,28 +201,32 @@ const props = defineProps({
 });
 
 const tab = ref(null)
-const versionInfo = ref()
-// const versioningEnabled = ref()
-const eTag = computed(() => props.item.e_tag.replace(/&quot;/g, '"'))
 const isLoading = ref(false)
 const overviewDialog = ref(false)
+const versionInfo = ref(false)
+// const versioningEnabled = ref()
+const eTag = computed(() => props.item.e_tag.replace(/&quot;/g, '"'))
+const versionForm = computed(() => ({
+  e_tag: encodeURIComponent(eTag.value),
+  key: encodeURIComponent(props.item.key),
+  location: encodeURIComponent(props.location)
+}))
 
-const handleVersionInfo = async (val) => {
-  console.log('handle tigger', val)
+const handleVersionInfo = async () => {
   if (tab.value === 'versions') {
-    console.log('handleVersionInfo', )
     try {
-      const response = await props.api.base.instance.post(`http://localhost:8001/ajax/s3-get-versions/${props.resource.id}/`,
-      `e_tag=${encodeURIComponent(eTag.value)}&key=${encodeURIComponent(props.item.key)}&location=${encodeURIComponent(props.location)}`)
-      console.log({response})
+      const formData = convertObjectToFormData(versionForm.value)
+      // TODO
+      // e_tag=%229ffeb8bcc9a55a7b7a589d783ab2af75%22&key=2022-03-14T235035Z%2F9.4.6.1%2Fblueprints.json&location=us-east-1
+      const response = await props.api.base.instance.post(`http://localhost:8001/ajax/s3-get-versions/${props.resource.id}/`, formData)
       isLoading.value = false
-      versionInfo.value = response.data
+      versionInfo.value = response.status
     } catch (error) {
+      // When using API calls, it's a good idea to catch errors and meaningfully display them.
+      // In this case, we'll just log the error to the console.
       console.log({error})
     }
   }
-  // e_tag=%229ffeb8bcc9a55a7b7a589d783ab2af75%22&key=2022-03-14T235035Z%2F9.4.6.1%2Fblueprints.json&location=us-east-1
-  // e_tag=%229ffeb8bcc9a55a7b7a589d783ab2af75%22&key=2022-03-14T235035Z%2F9.4.6.1%2Fblueprints.json&location=us-east-1
 }
 
 const enableVersioning = async () => {
@@ -233,6 +238,8 @@ const enableVersioning = async () => {
     // console.log({response})
     // versioningEnabled.value = response.data
   } catch (error) {
+    // When using API calls, it's a good idea to catch errors and meaningfully display them.
+    // In this case, we'll just log the error to the console.
     console.log({error})
   }
 }

@@ -4,7 +4,6 @@
 {% block heading %}S3 Bucket Manager{% endblock %}
 {% block card_body %} -->
 <template>
-  <!-- It works but not displaying -->
 <VSheet class="pa-3" rounded>
   <VSelect 
     label="Buckets:" 
@@ -12,14 +11,15 @@
     item-title="name"
     item-value="id"
     return-object
-    @update:modelValue="handleResourceSelection"
+    @update:modelValue="getResourceSelection"
     />
   <BucketDisplay 
     :api="api" 
     :location="bucketDetails?.location"
     :resource="bucketDetails?.resource"
     :state="bucketDetails?.state"
-    :update-resource-selection="updateResourceSelection" />
+    :update-resource-selection="updateResourceSelection"
+    :handle-resource-selection="handleResourceSelection" />
 </VSheet>
 <!-- <div class="panel panel-default" id="content-box">
   {% with buckets.0 as resource %}
@@ -52,26 +52,34 @@ if (token) {
   // eslint-disable-next-line vue/no-mutating-props
   props.api.base.instance.defaults.headers.common['X-CSRFTOKEN'] = token
   // eslint-disable-next-line vue/no-mutating-props
-  props.api.base.instance.defaults.headers.common['CONTENT-TYPE'] = 'application/x-www-form-urlencoded; charset=UTF-8'
+  // props.api.base.instance.defaults.headers.common['CONTENT-TYPE'] = 'application/x-www-form-urlencoded; charset=UTF-8'
 }
 
 const handleResourceSelection = async (resource) => {
-  console.log('handleResourceSelection', resource)
+  console.log('handleResourceSelection', {resource}, 'for min timeout thingy')
+  setTimeout(getResourceSelection(resource), 4000)
+}
+
+const getResourceSelection = async (resource) => {
+  console.log('getResourceSelection', {resource})
   try {
     const response = await props.api.base.instance.get(`http://localhost:8001/ajax/s3_browser_info/${resource.id}/`)
-    console.log({response})
     bucketDetails.value = response.data
   } catch (error) {
+    // When using API calls, it's a good idea to catch errors and meaningfully display them.
+    // In this case, we'll just log the error to the console.
     console.log({error})
   }
 }
 
+
 const getBuckets = async () => {
   try {
-    console.log('get buckets ran')
     const response = await props.api.base.instance.get('http://localhost:8001/ajax/s3-list-buckets/')
     buckets.value = response.data.bucket_info
   } catch (error) {
+    // When using API calls, it's a good idea to catch errors and meaningfully display them.
+    // In this case, we'll just log the error to the console.
     console.log({error})
   }
 }

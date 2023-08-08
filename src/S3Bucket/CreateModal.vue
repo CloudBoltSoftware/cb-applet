@@ -1,5 +1,5 @@
 <template>
-  <VDialog v-model="createDialog" width="1024">
+  <VDialog v-model="createDialog" width="1024" @update:model-value="(val) => !val && onCancel()">
   <!-- <div class="modal fade" id="folderModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true"> -->
     <template #activator="{ props: createProps }" >
       <!-- id="create_btn" -->
@@ -7,18 +7,18 @@
     </template>
     <VCard class="py-3">
       <!-- id="createFolderForm" action="#" method="post" enctype="multipart/form-data" -->
-      <VForm @submit.prevent="submitModal" >
+      <VForm @submit.prevent="submitCreateModal" @update:model-value="(val) => formIsValid = val">
         <VCardTitle class="d-flex justify-space-between text-h5">
           <!-- {{  `Create Folder ${state.full_path ? `to ${state.full_path}` : ''}` }} -->
-          Create Folder -to- -put folder here-
+          {{ `Create Folder ${ state.full_path ? `to ${state.full_path}` : ''}`}}
           <!-- data-dismiss="modal" -->
-          <VBtn icon="mdi-close" title="Close this dialog" variant="text" @click="createDialog = false"/>
+          <VBtn icon="mdi-close" title="Close this dialog" variant="text" @click="onCancel"/>
         </VCardTitle>
         <VCardText>
           <VCol cols="12" >
             <!-- id="folder_name" -->
             <VTextField 
-              v-model="createFolderForm.folder_name"
+              v-model="newFolder"
               label="Folder Name"
               placeholder="Enter folder name"
               prepend-icon="mdi-folder-plus"
@@ -35,9 +35,9 @@
         </VCardText>
         <VCardAction class="d-flex justify-end px-3">
           <!-- data-dismiss="modal" -->
-          <VBtn prepend-icon="mdi-close" variant="flat" size="large" class="px-4 mx-2" @click="createDialog = false">Cancel</VBtn>
+          <VBtn prepend-icon="mdi-close" variant="flat" size="large" class="px-4 mx-2" @click="onCancel">Cancel</VBtn>
           <!-- id="create-folder-btn" data-path="" data-file_path="" data-loading-text="Submitting…" -->
-          <VBtn :loading="isSubmitting" prepend-icon="mdi-folder-plus" type=submit variant="flat" color="primary" size="large" class="px-4">Create
+          <VBtn :loading="isSubmitting"  :disabled="!formIsValid"  prepend-icon="mdi-folder-plus" type=submit variant="flat" color="primary" size="large" class="px-4">Create
             <template #loader>Submitting…</template>
           </VBtn>
         </VCardAction>
@@ -48,41 +48,68 @@
 </template>
     
 <script setup>
-import { ref } from "vue";
-
+import { computed, ref } from "vue";
+import { convertObjectToFormData } from '../helpers/axiosHelper';
 /**
  * @typedef {object} Props
  * @property {ReturnType<import("@cloudbolt/js-sdk").createApi>} Props.api - The authenticated API instance
+ * @property {object} Props.state - The selected S3 Bucket state
+ * @property {object} Props.resource - The selected S3 Bucket resource
  */
 /** @type {Props} */
-
-defineProps({
+const props = defineProps({
   api: {
     type: Object,
     required: true,
   },
+  state: {
+    type: Object,
+    default: () => {}
+  },
+  resource: {
+    type: Object,
+    default: () => {}
+  }
 });
 
-const createFolderForm = ref({
-  folder_name: ''
-}) 
+const emit = defineEmits(["update:handleResourceSelection"]);
+const newFolder = ref('')
+const createFolderForm = computed(() => ({
+  folder_name: newFolder.value,
+  path: props.state.full_path,
+  bucket_name: props.resource.name
+  })
+) 
 
+const formIsValid = ref(false)
 const isSubmitting = ref(false)
 const createDialog = ref(false)
 const requiredRule = [
   (value) => !!value || 'This field is required',
   (value) => !value.includes('/') || "Folder names can't contain '/''"]
-async function submitModal() {
+
+const onCancel = () => {
+  createDialog.value = false
+  newFolder.value = ''
+}
+
+async function submitCreateModal() {
+  console.log({props})
   try {
+    const formData = convertObjectToFormData(createFolderForm.value)
     isSubmitting.value = true
-    createDialog.value = false
     // TODO Handle Submission
-    console.log('Lets submit! Create Modal go!', createFolderForm.value)
+    console.log('Lets submit! Create Modal go!', formData)
+    // folder_name=tmp&path=&bucket_name=ui-demo-experience
+
     // Because this function is `async`, we can use `await` to wait for the API call to finish.
     // Alternatively, we could use `.then()` and `.catch()` to handle the response.
     // https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Asynchronous/Promises
-    // await props.api.v3.cmp.productInfo.getProductInfo();
+    const response = await props.api.base.instance.post(`http://localhost:8001/ajax/s3-create-folder/${props.resource.id}/`,  formData)
+    console.log("Create New Folder ", {response})
     isSubmitting.value = false
+    createDialog.value = false
+    emit("update:handleResourceSelection", props.resource);
   } catch (error) {
     // When using API calls, it's a good idea to catch errors and meaningfully display them.
     // In this case, we'll just log the error to the console.
