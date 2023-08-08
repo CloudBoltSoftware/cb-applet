@@ -1,8 +1,6 @@
 <template>
   <VDialog v-model="deleteDialog" width="1024">
-  <!-- <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true"> -->
     <template #activator="{ props: deleteProps }" >
-      <!-- disabled conditioal -->
       <VBtn v-bind="deleteProps" :disabled="selectedItems.length === 0 " icon="mdi-delete" title="Delete" size="x-large"/>
     </template>
     <VForm @submit.prevent="deleteModal">
@@ -16,14 +14,11 @@
           <p class="text-caption">Note: If you have selected a folder, all objects in that folder will also be deleted.</p>    
         </VCardText>
         <VCardAction class="d-flex justify-end px-3">
-          <!-- data-dismiss="modal" -->
           <VBtn prepend-icon="mdi-close" variant="flat" size="large" class="px-4 mx-2" @click="deleteDialog = false">Cancel</VBtn>
-          <!-- data-path="" data-file_path="" data-loading-text="Submitting…" id="confirm-delete" -->
           <VBtn prepend-icon="mdi-delete" variant="flat" color="primary" size="large" class="px-4" type=submit >Delete</VBtn>
         </VCardAction>
       </VCard>
     </VForm>
-  <!-- </div> -->
   </VDialog>
 </template>
     

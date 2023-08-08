@@ -1,16 +1,6 @@
 <template>
   <VForm 
     @submit.prevent="submitSelection">
-    <!-- <VTextField 
-      v-model="bucketForm.name"
-      name="name"
-      class="d-none"
-      />
-    <VTextField 
-      v-model="selectedPath"
-      name="path"
-      class="d-none"
-      /> -->
     <VBtn
       variant="text"
       :title="item.name"

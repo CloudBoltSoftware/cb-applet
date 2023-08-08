@@ -1,31 +1,22 @@
-<!-- {% extends "dashboard/card.html" %}
-{% load static %}
-{% block card_id %}S3 Bucket Manager{% endblock %}
-{% block heading %}S3 Bucket Manager{% endblock %}
-{% block card_body %} -->
 <template>
-<VSheet class="pa-3" rounded>
-  <VSelect 
-    label="Buckets:" 
-    :items="buckets"
-    item-title="name"
-    item-value="id"
-    return-object
-    @update:modelValue="getResourceSelection"
-    />
-  <BucketDisplay 
-    :api="api" 
-    :location="bucketDetails?.location"
-    :resource="bucketDetails?.resource"
-    :state="bucketDetails?.state"
-    :update-resource-selection="updateResourceSelection"
-    :handle-resource-selection="handleResourceSelection" />
-</VSheet>
-<!-- <div class="panel panel-default" id="content-box">
-  {% with buckets.0 as resource %}
-  {% include "s3_file_manager/templates/tab.html"  %}
-  {% endwith %}
-</div> -->
+  <VSheet class="pa-3" rounded>
+    <VSelect 
+      label="Buckets:" 
+      :items="buckets"
+      item-title="name"
+      item-value="id"
+      return-object
+      @update:modelValue="getResourceSelection"
+      />
+    <BucketDisplay 
+      v-if="bucketDetails"
+      :api="api" 
+      :location="bucketDetails?.location"
+      :resource="bucketDetails?.resource"
+      :state="bucketDetails?.state"
+      :update-resource-selection="updateResourceSelection"
+      :handle-resource-selection="handleResourceSelection" />
+  </VSheet>
 </template>
 
 <script setup>
@@ -51,6 +42,7 @@ if (token) {
   console.log({token})
   // eslint-disable-next-line vue/no-mutating-props
   props.api.base.instance.defaults.headers.common['X-CSRFTOKEN'] = token
+  // TODO is the below content type needed ?
   // eslint-disable-next-line vue/no-mutating-props
   // props.api.base.instance.defaults.headers.common['CONTENT-TYPE'] = 'application/x-www-form-urlencoded; charset=UTF-8'
 }

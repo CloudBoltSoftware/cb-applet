@@ -1,32 +1,23 @@
 <template>
   <VDialog v-model="fileDialog" width="1024" @update:model-value="(val) => !val && onCancel()" >
-<!-- <div class="modal fade" id="uploadObjectModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true"> -->
     <template #activator="{ props: fileProps }" >
-      <!-- <VBtn prepend-icon="mdi-file-upload" v-bind="fileProps" color="primary" id="file_btn" title="Upload New File">Upload a File</VBtn> -->
       <VBtn prepend-icon="mdi-file-upload" v-bind="fileProps" variant="flat" color="primary" size="x-large" title="Upload New File" class="px-4">Upload a File</VBtn>
     </template>
     <VCard class="py-3">
-      <!-- id="uploadFileForm" action="#" method="post" enctype="multipart/form-data" -->
       <VForm @submit.prevent="fileUploadModal">
         <VCardTitle class="d-flex justify-space-between text-h5">
           {{  `Upload File to ${state.full_path}` }}
           <VBtn icon="mdi-close" title="Close" data-dismiss="modal" variant="text" @click="onCancel" />
-          <!-- <span aria-hidden="true">&times;</span> -->
         </VCardTitle>
         <VCardText>
-          <!--  -->
           <VFileInput v-model="uploadFile" :rules="requiredRule" clearable label="Upload File" />
-          <!-- <p id="object_file_message" class="error-message">This field is required</p> -->
         </VCardText>
         <VCardActions class="d-flex justify-end px-3">
-          <!-- data-dismiss="modal"  -->
           <VBtn prepend-icon="mdi-close" variant="flat" size="large" class="px-4 mx-2" @click="onCancel" >Cancel</VBtn>
-          <!-- id="submit-object" -->
           <VBtn prepend-icon="mdi-file-upload" variant="flat" color="primary" size="large" class="px-4" type=submit >Upload to S3</VBtn>
         </VCardActions>
       </VForm>
     </VCard>
-<!-- </div> -->
   </VDialog>
 </template>
 

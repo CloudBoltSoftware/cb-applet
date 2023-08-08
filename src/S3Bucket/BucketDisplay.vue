@@ -1,8 +1,6 @@
 <template>
   <VProgressCircular v-if="isLoading" indeterminate class="ma-3" />
   <div v-else>
-  <!-- <nav class="nav nav-header-tabs"> -->
-  <!-- <div class="nav-left"> -->
     <VBreadcrumbs
       v-if="resource"
       :items="breadcrumbs"
@@ -11,16 +9,12 @@
     />
     <VBtnGroup disabled>
       <VBtn icon="mdi-file-download" title="Download" disabled  size="x-large"/>
-      <!-- <VBtn icon="mdi-delete" title="Delete" disabled size="large"/> -->
       <DeleteModal :api="api" :resource="resource" :selected-items="selectedItems" @update:handleResourceSelection="(val) => handleResourceSelection(val)" />
-      <!-- <VBtn id="upload_btn" icon="mdi-file-upload" title="Upload New File" size="large"/> -->
       <UploadModal :api="api" :resource="resource" :state="state" :handle-resource-selection="handleResourceSelection"/>
-      <!-- <VBtn id="create_btn" icon="mdi-folder-plus" class="btn btn-link" title="Add New Folder" size="large"/> -->
       <CreateModal :api="api" :resource="resource" :state="state" @update:handleResourceSelection="(val) => handleResourceSelection(val)"/>
       <VBtn v-if="flattenView" icon="mdi-folder-eye" title="Toggle Folder View" size="x-large" @click="flattenSelection"/>
       <VBtn v-else icon="mdi-view-headline"  title="Toggle List View" size="x-large" @click="flattenSelection" />
     </VBtnGroup>
-    <!-- </nav> -->
     <div id="s3-files-table">
         <VDataTable
           :headers="headers"
