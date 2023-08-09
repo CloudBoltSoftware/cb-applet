@@ -4,9 +4,9 @@
     class="pl-0 my-1"
   >
     <VBreadcrumbsItem v-for="(entry, idx) in breadcrumbs" :key="entry.title">
-      <div v-if="entry.disabled" class="text-medium-emphasis text-none text-h6">{{ entry.title }}</div>
-      <VBtn v-else class="text-primary text-none text-h6 px-0" variant="plain" @click="fetchSelection(entry.path)" >{{ entry.title }}</VBtn>
-      <VBreadcrumbsDivider v-if="breadcrumbs.length > idx && breadcrumbs.length > 1" class="pr-0">
+      <div v-if="entry.disabled" class="text-grey-darken-3 text-none text-h6">{{ entry.title }}</div>
+      <VBtn v-else class="text-blue-darken-3 text-none text-h6 px-0" variant="plain" @click="fetchSelection(entry.path)" >{{ entry.title }}</VBtn>
+      <VBreadcrumbsDivider v-if="breadcrumbs.length -1 > idx && breadcrumbs.length > 1" class="pr-0">
         <VIcon icon="mdi-slash-forward" />
       </VBreadcrumbsDivider>
     </VBreadcrumbsItem>

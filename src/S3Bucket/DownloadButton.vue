@@ -1,5 +1,5 @@
 <template>
-  <VBtn icon="mdi-file-download" :disabled="selectedItems.length === 0" size="x-large" title="Download" @click="downloadFiles"/>
+  <VBtn icon="mdi-file-download" :disabled="isDisabled" size="x-large" title="Download" @click="downloadFiles"/>
 </template>
     
 <script setup>
@@ -31,6 +31,12 @@ const props = defineProps({
   },
 });
 
+const isDisabled = computed(() => {
+  if (props.selectedItems.length === 0 || props.selectedItems.findIndex((entry) => !entry.is_file) !== -1) {
+    return true
+  }
+  return false
+})
 const filePaths = computed(() => {
   const allFiles = []
   props.selectedItems.forEach((item) => {

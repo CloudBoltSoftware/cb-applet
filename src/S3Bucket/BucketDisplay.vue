@@ -26,7 +26,8 @@
             <td class="d-inline-flex">
               <VIcon
                 :icon="item.raw.is_file ? 'mdi-file' :  'mdi-folder' "
-                class="align-center"
+                color="blue-darken-3"
+                class="align-self-center"
               />
               <BucketButton 
               v-if="!item.raw.is_file"

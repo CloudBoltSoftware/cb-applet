@@ -5,7 +5,7 @@
     </template>
     <VForm @submit.prevent="deleteModal">
       <VCard class="py-3" density="compact">
-        <VCardTitle class="d-flex justify-space-between text-h5">
+        <VCardTitle class="w-100 d-inline-flex justify-space-between text-h5">
           Delete Confirmation
           <VBtn icon="mdi-close" title="Close this dialog" data-dismiss="modal" variant="text" @click="deleteDialog = false"/>
         </VCardTitle>

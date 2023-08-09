@@ -5,7 +5,7 @@
     </template>
     <VCard class="py-3">
       <VForm @submit.prevent="renameObject" @update:model-value="(val) => formIsValid = val" >
-        <VCardTitle class="d-flex justify-space-between text-h5">
+        <VCardTitle class="w-100 d-inline-flex justify-space-between text-h5">
           Rename Object
           <VBtn icon="mdi-close" title="Close this dialog" variant="text" @click="onCancel" />
         </VCardTitle>

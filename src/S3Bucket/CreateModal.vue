@@ -5,7 +5,7 @@
     </template>
     <VCard class="py-3">
       <VForm @submit.prevent="submitCreateModal" @update:model-value="(val) => formIsValid = val">
-        <VCardTitle class="d-flex justify-space-between text-h5">
+        <VCardTitle class="w-100 d-inline-flex justify-space-between text-h5">
           <div>Create Folder at <span class="font-italic">{{ state.full_path ? state.full_path : 'Root folder'}}</span></div>
           <VBtn icon="mdi-close" title="Close this dialog" variant="text" @click="onCancel"/>
         </VCardTitle>

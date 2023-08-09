@@ -1,24 +1,22 @@
 <template>
   <VSheet class="pa-3" rounded>
-    <VBanner :border="0">
-      <template #prepend>
-        <VAvatar :image="avatarUrl"/>
-      </template>
-      <VBannerText class="text-h5">
-        S3 Bucket Manager
-      </VBannerText>
-    </VBanner>
-    <VSelect 
-      label="Buckets:" 
-      :items="buckets"
-      item-title="name"
-      item-value="id"
-      return-object
-      class="pt-3"
-      placeholder="Select S3 Bucket"
-      :hide-details="true"
-      @update:modelValue="getResourceSelection"
+    <div class="d-inline-flex w-100">
+      <div class="w-25 d-inline-flex mt-1">
+        <VAvatar :image="avatarUrl" />
+        <span class="ml-3 text-h5">S3 Bucket Manager</span>
+      </div>
+      <VSelect 
+        label="Buckets:" 
+        :items="buckets"
+        item-title="name"
+        item-value="id"
+        return-object
+        class="w-75"
+        placeholder="Select S3 Bucket"
+        :hide-details="true"
+        @update:modelValue="getResourceSelection"
       />
+    </div>
     <BucketDisplay 
       v-if="bucketDetails"
       :api="api" 

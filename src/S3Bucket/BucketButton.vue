@@ -5,7 +5,8 @@
       variant="text"
       :title="item.name"
       type="submit"
-      class="text-none"
+      class="text-none font-weight-regular px-2 text-body-1"
+      color="blue-darken-3"
     >{{ item.name }}</VBtn>
   </VForm>
 </template>
