@@ -3,11 +3,10 @@
     <template #activator="{ props: uploadProps }" >
       <VBtn v-bind="uploadProps" icon="mdi-file-upload" title="Upload New File" size="x-large"/>
     </template>
-    <VCard class="py-2">
+    <VCard class="py-3">
       <VCardActions class="d-flex justify-center ma-2">
-        <!-- TODO - after submitted refresh content, @update:submitted does nothing -->
-        <FileUpload :api="api" :resource="resource" :state="state" @update:closeDialog="uploadDialog = false" @update:submitted="() => handleResourceSelection(resource)" />
-        <FolderUpload :api="api" :resource="resource" :state="state" @update:closeDialog="uploadDialog = false" @update:submitted="() => handleResourceSelection(resource)"/>
+        <FileUpload :api="api" :resource="resource" :state="state" @update:closeDialog="uploadDialog = false" @update:submitted="handleResourceSelection" />
+        <FolderUpload :api="api" :resource="resource" :state="state" @update:closeDialog="uploadDialog = false" @update:submitted="handleResourceSelection"/>
       </VCardActions>
     </VCard>
   </VDialog>
@@ -17,7 +16,7 @@
 import { ref } from "vue";
 import FileUpload from "./FileUpload.vue";
 import FolderUpload from "./FolderUpload.vue";
-// TODO Update post upload not working
+
 /**
  * @typedef {object} Props
  * @property {ReturnType<import("@cloudbolt/js-sdk").createApi>} Props.api - The authenticated API instance
@@ -45,6 +44,6 @@ defineProps({
   },
 });
 
-const uploadDialog=ref(false)
+const uploadDialog = ref(false)
 </script>
 <style scoped></style>

@@ -5,15 +5,14 @@
     </template>
     <VCard class="py-3">
       <VCardTitle class="d-flex justify-space-between pb-0">
-        <VTabs v-model="tab" slider-color="black" height="50px" selected-class="bg-primary text-white" @update:model-value="(val) => handleVersionInfo(val)">
+        <VTabs v-model="tab" slider-color="black" height="50px" selected-class="bg-primary text-white" @update:model-value="(val) => fetchVersionInfo(val)">
           <VTab class="active tab-btn" value="overview" size="x-large">Overview</VTab>
           <VTab class="tab-btn" value="versions" size="x-large" >Versions</VTab>
         </VTabs>
         <VBtn icon="mdi-close" title="Close this dialog" variant="text" @click="overviewDialog = false" />
       </VCardTitle>
       <VCardText class="pt-0">
-        <!-- <VForm @submit.prevent="submitModal"> -->
-        <VWindow v-model="tab" @update:model-value="handleVersionInfo">
+        <VWindow v-model="tab" @update:model-value="fetchVersionInfo">
           <VWindowItem value="overview">
             <VContainer>
               <VRow>
@@ -83,7 +82,7 @@
                   </template>
                   <VBannerText class="d-flex justify-space-between pa-0">
                     <div class="mr-6">
-                      <p class="text-h5 mb-2">Bucket {{ resource.name }} doesn't have Bucket Versioning enabled</p>
+                      <p class="text-h5 mb-2">Bucket <span class="font-weight-medium">{{ resource.name }}</span> doesn't have Bucket Versioning enabled</p>
                       <p class="text-body-1">We recommend that you enable Bucket Versioning to help protect against unintentionally overwriting or deleting objects. 
                         <VBtn append-icon="mdi-information" href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/Versioning.html" target="_blank" variant="text" class="text-capitalize font-weight-regular text-body-1">Learn more</VBtn>
                       </p>
@@ -111,7 +110,6 @@
               </div>
           </VWindowItem>
         </VWindow>
-        <!-- </VForm> -->
       </VCardText>
       <VCardActions class="d-flex justify-end px-3">
         <VBtn color="primary" variant="flat" size="large" class="px-4" @click="overviewDialog = false">OK</VBtn>
@@ -179,14 +177,12 @@ const versionForm = computed(() => ({
   location: encodeURIComponent(props.location)
 }))
 
-const handleVersionInfo = async () => {
+const fetchVersionInfo = async () => {
   if (tab.value === 'versions') {
     try {
       const formData = convertObjectToFormData(versionForm.value)
-      // TODO
-      // e_tag=%229ffeb8bcc9a55a7b7a589d783ab2af75%22&key=2022-03-14T235035Z%2F9.4.6.1%2Fblueprints.json&location=us-east-1
       const response = await props.api.base.instance.post(`http://localhost:8001/ajax/s3-get-versions/${props.resource.id}/`, formData)
-      console.log({response})
+      console.log('Fetch Version Info ',{response})
       isLoading.value = false
       versionInfo.value = response.data
     } catch (error) {

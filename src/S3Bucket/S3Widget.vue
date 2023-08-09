@@ -1,11 +1,22 @@
 <template>
   <VSheet class="pa-3" rounded>
+    <VBanner :border="0">
+      <template #prepend>
+        <VAvatar :image="avatarUrl"/>
+      </template>
+      <VBannerText class="text-h5">
+        S3 Bucket Manager
+      </VBannerText>
+    </VBanner>
     <VSelect 
       label="Buckets:" 
       :items="buckets"
       item-title="name"
       item-value="id"
       return-object
+      class="pt-3"
+      placeholder="Select S3 Bucket"
+      :hide-details="true"
       @update:modelValue="getResourceSelection"
       />
     <BucketDisplay 
@@ -21,7 +32,8 @@
 
 <script setup>
 import { onMounted, ref } from "vue";
-import BucketDisplay from './BucketDisplay.vue'
+import avatarUrl from '../assets/s3_bucket_200×199.png';
+import BucketDisplay from './BucketDisplay.vue';
 /**
  * @typedef {object} Props
  * @property {ReturnType<import("@cloudbolt/js-sdk").createApi>} Props.api - The authenticated API instance
@@ -36,18 +48,16 @@ const props = defineProps({
 
 const buckets = ref()
 const bucketDetails = ref()
-//  TODO Do this better. Especially the form thing
+//  TODO Handle CSRF Token
 let token = sessionStorage.getItem("csrfToken");
 if (token) {
   console.log({token})
   // eslint-disable-next-line vue/no-mutating-props
   props.api.base.instance.defaults.headers.common['X-CSRFTOKEN'] = token
-  // TODO is the below content type needed ?
-  // eslint-disable-next-line vue/no-mutating-props
-  // props.api.base.instance.defaults.headers.common['CONTENT-TYPE'] = 'application/x-www-form-urlencoded; charset=UTF-8'
 }
 
-const handleResourceSelection = async (resource) => {
+const handleResourceSelection = async (resource = bucketDetails.value.resource) => {
+  console.log('bucketDetails', bucketDetails.value)
   console.log('handleResourceSelection', {resource}, 'for min timeout thingy')
   setTimeout(getResourceSelection(resource), 4000)
 }
@@ -63,7 +73,6 @@ const getResourceSelection = async (resource) => {
     console.log({error})
   }
 }
-
 
 const getBuckets = async () => {
   try {
@@ -82,27 +91,5 @@ const updateResourceSelection = async (newResource) => {
 }
 
 onMounted(getBuckets)
-  // // Handle the type-ahead for the dropdown
-  // $("#buckets").selectize()
-
-  // // Reload the S3 management screen when a new item is selected
-  // $("#buckets").change(function() {
-  //   c2.block.block();
-  //   $("form#buckets").submit();
-  //   $.ajax({
-  //     url: '/ajax/s3-browser/' + $(this).val(),
-  //     success: function(data) {
-  //       $("#repoContent").html(data);
-  //       c2.block.unblock();
-  //     },
-  //     error: function(err) {
-  //       $("#loading-box").fadeOut("slow",
-  //         function() {
-  //           $("#repoContent").html(err);
-  //           c2.block.unblock();
-  //         });
-  //     }
-  //   });
-  // });
 </script>
 <style scoped></style>

@@ -4,13 +4,12 @@
       <VBtn v-bind="renameProps" icon="mdi-pencil-circle" title="Rename"/>
     </template>
     <VCard class="py-3">
-      <VForm @submit.prevent="submitModal" @update:model-value="(val) => formIsValid = val" >
+      <VForm @submit.prevent="renameObject" @update:model-value="(val) => formIsValid = val" >
         <VCardTitle class="d-flex justify-space-between text-h5">
           Rename Object
           <VBtn icon="mdi-close" title="Close this dialog" variant="text" @click="onCancel" />
         </VCardTitle>
         <VCardText>
-          <!-- TODO : Show old and new? New should load into the value -->
           <VTextField 
             v-model="renameNew"
             label="New Object Name"
@@ -23,6 +22,11 @@
           </VCol>
         </VCardText>
         <VCardActions class="d-flex justify-end px-3">
+          <VTooltip location="start" :text="formError" >
+            <template #activator="{ props: activatorProps }">
+              <VIcon v-if="formError" v-bind="activatorProps" color="error" size="large" icon="mdi-alert-circle" class="mt-1"/>
+            </template>
+          </VTooltip>
           <VBtn prepend-icon="mdi-close" variant="flat" size="large" class="px-4 mx-2" @click="onCancel">Cancel</VBtn>
           <VBtn :loading="isSubmitting" :disabled="!formIsValid" type="submit" variant="flat" color="primary" size="large" class="px-4">Rename
             <template #loader>Submitting…</template>
@@ -65,9 +69,11 @@ const props = defineProps({
   },
 });
 
+const emit = defineEmits(["update:handleResourceSelection"]);
 const isSubmitting = ref(false)
 const renameDialog = ref(false)
 const formIsValid = ref(false)
+const formError = ref()
 const renameOld = ref('')
 const renameNew = ref('')
 // TODO: Encode ?
@@ -85,6 +91,7 @@ const requiredRule = [
 const onCancel = () => {
   renameDialog.value = false
   renameNew.value = renameOld.value
+  formError.value = ''
 }
 
 onMounted(() => {
@@ -92,21 +99,23 @@ onMounted(() => {
   renameNew.value = props?.item?.name
 })
 
-async function submitModal() {
+async function renameObject() {
   try {
     isSubmitting.value = true
     const formData = convertObjectToFormData(renameForm.value)
     // Because this function is `async`, we can use `await` to wait for the API call to finish.
     // Alternatively, we could use `.then()` and `.catch()` to handle the response.
     // https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Asynchronous/Promises
-    const response = await props.api.base.instance.post(`http://localhost:8001/ajax/bogus/${props.resource.id}/`,  formData)
-    console.log(response)
+    const response = await props.api.base.instance.post(`http://localhost:8001/ajax/s3-rename-object/${props.resource.id}/`,  formData)
+    console.log("Rename Object ", {response})
     isSubmitting.value = false
     renameDialog.value = false
+    emit("update:handleResourceSelection");
   } catch (error) {
     // When using API calls, it's a good idea to catch errors and meaningfully display them.
-    // In this case, we'll just log the error to the console.
     console.error(error);
+    formError.value = `(${error.code}) ${error.name}: ${error.message}`
+    formIsValid.value = false
     isSubmitting.value = false
   }
 }</script>

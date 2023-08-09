@@ -67,18 +67,13 @@ const deleteForm = computed(() => ({
 async function deleteModal() {
   try {
     const formData = convertObjectToFormData(deleteForm.value)
-    console.log('Lets submit! Delete Modal go!', formData)
     // Because this function is `async`, we can use `await` to wait for the API call to finish.
     // Alternatively, we could use `.then()` and `.catch()` to handle the response.
     // https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Asynchronous/Promises
     const response = await props.api.base.instance.post(`http://localhost:8001/ajax/s3-delete-file/${props.resource.id}/`,  formData)
-
-  // all_files_path: [{"file_path":"tmp/","object_type":"Folder"}]
-  // all_files_path=%5B%7B%22file_path%22%3A%22tmp%2F%22%2C%22object_type%22%3A%22Folder%22%7D%5D
-    //  TODO this is giving the whole page back
     console.log("Delete Files/Folders ", {response})
     deleteDialog.value = false
-    emit("update:handleResourceSelection", props.resource);
+    emit("update:handleResourceSelection");
   } catch (error) {
     // When using API calls, it's a good idea to catch errors and meaningfully display them.
     // In this case, we'll just log the error to the console.

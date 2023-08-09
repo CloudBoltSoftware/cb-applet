@@ -1,6 +1,6 @@
 <template>
   <VForm 
-    @submit.prevent="submitSelection">
+    @submit.prevent="fetchSelection(selectionForm)">
     <VBtn
       variant="text"
       :title="item.name"
@@ -12,13 +12,13 @@
 
 <script setup>
 import { computed, onUpdated, ref } from "vue";
-import { convertObjectToFormData } from '../helpers/axiosHelper';
 
 /**
  * @typedef {object} Props
  * @property {ReturnType<import("@cloudbolt/js-sdk").createApi>} Props.api - The authenticated API instance
  * @property {object} Props.item - The current S3 Bucket item
  * @property {string} Props.id - The current S3 Bucket id
+ * @property {function} Props.fetchSelection - Function to fetch the selected S3 Bucket path
  */
 /** @type {Props} */
 const props = defineProps({
@@ -33,14 +33,16 @@ const props = defineProps({
   id: {
     type: String,
     required: true
+  },
+  fetchSelection: {
+    type: Function,
+    default: () => {},
   }
 });
 
-const emit = defineEmits(["update:updateResourceSelection"]);
-
 const selectedPath = ref('')
 const selectedName = ref('')
-const bucketForm = computed(() => ({
+const selectionForm = computed(() => ({
   path: selectedPath.value,  // Encoding path early leads to double encoding '/'
   name: encodeURIComponent(selectedName.value)
   })
@@ -50,20 +52,6 @@ onUpdated(() => {
   selectedName.value = encodeURIComponent(props.item.name)
 
 });
-
-const submitSelection = async () => {
-  try {
-    const formData = convertObjectToFormData(bucketForm.value)
-    const response = await props.api.base.instance.post(`http://localhost:8001/ajax/s3_browser_info/${props.id}/`, formData)
-    // TODO path=2022-03-14T235035Z%2F&name=2022-03-14T235035Z
-    // TODO path=2022-03-14T235035Z%2F9.4.6.1%2F&name=9.4.6.1
-    emit("update:updateResourceSelection", response.data);
-  } catch (error) {
-    // When using API calls, it's a good idea to catch errors and meaningfully display them.
-    // In this case, we'll just log the error to the console.
-    console.log({error})
-  }
-}
 
 </script>
 <style scoped></style>
