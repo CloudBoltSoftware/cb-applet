@@ -1,11 +1,11 @@
 {
-  "name": "cui-applet",
+  "name": "cui-s3-bucket-manager-applet",
   "xuiConfig": {
-    "name": "cui-applet",
+    "name": "cui-s3-bucket-manager-applet",
     "id": "APL-12345678",
-    "icon": "xui/src/cui-applet.png",
-    "met_description": "Hello World applet for extending the CloudBolt CUI",
-    "met_label": "CUI Applet Hello World",
+    "icon": "xui/src/s3_bucket_200×199.png",
+    "met_description": "S3 Bucket Browser extending the CloudBolt CUI",
+    "met_label": "S3 Bucket Browser Applet",
     "met_is_applet": true,
     "met_entry_point": "static/main.es.js",
     "met_maximum_version_required": "",
@@ -19,23 +19,7 @@
     ],
     "met_targets": {
       "cui": {
-        "fullPage": [{"slug": "my-url"}],
-        "resourcesDetailsPaneDiskList": ["preTable", "postTable", "expandedCellFoot"],
-        "resourcesDetailsPaneNetworks": ["preTable", "postTable", "expandedCellHead"],
-        "resourceDetailsDiskList": ["preTable", "postTable", "expandedCellFoot"],
-        "resourceDetailsNetworks": ["preTable", "postTable", "expandedCellHead"],
-        "resourceDetailsTabs": [
-          {
-            "resourceTypes": [
-              "service",
-              "server"
-            ],
-            "label": "Additional Info"
-          }
-        ],
-        "catalog": [
-          "headerLoggedIn"
-        ],
+        "fullPage": [{"slug": "s3-browser"}],
         "all": [
           "preNavItems"
         ]
@@ -43,7 +27,7 @@
     }
   },
   "version": "0.1.0",
-  "description": "Template for creating a CloudBolt CB applet",
+  "description": "S3 File Manager converted to a CloudBolt CB applet",
   "type": "module",
   "files": [
     "dist"
