@@ -69,7 +69,7 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(["update:handleResourceSelection"]);
+const emit = defineEmits(["update:refreshResource"]);
 const isSubmitting = ref(false)
 const renameDialog = ref(false)
 const formIsValid = ref(false)
@@ -110,7 +110,7 @@ async function renameObject() {
     console.log("Rename Object ", {response})
     isSubmitting.value = false
     renameDialog.value = false
-    emit("update:handleResourceSelection");
+    emit("update:refreshResource");
   } catch (error) {
     // When using API calls, it's a good idea to catch errors and meaningfully display them.
     console.error(error);

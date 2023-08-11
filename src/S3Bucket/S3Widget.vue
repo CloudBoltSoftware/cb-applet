@@ -24,7 +24,7 @@
       :resource="bucketDetails?.resource"
       :state="bucketDetails?.state"
       :update-resource-selection="updateResourceSelection"
-      :handle-resource-selection="handleResourceSelection" />
+      :refresh-resource="refreshResource" />
   </VSheet>
 </template>
 
@@ -46,6 +46,7 @@ const props = defineProps({
 
 const buckets = ref()
 const bucketDetails = ref()
+
 //  TODO Handle CSRF Token
 let token = sessionStorage.getItem("csrfToken");
 if (token) {
@@ -54,8 +55,7 @@ if (token) {
   props.api.base.instance.defaults.headers.common['X-CSRFTOKEN'] = token
 }
 
-// TODO Rename function
-const handleResourceSelection = async (resource = bucketDetails.value.resource) => {
+const refreshResource = async (resource = bucketDetails.value.resource) => {
   setTimeout(getResourceSelection(resource), 4000)
 }
 

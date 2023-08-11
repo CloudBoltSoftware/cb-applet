@@ -66,7 +66,7 @@ const props = defineProps({
   }
 });
 
-const emit = defineEmits(["update:handleResourceSelection"]);
+const emit = defineEmits(["update:refreshResource"]);
 const newFolder = ref('')
 const createFolderForm = computed(() => ({
   folder_name: newFolder.value,
@@ -101,7 +101,7 @@ async function submitCreateModal() {
     isSubmitting.value = false
     createDialog.value = false
     newFolder.value = ''
-    emit("update:handleResourceSelection");
+    emit("update:refreshResource");
   } catch (error) {
     // When using API calls, it's a good idea to catch errors and meaningfully display them.
     console.error(error);
