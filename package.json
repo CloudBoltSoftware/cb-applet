@@ -22,6 +22,14 @@
         "fullPage": [{"slug": "s3-browser"}],
         "all": [
           "preNavItems"
+        ],
+        "resourceDetailsTabs": [
+          {
+            "resourceTypes": [
+              "s3_bucket"
+            ],
+            "label": "S3 Bucket Browser"
+          }
         ]
       }
     }

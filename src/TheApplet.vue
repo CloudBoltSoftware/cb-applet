@@ -3,7 +3,7 @@
   <div v-else-if="removed" />
   <VProgressCircular v-else-if="loading" indeterminate class="ma-3" />
   <div v-else class="ma-3">
-    <S3Widget :api="api" />
+    <S3Widget :api="api" :context="context" />
   </div>
 </template>
 
@@ -43,7 +43,7 @@ import S3Widget from "./S3Bucket/S3Widget.vue";
  * https://vuejs.org/guide/components/props.html
  * @type {Props}
  */
-const props = defineProps({
+defineProps({
   user: {
     type: Object,
     default: () => ({}),

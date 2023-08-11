@@ -19,12 +19,14 @@
     </div>
     <BucketDisplay 
       v-if="bucketDetails"
-      :api="api" 
+      :api="api"
+      :is-flat="isFlat"
       :location="bucketDetails?.location"
       :resource="bucketDetails?.resource"
       :state="bucketDetails?.state"
       :update-resource-selection="updateResourceSelection"
-      :refresh-resource="refreshResource" />
+      :refresh-resource="refreshResource"
+      @update:updateFlatten="(val) => isFlat = val" />
   </VSheet>
 </template>
 
@@ -35,6 +37,7 @@ import BucketDisplay from './BucketDisplay.vue';
 /**
  * @typedef {object} Props
  * @property {ReturnType<import("@cloudbolt/js-sdk").createApi>} Props.api - The authenticated API instance
+ * @property {object} Props.context - The applet context
  */
 /** @type {Props} */
 const props = defineProps({
@@ -42,11 +45,15 @@ const props = defineProps({
     type: Object,
     required: true,
   },
+  context: {
+    type: Object,
+    required: true,
+  },
 });
 
 const buckets = ref()
 const bucketDetails = ref()
-
+const isFlat = ref(false)
 //  TODO Handle CSRF Token
 let token = sessionStorage.getItem("csrfToken");
 if (token) {
@@ -59,11 +66,13 @@ const refreshResource = async (resource = bucketDetails.value.resource) => {
   setTimeout(getResourceSelection(resource), 4000)
 }
 
+//  TODO Handle when Flat was already chosen ?
 const getResourceSelection = async (resource) => {
   console.log('getResourceSelection', {resource})
   try {
     const response = await props.api.base.instance.get(`http://localhost:8001/ajax/s3_browser_info/${resource.id}/`)
     bucketDetails.value = response.data
+    isFlat.value = response.data.state.flat
   } catch (error) {
     // When using API calls, it's a good idea to catch errors and meaningfully display them.
     // In this case, we'll just log the error to the console.
@@ -88,5 +97,7 @@ const updateResourceSelection = async (newResource) => {
 }
 
 onMounted(getBuckets)
+//  TODO Handle when loading with a s3 Bucket context
+console.log(props.context)
 </script>
 <style scoped></style>

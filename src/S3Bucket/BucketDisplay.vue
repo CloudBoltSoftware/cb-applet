@@ -13,7 +13,7 @@
         <DeleteModal :api="api" :resource="resource" :selected-items="selectedItems" @update:refreshResource="refreshResource" />
         <UploadModal :api="api" :resource="resource" :state="state" :refresh-resource="refreshResource"/>
         <CreateModal :api="api" :resource="resource" :state="state" @update:refreshResource="refreshResource"/>
-        <VBtn v-if="flattenView" icon="mdi-folder-eye" title="Toggle Folder View" size="x-large" @click="fetchFlattenedView"/>
+        <VBtn v-if="isFlat" icon="mdi-folder-eye" title="Toggle Folder View" size="x-large" @click="fetchFlattenedView"/>
         <VBtn v-else icon="mdi-view-headline"  title="Toggle List View" size="x-large" @click="fetchFlattenedView" />
       </VBtnGroup>
       <VTooltip location="top" text="Toggle Version Mode" >
@@ -82,17 +82,21 @@ const props = defineProps({
     type: Function,
     default: () => {},
   },
+  isFlat: {
+    type: Boolean,
+    required: true
+  }
 });
 
+const emit = defineEmits(["update:updateFlatten"]);
 const isVersionMode = ref(false)
 // TODO - Better check Version mode
 // const hasVersionMode = computed(() => props?.state?.dir_list[0].versions.length > 0)
 const isLoading = ref(false)
 const selectedItems = ref()
-const flattenView = ref(false)
 const flattenForm = computed(() => ({
   path: '',
-  flat: flattenView.value ? 'True' : 'False'
+  flat: props.isFlat ? 'True' : 'False'
 }))
 const dataTableItems = computed(() => {
   let list = props?.state?.dir_list
@@ -106,7 +110,7 @@ const updatedSelectedItems = (newItems) => {
   selectedItems.value = newItems
 }
 const fetchFlattenedView = async () => {
-  flattenView.value = !flattenView.value
+  emit("update:updateFlatten", !props.isFlat)
   try {
     const formData = convertObjectToFormData(flattenForm.value)
     const flattenResponse = await props.api.base.instance.post(`http://localhost:8001/ajax/s3_browser_info/${props.resource.id}/`, formData)
