@@ -19,7 +19,7 @@
                 <VCol cols="6">
                   <div class="mb-3">
                     <div class="text-medium-emphasis">Owner</div>
-                    <p>{{ item.owner_name }}</p>
+                    <p>{{ sourceItem.owner_name }}</p>
                   </div>
                   <div class="mb-3">
                     <div class="text-medium-emphasis">AWS Region</div>
@@ -27,34 +27,34 @@
                   </div>
                   <div class="mb-3">
                     <div class="text-medium-emphasis">Last Modified</div>
-                    <p>{{  item.last_modified }}</p>
+                    <p>{{  sourceItem.last_modified }}</p>
                   </div>
                   <div class="mb-3">
                     <div class="text-medium-emphasis">Size</div>
-                    <p>{{  item.size }}</p>
+                    <p>{{  sourceItem.size }}</p>
                   </div>
                   <div class="mb-3">
                     <div class="text-medium-emphasis">Type</div>
-                    <p>{{ item.item_type }}</p>
+                    <p>{{ sourceItem.item_type }}</p>
                   </div>
                   <div class="mb-3">
                     <div class="text-medium-emphasis">Key</div>
-                    <p>{{ item.name }}</p>
+                    <p>{{ sourceItem.name }}</p>
                   </div>
                   <!-- Not visible -->
                   <div id="kfp-parent" class="d-none">
-                    <p>{{  item.key }}</p>
+                    <p>{{ sourceItem.key }}</p>
                   </div>
                 </VCol>
                 <!-- class="overview-modal-right-pane" -->
                 <VCol cols="6" >
                   <div class="mb-3">
                     <div class="text-medium-emphasis">S3 URI</div>
-                    <p>{{ item.s3_uri }}</p>
+                    <p>{{ sourceItem.s3_uri }}</p>
                   </div>
                   <div class="mb-3">
                     <div class="text-medium-emphasis">Amazon Resource Name (ARN)</div>
-                    <p>{{ item.arn }}</p>
+                    <p>{{ sourceItem.arn }}</p>
                   </div>
                   <div class="mb-3">
                     <div class="text-medium-emphasis">Entity Tag (ETag)</div>
@@ -63,7 +63,7 @@
                   <div class="mb-3">
                     <div class="text-medium-emphasis">Object URL</div>
                     <!-- <a id="object_url" target="_blank" href="#"></a> -->
-                    <a target="_blank" :href="item.object_url" class="text-decoration-none text-primary" >{{ item.object_url }}</a>
+                    <a target="_blank" :href="sourceItem.object_url" class="text-decoration-none text-primary" >{{ sourceItem.object_url }}</a>
                   </div>
                 </VCol>
               </VRow>
@@ -102,22 +102,23 @@
                     {{ versionMessage }}
                   </VBannerText>
                 </VBanner>
-                <VDataTable v-if="versioningEnabled">
-                  <thead>
-                    <tr>
-                      <th><VIcon icon="mdi-cog"/></th>
-                      <th>Filename</th>
-                      <th>Version ID</th>
-                      <th>Type</th>
-                      <th>Last Modified</th>
-                      <th>Size</th>
-                      <th>Storage Class</th>
-                      <th>Download</th>
-                    </tr>
-                  </thead>
-                  <tbody
-                    :items="[]">
-                  </tbody>
+                <VDataTable 
+                  :headers="headers"
+                  :items="sourceItem?.versions" >
+                  <template #[`item.name`]>
+                    {{ sourceItem.name }}
+                  </template>
+                  <template #[`item.item_type`]>
+                    {{ sourceItem.item_type }}
+                  </template>
+                  <template #[`item.last_modified`]="{ item }">
+                    {{ new Date(item.raw.last_modified).toDateString() }}  {{ new Date(item.raw.last_modified).toLocaleTimeString('en-US') }}
+                  </template> 
+                  <template #[`item.actions`]="{ item }">
+                    <VBtnGroup>
+                      <VBtn icon="mdi-file-download" title="Download" @click="downloadFile(item.download_url)"/>
+                    </VBtnGroup>
+                  </template> 
                 </VDataTable>
               </div>
           </VWindowItem>
@@ -145,8 +146,8 @@ import { convertObjectToFormData } from '../helpers/axiosHelper';
  * @property {String} keyFilePath
  * @property {String} s3_uri
  * @property {String} arn
- * @property {String} e_tag
- * @property {String} object_url
+ * @property {String} e_tag  // TODO: Removed
+ * @property {String} object_url // TODO: Removed
  */
 
 /**
@@ -163,7 +164,7 @@ const props = defineProps({
     type: Object,
     required: true,
   },
-  item: {
+  sourceItem: {
     type: Object,
     default: () => {}
   },
@@ -175,6 +176,10 @@ const props = defineProps({
     type: Object,
     default: () => {},
   },
+  headers: {
+    type: Array,
+    default: () => []
+  }
 });
 
 const tab = ref(null)
@@ -183,10 +188,11 @@ const overviewDialog = ref(false)
 const versionInfo = ref()
 const versionMessage = ref('')
 const versioningEnabled = ref(false)
-const eTag = computed(() => props.item.e_tag.replace(/&quot;/g, '"'))
+console.log(versioningEnabled)
+const eTag = computed(() => props.sourceItem.e_tag.replace(/&quot;/g, '"'))
 const versionForm = computed(() => ({
   e_tag: encodeURIComponent(eTag.value),
-  key: encodeURIComponent(props.item.key),
+  key: encodeURIComponent(props.sourceItem.key),
   location: encodeURIComponent(props.location)
 }))
 const versionEnableForm = computed(() => ({
@@ -223,5 +229,10 @@ const enableVersioning = async () => {
   }
 }
 
+const downloadFile = (url) => {
+  // TODO Better Decoding needed
+  const adjustedUrl = url.replace(/&amp;/g,'&')
+  window.open(adjustedUrl, '_blank')
+}
 </script>
 <style scoped></style>

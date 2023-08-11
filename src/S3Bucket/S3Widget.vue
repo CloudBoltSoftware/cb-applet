@@ -1,5 +1,5 @@
 <template>
-  <VSheet class="pa-3" rounded>
+  <VSheet class="px-3 py-4" rounded>
     <div class="d-inline-flex w-100">
       <div class="w-25 d-inline-flex mt-1">
         <VAvatar :image="avatarUrl" />
