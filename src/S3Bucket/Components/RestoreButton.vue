@@ -32,8 +32,9 @@ const props = defineProps({
 const emit = defineEmits(["update:refreshResource"]);
 //  TODO This button does not yet work in the example
 const retoreItemForm = computed(() => ({
-  state: {},  // TODO: Example?
-  item: {},  // TODO: Possible Value
+  key: props.item.key,
+  path: props.item.path,
+  version_id:  props.item.version_id,
   restore: 'True'
 }))
 
@@ -41,7 +42,7 @@ const restoreItem = async () => {
   // TODO - Backend issue
   try {
     const formData = convertObjectToFormData(retoreItemForm.value)
-    const response = await props.api.base.instance.post(`http://localhost:8001/ajax/s3-promote-version/${props.id}/`, formData)
+    const response = await props.api.base.instance.post(`http://localhost:8001/ajax/s3-promote-version/${props.resourceId}/`, formData)
     console.log('Restore Version ',{response})
     emit("update:refreshResource");
   } catch (error) {

@@ -26,7 +26,6 @@
           <div class="text-medium-emphasis">Key</div>
           <p>{{ sourceItem.name }}</p>
         </div>
-        <!-- TODO: Remove? Not visible -->
         <div id="kfp-parent" class="d-none">
           <p>{{ sourceItem.key }}</p>
         </div>
@@ -57,17 +56,17 @@
 import { computed } from "vue";
 /**
  * @typedef {Object} sourceItem
- * @property {String} owner_name // TODO: Removed
+ * @property {String} owner_name
  * @property {String} last_modified
  * @property {String} size
  * @property {String} item_type
  * @property {String} name
  * @property {String} key
- * @property {String} keyFilePath // TODO: Changed
+ * @property {String} keyFilePath
  * @property {String} s3_uri
  * @property {String} arn
- * @property {String} e_tag  // TODO: Removed
- * @property {String} object_url // TODO: Changed
+ * @property {String} e_tag
+ * @property {String} object_url
  */
 
 /**

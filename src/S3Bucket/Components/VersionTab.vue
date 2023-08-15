@@ -91,15 +91,14 @@ const props = defineProps({
     default: () => {},
   },
 });
-// TODO Properly handle versioning
+// TODO - Re-enable once Version updates are fixed. Update to handle versioning
 const isLoading = ref(false)
 const versionInfo = ref()
 const versionMessage = ref('')
-// const versioningEnabled = ref(false)
 
 const eTag = computed(() => props.sourceItem?.e_tag ? props.sourceItem.e_tag.replace(/&quot;/g, '"') : '')
 const versionForm = computed(() => ({
-  e_tag: encodeURIComponent(eTag.value),  // TODO: No use for e_tag ?
+  e_tag: encodeURIComponent(eTag.value),
   key: encodeURIComponent(props.sourceItem.key),
   location: encodeURIComponent(props.location)
 }))
@@ -146,6 +145,7 @@ const enableVersioning = async () => {
   }
 }
 
+// TODO - Re-enable once Version updates are fixed. Requires download_url
 const downloadFile = (url) => {
   // TODO Better Decoding needed
   const adjustedUrl = url.replace(/&amp;/g,'&')

@@ -8,7 +8,7 @@
       />
     <div class="d-flex justify-space-between">
       <VBtnGroup>
-        <DownloadButton :api="api" :resource-id="resource.id" :selected-items="selectedItems" />
+        <DownloadButton :api="api" :resource-id="resource.id" :location="location" :selected-items="selectedItems" />
         <DeleteModal :api="api" :state="state" :resource-id="resource.id" :selected-items="selectedItems" @update:refreshResource="refreshResource" />
         <UploadModal :api="api" :resource="resource" :path="state.full_path" :refresh-resource="refreshResource"/>
         <CreateModal :api="api" :resource="resource" :state="state" @update:refreshResource="refreshResource"/>
@@ -17,7 +17,7 @@
       </VBtnGroup>
       <VTooltip location="top" text="Toggle Version Mode" >
         <template #activator="{ props: activatorProps }">
-          <VSwitch v-model="isVersionMode" v-bind="activatorProps" inset color="primary" label="Version" density="compact" hide-details class="flex-grow-0 mr-2"/>
+          <VSwitch v-if="hasVersionMode" v-model="isVersionMode" v-bind="activatorProps" inset color="primary" label="Version" density="compact" hide-details class="flex-grow-0 mr-2"/>
         </template>
       </VTooltip>
     </div>
@@ -90,8 +90,8 @@ const props = defineProps({
 
 const emit = defineEmits(["update:updateFlatten"]);
 const isVersionMode = ref(false)
-// TODO - Better check Version mode
-// const hasVersionMode = computed(() => props?.state?.dir_list[0].versions.length > 0)
+// TODO - Update when Version mode is restored
+const hasVersionMode = ref(false)
 const isLoading = ref(false)
 const selectedItems = ref()
 const dataTableItems = computed(() => {
@@ -112,7 +112,7 @@ const fetchFlattenedView = async () => {
   try {
     isLoading.value = true
     const formData = convertObjectToFormData(flattenForm)
-    const flattenResponse = await props.api.base.instance.post(`http://localhost:8001/ajax/s3_browser_info/${props.resource.id}/`, formData)
+    const flattenResponse = await props.api.base.instance.post(`http://localhost:8001/ajax/s3-browser-info/${props.resource.id}/`, formData)
     props.updateResourceSelection(flattenResponse.data);
     isLoading.value = false
   } catch (error) {
@@ -125,7 +125,7 @@ const fetchFlattenedView = async () => {
 const fetchSelection = async (form) => {
   try {
     const formData = convertObjectToFormData(form)
-    const response = await props.api.base.instance.post(`http://localhost:8001/ajax/s3_browser_info/${props.resource.id}/`, formData)
+    const response = await props.api.base.instance.post(`http://localhost:8001/ajax/s3-browser-info/${props.resource.id}/`, formData)
     props.updateResourceSelection(response.data)
   } catch (error) {
     // When using API calls, it's a good idea to catch errors and meaningfully display them.

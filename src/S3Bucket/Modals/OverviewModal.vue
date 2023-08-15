@@ -7,7 +7,7 @@
       <VCardTitle class="d-inline-flex justify-space-between pb-0">
         <VTabs v-model="tab" slider-color="black" height="50px" selected-class="bg-primary text-white" >
           <VTab class="active tab-btn" value="overview" size="x-large">Overview</VTab>
-          <VTab class="tab-btn" value="versions" size="x-large" >Versions</VTab>
+          <VTab v-if="hasVersionMode" class="tab-btn" value="versions" size="x-large" >Versions</VTab>
         </VTabs>
         <VBtn icon="mdi-close" title="Close this dialog" variant="text" @click="overviewDialog = false" />
       </VCardTitle>
@@ -68,5 +68,7 @@ defineProps({
 
 const tab = ref(null)
 const overviewDialog = ref(false)
+// TODO - Re-enable once Version updates are fixed.
+const hasVersionMode = ref(false)
 </script>
 <style scoped></style>

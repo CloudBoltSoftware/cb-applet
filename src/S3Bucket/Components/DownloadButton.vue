@@ -9,6 +9,7 @@ import { convertObjectToFormData } from '../../helpers/axiosHelper';
  * @typedef {Object} Props
  * @property {ReturnType<import("@cloudbolt/js-sdk").createApi>} Props.api - The authenticated API instance
  * @property {String} Props.resourceId - The S3 Bucket resource Id
+ * @property {String} Props.location - The S3 Bucket location
  * @property {Array} Props.selectedItems - The selected S3 Bucket items
  */
 /** @type {Props} */
@@ -18,6 +19,10 @@ const props = defineProps({
     required: true,
   },
   resourceId: {
+    type: String,
+    required: true,
+  },
+  location: {
     type: String,
     required: true,
   },
@@ -37,7 +42,8 @@ const filePaths = computed(() => {
   const allFiles = []
   props.selectedItems.forEach((item) => {
     allFiles.push({
-      path: item.url
+      path: item.url,
+      location: props.location
     })
   })
 

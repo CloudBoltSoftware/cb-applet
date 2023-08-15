@@ -14,7 +14,7 @@
           /> Delete Confirmation</span>
           <VBtn icon="mdi-close" title="Close this dialog" data-dismiss="modal" variant="text" @click="deleteDialog = false"/>
         </VCardTitle>
-        <VCardText class="py-0">
+        <VCardText class="py-0 ml-3">
           <p class="text-h6">Are you sure you want to delete?</p>
           <p class="text-body-1">Note: If you have selected a folder, all objects in that folder will also be deleted.</p>    
         </VCardText>
@@ -78,8 +78,7 @@ const filePath = computed(() => {
   return allFiles
 })
 const deleteForm = computed(() => ({
-  all_files_path: JSON.stringify(filePath.value),
-  state: JSON.stringify(props.state)
+  all_files_path: JSON.stringify(filePath.value)
 }))
 
 async function deleteModal() {

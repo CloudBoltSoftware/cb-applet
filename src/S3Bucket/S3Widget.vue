@@ -33,7 +33,7 @@
 
 <script setup>
 import { computed, onMounted, ref, watch } from "vue";
-import avatarUrl from '../assets/s3_bucket_200×199.png';
+import avatarUrl from '../assets/Icons_Storage_S3.png';
 import BucketDisplay from './BucketDisplay.vue';
 /**
  * @typedef {Object} Props
@@ -83,7 +83,7 @@ const getBuckets = async () => {
 
 const getResourceSelection = async (resource) => {
   try {
-    const response = await props.api.base.instance.get(`http://localhost:8001/ajax/s3_browser_info/${resource.id}/`)
+    const response = await props.api.base.instance.get(`http://localhost:8001/ajax/s3-browser-info/${resource.id}/`)
     console.log('getResourceSelection', {response})
     bucketDetails.value = response.data
     isFlat.value = response.data.state.flat

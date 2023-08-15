@@ -32,12 +32,12 @@
       </td>
     </template> 
     <template #[`item.last_modified`]="{ item }">
-      {{ item.raw.is_file ? `${ new Date(item.raw.last_modified).toLocaleTimeString('en-US')}  ${new Date(item.raw.last_modified).toDateString()}` : '' }}
+      {{ item.raw.is_file ? parseDate(item.raw) : '' }}
     </template> 
     <template #[`item.actions`]="{ item }">
       <td v-if="item.raw.is_file" class="d-inline-flex">
         <VBtnGroup>
-          <VBtn icon="mdi-file-download" title="Download" :disabled="item.raw.is_delete_marker" @click="downloadFile(item.raw.download_url)"/>
+          <VBtn v-if="isVersionMode" icon="mdi-file-download" title="Download" :disabled="item.raw.is_delete_marker" @click="downloadFile(item.raw.download_url)"/>
           <RestoreButton v-if="isVersionMode" :resource-id="resource.id" :api="api" :item="item.raw" @update:refreshResource="refreshResource"/>
           <RenameModal :api="api" :name="item.raw.name" :resource="resource" :path="state.full_path" @update:refreshResource="refreshResource"/>
           <OverviewModal :api="api" :source-item="item.raw" :location="location" :resource="resource" :refresh-resource="refreshResource"/>
@@ -62,7 +62,7 @@
             <span class="mx-2">{{ entry.version_id }}</span><span class="ml-2 text-disabled">Version Id</span>
         </td>
         <td>{{ item.raw.item_type }}</td>  
-        <td>{{ `${new Date(entry.last_modified).toDateString()}  ${ new Date(entry.last_modified).toLocaleTimeString('en-US')}` }}</td>
+        <td>{{ parseDate(entry) }}</td>
         <td>{{ entry.size }}</td>
         <td>{{ entry.storage_class }}</td>
         <td>        
@@ -171,6 +171,15 @@ const versionHeaders = [
   { title: '', align: 'center', key: 'data-table-expand', sortable: false },
 ]
 
+const parseDate = (entry) => {
+  // Converting from database UTC values to local string
+  const modifiedDate = new Date(`${entry.last_modified} UTC`).toDateString()
+  const modifiedTime = new Date(`${entry.last_modified} UTC`).toLocaleTimeString('en-US')
+  
+  return `${modifiedDate}  ${modifiedTime}`
+}
+
+// TODO - Re-enable once Version updates are fixed. Requires download_url
 const downloadFile = (url) => {
   // TODO Better Decoding needed
   const adjustedUrl = url.replace(/&amp;/g,'&')

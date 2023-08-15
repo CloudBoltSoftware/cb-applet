@@ -3,7 +3,7 @@
   "xuiConfig": {
     "name": "cui-s3-bucket-manager-applet",
     "id": "APL-12345678",
-    "icon": "xui/src/s3_bucket_200×199.png",
+    "icon": "xui/src/Icons_Storage_S3.png",
     "met_description": "S3 Bucket Browser extending the CloudBolt CUI",
     "met_label": "S3 Bucket Browser Applet",
     "met_is_applet": true,
@@ -14,6 +14,11 @@
       {
         "name": "cui",
         "minimum_version": "2023.3.58",
+        "maximum_version": ""
+      },
+      {
+        "name": "s3_file_manager",
+        "minimum_version": "8.6",
         "maximum_version": ""
       }
     ],
