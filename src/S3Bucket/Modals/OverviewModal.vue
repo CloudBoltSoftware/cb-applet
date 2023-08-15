@@ -30,16 +30,16 @@
     
 <script setup>
 import { ref } from "vue";
-import OverviewTab from './OverviewTab.vue';
-import VersionTab from './VersionTab.vue';
+import OverviewTab from '../Components/OverviewTab.vue';
+import VersionTab from '../Components/VersionTab.vue';
 
 /**
- * @typedef {object} Props
+ * @typedef {Object} Props
  * @property {ReturnType<import("@cloudbolt/js-sdk").createApi>} Props.api - The authenticated API instance
- * @property {object} Props.sourceItem - The selected S3 Bucket item
- * @property {string} Props.location - The selected S3 Bucket location
- * @property {object} Props.resource - The selected S3 Bucket resource
- * @property {function} Props.refreshResource - Function to fetch the selected S3 Bucket
+ * @property {Object} Props.sourceItem - The selected S3 Bucket item
+ * @property {String} Props.location - The selected S3 Bucket location
+ * @property {Object} Props.resource - The S3 Bucket resource
+ * @property {Function} Props.refreshResource - Function to fetch the selected S3 Bucket
  */
 /** @type {Props} */
 

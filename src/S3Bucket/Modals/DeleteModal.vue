@@ -29,13 +29,13 @@
     
 <script setup>
 import { computed, ref } from "vue";
-import { convertObjectToFormData } from '../helpers/axiosHelper';
+import { convertObjectToFormData } from '../../helpers/axiosHelper';
 
 /**
- * @typedef {object} Props
+ * @typedef {Object} Props
  * @property {ReturnType<import("@cloudbolt/js-sdk").createApi>} Props.api - The authenticated API instance
- * @property {object} Props.resource - The selected S3 Bucket resource
- * @property {object} Props.selectedItems - The selected S3 Bucket items
+ * @property {String} Props.resourceId - The S3 Bucket resource id
+ * @property {Array} Props.selectedItems - The selected S3 Bucket items
  */
 /** @type {Props} */
 const props = defineProps({
@@ -43,14 +43,18 @@ const props = defineProps({
     type: Object,
     required: true,
   },
-  resource: {
-    type: Object,
+  resourceId: {
+    type: String,
     required: true,
   },
   selectedItems: {
     type: Array,
     default: () => [],
   },
+  state: {
+    type: Object,
+    default: () => {},
+  }
 });
 
 const emit = defineEmits(["update:refreshResource"]);
@@ -74,7 +78,8 @@ const filePath = computed(() => {
   return allFiles
 })
 const deleteForm = computed(() => ({
-  all_files_path: JSON.stringify(filePath.value)
+  all_files_path: JSON.stringify(filePath.value),
+  state: JSON.stringify(props.state)
 }))
 
 async function deleteModal() {
@@ -83,7 +88,7 @@ async function deleteModal() {
     // Because this function is `async`, we can use `await` to wait for the API call to finish.
     // Alternatively, we could use `.then()` and `.catch()` to handle the response.
     // https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Asynchronous/Promises
-    const response = await props.api.base.instance.post(`http://localhost:8001/ajax/s3-delete-file/${props.resource.id}/`,  formData)
+    const response = await props.api.base.instance.post(`http://localhost:8001/ajax/s3-delete-file/${props.resourceId}/`,  formData)
     console.log("Delete Files/Folders ", {response})
     deleteDialog.value = false
     emit("update:refreshResource");

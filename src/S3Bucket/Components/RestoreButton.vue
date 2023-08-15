@@ -4,13 +4,13 @@
     
 <script setup>
 import { computed } from "vue";
-import { convertObjectToFormData } from '../helpers/axiosHelper';
+import { convertObjectToFormData } from '../../helpers/axiosHelper';
 
 /**
- * @typedef {object} Props
+ * @typedef {Object} Props
  * @property {ReturnType<import("@cloudbolt/js-sdk").createApi>} Props.api - The authenticated API instance
- * @property {object} Props.item - The selected S3 Bucket item
- * @property {object} Props.id - The selected S3 Bucket resource id
+ * @property {Object} Props.item - The selected S3 Bucket item
+ * @property {Object} Props.resourceId - The S3 Bucket resource id
  */
 /** @type {Props} */
 
@@ -23,13 +23,14 @@ const props = defineProps({
     type: Object,
     default: () => {}
   },
-  id: {
+  resourceId: {
     type: Object,
-    default: () => {},
+    required: true,
   }
 });
 
 const emit = defineEmits(["update:refreshResource"]);
+//  TODO This button does not yet work in the example
 const retoreItemForm = computed(() => ({
   state: {},  // TODO: Example?
   item: {},  // TODO: Possible Value

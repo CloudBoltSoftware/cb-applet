@@ -5,9 +5,10 @@
     :headers="isVersionMode ? versionHeaders : headers"
     :items="dataTableItems"
     :item-value="item => item"
+    :loading=isLoading
     show-select
     :show-expand="isVersionMode ? true : false"
-    @update:model-value="(val) => updatedSelectedItems(val)"
+    @update:model-value="(val) => emit('update:items', val)"
     >
     <template #[`item.name`]="{ item }">
       <td class="d-inline-flex">
@@ -24,9 +25,7 @@
         />
         <BucketButton 
         v-if="!item.raw.is_file"
-        :id="resource.id"
         :item="item.raw"
-        :api="api"
         :fetch-selection="fetchSelection"
         />
         <div v-else class="ml-2">{{ item.raw.name }}</div>
@@ -38,12 +37,19 @@
     <template #[`item.actions`]="{ item }">
       <td v-if="item.raw.is_file" class="d-inline-flex">
         <VBtnGroup>
-          <VBtn icon="mdi-file-download" title="Download" @click="downloadFile(item.raw.download_url)"/>
-          <RestoreButton v-if="isVersionMode" :id="resource.id" :api="api" :item="item.raw" @update:refreshResource="refreshResource"/>
-          <RenameModal :api="api" :item="item.raw" :resource="resource" :state="state" @update:refreshResource="refreshResource"/>
+          <VBtn icon="mdi-file-download" title="Download" :disabled="item.raw.is_delete_marker" @click="downloadFile(item.raw.download_url)"/>
+          <RestoreButton v-if="isVersionMode" :resource-id="resource.id" :api="api" :item="item.raw" @update:refreshResource="refreshResource"/>
+          <RenameModal :api="api" :name="item.raw.name" :resource="resource" :path="state.full_path" @update:refreshResource="refreshResource"/>
           <OverviewModal :api="api" :source-item="item.raw" :location="location" :resource="resource" :refresh-resource="refreshResource"/>
         </VBtnGroup>
       </td>
+    </template>
+    <template #[`item.data-table-expand`]="{ item, isExpanded, toggleExpand }">
+      <VIcon
+        v-if="item.raw.is_file"
+        :icon="isExpanded ? 'mdi-menu-down' : 'mdi-menu-up'"
+        @click="toggleExpand(item)"
+      />
     </template>
     <template #expanded-row="{ item }">
       <tr v-for="(entry, idx) in item.raw?.versions" :key="idx">
@@ -51,17 +57,17 @@
         <td>       
           <VIcon 
             icon="mdi-arrow-up-left"
-            class="ml-4"
+            class="ml-4 mt-n1"
             />
+            <span class="mx-2">{{ entry.version_id }}</span><span class="ml-2 text-disabled">Version Id</span>
         </td>
-        <td>{{ entry.version_id }}</td>
         <td>{{ item.raw.item_type }}</td>  
         <td>{{ `${new Date(entry.last_modified).toDateString()}  ${ new Date(entry.last_modified).toLocaleTimeString('en-US')}` }}</td>
         <td>{{ entry.size }}</td>
         <td>{{ entry.storage_class }}</td>
         <td>        
           <VBtnGroup>
-            <VBtn icon="mdi-file-download" title="Download" @click="downloadFile(entry.download_url)"/>
+            <VBtn icon="mdi-file-download" title="Download" :disabled="entry.is_delete_marker"  @click="downloadFile(entry.download_url)"/>
             <RestoreButton :id="resource.id" :api="api" :item="entry" @update:refreshResource="refreshResource"/>
           </VBtnGroup>
         </td>
@@ -73,23 +79,24 @@
 
 <script setup>
 import { ref } from "vue";
+import OverviewModal from "../Modals/OverviewModal.vue";
+import RenameModal from "../Modals/RenameModal.vue";
 import BucketButton from "./BucketButton.vue";
-import OverviewModal from "./OverviewModal.vue";
-import RenameModal from "./RenameModal.vue";
 import RestoreButton from "./RestoreButton.vue";
 /**
- * @typedef {object} Props
+ * @typedef {Object} Props
  * @property {ReturnType<import("@cloudbolt/js-sdk").createApi>} Props.api - The authenticated API instance
- * @property {string} Props.location - The selected S3 Bucket location
- * @property {object} Props.resource - The selected S3 Bucket resource
- * @property {object} Props.state - The selected S3 Bucket state
- * @property {boolean} Props.isVersionMode - Boolean if Bucket Version mode is on
- * @property {array} Props.dataTableItems - The array of the dataTable items
- * @property {array} Props.selectedItems - The array of the selected table items
- * @property {function} Props.updatedSelectedItems - Function to update the array of the selected table items
- * @property {function} Props.updateResourceSelection - Function to replace the selected S3 Bucket resource
- * @property {function} Props.refreshResource - Function to fetch the selected S3 Bucket
- * @property {function} Props.fetchSelection - Function to fetch the selection
+ * @property {String} Props.location - The S3 Bucket location
+ * @property {Object} Props.resource - The S3 Bucket resource
+ * @property {Boolean} Props.isLoading - Loading data response
+ * @property {Object} Props.state - The S3 Bucket state data
+ * @property {Boolean} Props.isVersionMode - Boolean if Bucket Version mode is on
+ * @property {Array} Props.dataTableItems - The array of the items for the dataTable
+ * @property {Array} Props.selectedItems - The array of the selected dataTable items
+ * @property {Function} Props.updatedSelectedItems - Function to update the array of the selected table items
+ * @property {Function} Props.updateResourceSelection - Function to replace the S3 Bucket resource
+ * @property {Function} Props.refreshResource - Function to refresh the selected S3 Bucket
+ * @property {Function} Props.fetchSelection - Function to fetch the selection
  */
 /** @type {Props} */
 defineProps({
@@ -100,6 +107,10 @@ defineProps({
   location: {
     type: String,
     default: '',
+  },
+  isLoading: {
+    type: Boolean,
+    default: false,
   },
   resource: {
     type: Object,
@@ -140,6 +151,7 @@ defineProps({
 });
 
 const expanded = ref([])
+const emit = defineEmits(["update:items"]);
 
 const headers = [
   { title: 'Name', align: 'start', key: 'name' },
@@ -151,7 +163,6 @@ const headers = [
 ]
 const versionHeaders = [
   { title: 'Name', align: 'start', key: 'name' },
-  { title: 'Version ID', align: 'start', key: 'version_id' },
   { title: 'Type', align: 'start', key: 'item_type' },
   { title: 'Last Modified', align: 'start', key: 'last_modified' },
   { title: 'Size', align: 'start', key: 'size' },

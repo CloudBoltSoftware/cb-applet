@@ -1,17 +1,16 @@
 <template>
-  <VProgressCircular v-if="isLoading" indeterminate class="ma-3" />
-  <div v-else class="d-flex flex-column">
+  <div class="d-flex flex-column">
     <BucketBreadcrumbs 
       :state="state"
-      :resource="resource"
+      :name="resource.name"
       :fetch-selection="fetchSelection"
       class="justify-start"
       />
     <div class="d-flex justify-space-between">
       <VBtnGroup>
-        <DownloadButton :api="api" :resource="resource" :location="location" :selected-items="selectedItems" />
-        <DeleteModal :api="api" :resource="resource" :selected-items="selectedItems" @update:refreshResource="refreshResource" />
-        <UploadModal :api="api" :resource="resource" :state="state" :refresh-resource="refreshResource"/>
+        <DownloadButton :api="api" :resource-id="resource.id" :selected-items="selectedItems" />
+        <DeleteModal :api="api" :state="state" :resource-id="resource.id" :selected-items="selectedItems" @update:refreshResource="refreshResource" />
+        <UploadModal :api="api" :resource="resource" :path="state.full_path" :refresh-resource="refreshResource"/>
         <CreateModal :api="api" :resource="resource" :state="state" @update:refreshResource="refreshResource"/>
         <VBtn v-if="isFlat" icon="mdi-folder-eye" title="Toggle Folder View" size="x-large" @click="fetchFlattenedView"/>
         <VBtn v-else icon="mdi-view-headline"  title="Toggle List View" size="x-large" @click="fetchFlattenedView" />
@@ -22,18 +21,19 @@
         </template>
       </VTooltip>
     </div>
-    <NestedTable
+    <NestedTable 
       :api="api"
       :location="location"
       :resource="resource"
+      :is-loading="isLoading"
       :state="state"
       :is-version-mode="isVersionMode"
       :data-table-items="dataTableItems"
       :selected-items="selectedItems"
       :fetch-selection="fetchSelection"
-      :updated-selected-items="updatedSelectedItems"
       :update-resource-selection="updateResourceSelection"
       :refresh-resource="refreshResource"
+      @update:items="(val) => selectedItems = val"
       />
   </div>
 </template>
@@ -41,20 +41,20 @@
 <script setup>
 import { computed, ref } from "vue";
 import { convertObjectToFormData } from '../helpers/axiosHelper';
-import BucketBreadcrumbs from "./BucketBreadcrumbs.vue";
-import CreateModal from "./CreateModal.vue";
-import DeleteModal from "./DeleteModal.vue";
-import DownloadButton from "./DownloadButton.vue";
-import NestedTable from "./NestedTable.vue";
-import UploadModal from "./UploadModal.vue";
+import BucketBreadcrumbs from "./Components/BucketBreadcrumbs.vue";
+import DownloadButton from "./Components/DownloadButton.vue";
+import NestedTable from "./Components/NestedTable.vue";
+import CreateModal from "./Modals/CreateModal.vue";
+import DeleteModal from "./Modals/DeleteModal.vue";
+import UploadModal from "./Modals/UploadModal.vue";
 /**
- * @typedef {object} Props
+ * @typedef {Object} Props
  * @property {ReturnType<import("@cloudbolt/js-sdk").createApi>} Props.api - The authenticated API instance
- * @property {string} Props.location - The selected S3 Bucket location
- * @property {object} Props.resource - The selected S3 Bucket resource
- * @property {object} Props.state - The selected S3 Bucket state
- * @property {function} Props.updateResourceSelection - Function to replace the selected S3 Bucket resource
- * @property {function} Props.refreshResource - Function to fetch the selected S3 Bucket
+ * @property {String} Props.location - The selected S3 Bucket location
+ * @property {Object} Props.resource - The S3 Bucket resource
+ * @property {Object} Props.state - The selected S3 Bucket state
+ * @property {Function} Props.updateResourceSelection - Function to replace The S3 Bucket resource
+ * @property {Function} Props.refreshResource - Function to fetch the selected S3 Bucket
  */
 /** @type {Props} */
 const props = defineProps({
@@ -94,10 +94,6 @@ const isVersionMode = ref(false)
 // const hasVersionMode = computed(() => props?.state?.dir_list[0].versions.length > 0)
 const isLoading = ref(false)
 const selectedItems = ref()
-const flattenForm = computed(() => ({
-  path: '',
-  flat: props.isFlat ? 'True' : 'False'
-}))
 const dataTableItems = computed(() => {
   let list = props?.state?.dir_list
   if (isVersionMode.value) {
@@ -106,15 +102,19 @@ const dataTableItems = computed(() => {
   return list.filter((item) => !item.is_file ? item : item.is_delete_marker ? false : item )
 })
 
-const updatedSelectedItems = (newItems) => {
-  selectedItems.value = newItems
-}
 const fetchFlattenedView = async () => {
-  emit("update:updateFlatten", !props.isFlat)
+  emit("update:updateFlatten")
+  // Flatten form created here to handle the props update delay from the above emit
+  const flattenForm = {
+    path: '',
+    flat: !props.isFlat ? 'True' : 'False'
+  }
   try {
-    const formData = convertObjectToFormData(flattenForm.value)
+    isLoading.value = true
+    const formData = convertObjectToFormData(flattenForm)
     const flattenResponse = await props.api.base.instance.post(`http://localhost:8001/ajax/s3_browser_info/${props.resource.id}/`, formData)
     props.updateResourceSelection(flattenResponse.data);
+    isLoading.value = false
   } catch (error) {
     // When using API calls, it's a good idea to catch errors and meaningfully display them.
     // In this case, we'll just log the error to the console.

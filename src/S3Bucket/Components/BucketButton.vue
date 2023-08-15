@@ -15,25 +15,15 @@
 import { computed, onUpdated, ref } from "vue";
 
 /**
- * @typedef {object} Props
- * @property {ReturnType<import("@cloudbolt/js-sdk").createApi>} Props.api - The authenticated API instance
- * @property {object} Props.item - The current S3 Bucket item
- * @property {string} Props.id - The current S3 Bucket id
- * @property {function} Props.fetchSelection - Function to fetch the selected S3 Bucket path
+ * @typedef {Object} Props
+ * @property {Object} Props.item - The current S3 Bucket item
+ * @property {Function} Props.fetchSelection - Function to fetch the selected S3 Bucket path
  */
 /** @type {Props} */
 const props = defineProps({
-  api: {
-    type: Object,
-    required: true,
-  },
   item: {
     type: Object,
     default: () => {},
-  },
-  id: {
-    type: String,
-    required: true
   },
   fetchSelection: {
     type: Function,

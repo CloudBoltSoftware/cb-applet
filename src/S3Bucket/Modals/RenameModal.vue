@@ -17,9 +17,6 @@
             type="text"
             :rules="requiredRule"
             required />
-          <VCol cols="12" class="details-div">
-            <!-- TODO: Not sure what this component is for -->
-          </VCol>
         </VCardText>
         <VCardActions class="d-flex justify-end px-3">
           <VTooltip location="start" :text="formError" >
@@ -38,15 +35,15 @@
 </template>
     
 <script setup>
-import { computed, onMounted, ref } from "vue";
-import { convertObjectToFormData } from '../helpers/axiosHelper';
+import { computed, ref, watch } from "vue";
+import { convertObjectToFormData } from '../../helpers/axiosHelper';
 
 /**
- * @typedef {object} Props
+ * @typedef {Object} Props
  * @property {ReturnType<import("@cloudbolt/js-sdk").createApi>} Props.api - The authenticated API instance
- * @property {object} Props.item - The selected S3 Bucket item
- * @property {object} Props.resource - The selected S3 Bucket resource
- * @property {object} Props.state - The selected S3 Bucket state
+ * @property {Object} Props.name - The selected S3 Bucket item's name
+ * @property {Object} Props.resource - The S3 Bucket resource
+ * @property {String} Props.path - The selected S3 Bucket item's current full path
  */
 /** @type {Props} */
 
@@ -55,17 +52,17 @@ const props = defineProps({
     type: Object,
     required: true,
   },
-  item: {
-    type: Object,
-    default: () => {}
+  name: {
+    type: String,
+    required: true
   },
   resource: {
     type: Object,
     default: () => {}
   },
-  state: {
-    type: Object,
-    default: () => {}
+  path: {
+    type: String,
+    default: ''
   },
 });
 
@@ -76,11 +73,11 @@ const formIsValid = ref(false)
 const formError = ref()
 const renameOld = ref('')
 const renameNew = ref('')
-// TODO: Encode ?
+
 const renameForm = computed(() => ({  
   old_object_name: renameOld.value,
   new_object_name: renameNew.value,
-  path: props.state.full_path,
+  path: props.path,
   bucket_name: props.resource.name})
 ) 
 
@@ -94,10 +91,11 @@ const onCancel = () => {
   formError.value = ''
 }
 
-onMounted(() => {
-  renameOld.value = props?.item?.name,
-  renameNew.value = props?.item?.name
-})
+watch(() => renameDialog.value === true,
+  () => {
+    renameOld.value = props?.name,
+    renameNew.value = props?.name
+  })
 
 async function renameObject() {
   try {

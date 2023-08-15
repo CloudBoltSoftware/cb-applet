@@ -56,16 +56,16 @@
     
 <script setup>
 import { computed, onMounted, ref } from "vue";
-import { convertObjectToFormData } from '../helpers/axiosHelper';
+import { convertObjectToFormData } from '../../helpers/axiosHelper';
 import RestoreButton from "./RestoreButton.vue";
 
 /**
- * @typedef {object} Props
+ * @typedef {Object} Props
  * @property {ReturnType<import("@cloudbolt/js-sdk").createApi>} Props.api - The authenticated API instance
- * @property {object} Props.item - The selected S3 Bucket item
- * @property {string} Props.location - The selected S3 Bucket location
- * @property {object} Props.resource - The selected S3 Bucket resource
- * @property {function} Props.refreshResource - Function to replace the selected S3 Bucket resource
+ * @property {Object} Props.sourceItem - The selected S3 Bucket item
+ * @property {String} Props.location - The selected S3 Bucket location
+ * @property {Object} Props.resource - The S3 Bucket resource
+ * @property {Function} Props.refreshResource - Function to replace The S3 Bucket resource
  */
 /** @type {Props} */
 

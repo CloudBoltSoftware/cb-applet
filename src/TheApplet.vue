@@ -16,24 +16,24 @@ import S3Widget from "./S3Bucket/S3Widget.vue";
 /**
  * JSDoc is a great way to document your code and help your IDE provide better autocomplete.
  * https://jsdoc.app/
- * @typedef {object} Props
+ * @typedef {Object} Props
  * @property {User} Props.user - User details
  * @property {ReturnType<import("@cloudbolt/js-sdk").createApi>} Props.api - The authenticated API instance
- * @property {string} Props.page - The currently loaded page name
- * @property {string} Props.area - The page area where the component is being rendered
- * @property {object} Props.context - Individual Applet targets might pass in contextual information that only makes sense for applets in that context.
+ * @property {String} Props.page - The currently loaded page name
+ * @property {String} Props.area - The page area where the component is being rendered
+ * @property {Object} Props.context - Individual Applet targets might pass in contextual information that only makes sense for applets in that context.
  */
 
 /**
- * @typedef {object} User
- * @property {string} user.username - The user's username
- * @property {string} user.email - The user's email address
- * @property {string} user.firstName - The user's first name
- * @property {string} user.lastName - The user's last name
- * @property {string} user.id - The user's id
- * @property {string} user.globalId - The user's global id
- * @property {boolean} user.cmpAdmin - Whether the user is a CMP admin
- * @property {boolean} user.globalViewer - Whether the user is a global viewer
+ * @typedef {Object} User
+ * @property {String} user.username - The user's username
+ * @property {String} user.email - The user's email address
+ * @property {String} user.firstName - The user's first name
+ * @property {String} user.lastName - The user's last name
+ * @property {String} user.id - The user's id
+ * @property {String} user.globalId - The user's global id
+ * @property {Boolean} user.cmpAdmin - Whether the user is a CMP admin
+ * @property {Boolean} user.globalViewer - Whether the user is a global viewer
  */
 
 /**

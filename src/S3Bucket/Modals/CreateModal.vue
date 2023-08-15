@@ -43,12 +43,12 @@
     
 <script setup>
 import { computed, ref } from "vue";
-import { convertObjectToFormData } from '../helpers/axiosHelper';
+import { convertObjectToFormData } from '../../helpers/axiosHelper';
 /**
- * @typedef {object} Props
+ * @typedef {Object} Props
  * @property {ReturnType<import("@cloudbolt/js-sdk").createApi>} Props.api - The authenticated API instance
- * @property {object} Props.state - The selected S3 Bucket state
- * @property {object} Props.resource - The selected S3 Bucket resource
+ * @property {Object} Props.state - The selected S3 Bucket state
+ * @property {Object} Props.resource - The S3 Bucket resource
  */
 /** @type {Props} */
 const props = defineProps({

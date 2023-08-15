@@ -71,9 +71,9 @@ import { computed } from "vue";
  */
 
 /**
- * @typedef {object} Props
- * @property {object} Props.sourceItem - The selected S3 Bucket item
- * @property {string} Props.location - The selected S3 Bucket location
+ * @typedef {Object} Props
+ * @property {Object} Props.sourceItem - The selected S3 Bucket item
+ * @property {String} Props.location - The selected S3 Bucket location
  */
 /** @type {Props} */
 

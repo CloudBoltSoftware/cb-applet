@@ -4,12 +4,12 @@
     
 <script setup>
 import { computed } from "vue";
-import { convertObjectToFormData } from '../helpers/axiosHelper';
+import { convertObjectToFormData } from '../../helpers/axiosHelper';
 /**
- * @typedef {object} Props
+ * @typedef {Object} Props
  * @property {ReturnType<import("@cloudbolt/js-sdk").createApi>} Props.api - The authenticated API instance
- * @property {object} Props.resource - The selected S3 Bucket resource
- * @property {object} Props.selectedItems - The selected S3 Bucket items
+ * @property {String} Props.resourceId - The S3 Bucket resource Id
+ * @property {Array} Props.selectedItems - The selected S3 Bucket items
  */
 /** @type {Props} */
 const props = defineProps({
@@ -17,13 +17,9 @@ const props = defineProps({
     type: Object,
     required: true,
   },
-  resource: {
-    type: Object,
-    required: true,
-  },
-  location: {
+  resourceId: {
     type: String,
-    default: '',
+    required: true,
   },
   selectedItems: {
     type: Array,
@@ -41,8 +37,7 @@ const filePaths = computed(() => {
   const allFiles = []
   props.selectedItems.forEach((item) => {
     allFiles.push({
-      path: item.url,
-      location: props.location
+      path: item.url
     })
   })
 
@@ -56,7 +51,7 @@ async function downloadFiles() {
       // Because this function is `async`, we can use `await` to wait for the API call to finish.
       // Alternatively, we could use `.then()` and `.catch()` to handle the response.
       // https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Asynchronous/Promises
-      const response = await props.api.base.instance.post(`http://localhost:8001/ajax/s3-download-file/${props.resource.id}/`,  formData)
+      const response = await props.api.base.instance.post(`http://localhost:8001/ajax/s3-download-file/${props.resourceId}/`,  formData)
       console.log("Download Files ", {response})
       if (response.status === 200) {
         window.open(response.data.url, "_blank")

@@ -6,13 +6,13 @@
     <VCard class="py-3">
       <VCardTitle class="w-100 d-inline-flex justify-space-between text-h5">
         <div>
-          Upload File or Folder to <span class="font-italic">{{ state.full_path ? state.full_path : 'Root folder'}}</span>
+          Upload File or Folder to <span class="font-italic">{{ path ? path : 'Root folder'}}</span>
         </div>
         <VBtn icon="mdi-close" title="Close this dialog" data-dismiss="modal" variant="text" @click="uploadDialog = false"/>
       </VCardTitle>
       <VCardActions class="d-flex justify-center ma-2">
-        <FileUpload :api="api" :resource="resource" :state="state" @update:closeDialog="uploadDialog = false" @update:submitted="refreshResource" />
-        <FolderUpload :api="api" :resource="resource" :state="state" @update:closeDialog="uploadDialog = false" @update:submitted="refreshResource"/>
+        <FileUpload :api="api" :resource="resource" :path="path" @update:closeDialog="uploadDialog = false" @update:submitted="refreshResource" />
+        <FolderUpload :api="api" :resource="resource" :path="path" @update:closeDialog="uploadDialog = false" @update:submitted="refreshResource"/>
       </VCardActions>
     </VCard>
   </VDialog>
@@ -20,15 +20,15 @@
 
 <script setup>
 import { ref } from "vue";
-import FileUpload from "./FileUpload.vue";
-import FolderUpload from "./FolderUpload.vue";
+import FileUpload from "../Components/FileUpload.vue";
+import FolderUpload from "../Components/FolderUpload.vue";
 
 /**
- * @typedef {object} Props
+ * @typedef {Object} Props
  * @property {ReturnType<import("@cloudbolt/js-sdk").createApi>} Props.api - The authenticated API instance
- * @property {object} Props.state - The selected S3 Bucket state
- * @property {object} Props.resource - The selected S3 Bucket resource
- * @property {function} Props.refreshResource - Function to fetch the selected S3 Bucket
+ * @property {String} Props.path - The current S3 Bucket item's full path
+ * @property {Object} Props.resource - The S3 Bucket resource
+ * @property {Function} Props.refreshResource - Function to re-fetch the selected S3 Bucket
  */
 /** @type {Props} */
 defineProps({
@@ -36,9 +36,9 @@ defineProps({
     type: Object,
     required: true,
   },
-  state: {
-    type: Object,
-    default: () => {}
+  path: {
+    type: String,
+    default: ''
   },
   resource: {
     type: Object,
