@@ -1,16 +1,13 @@
 <template>
   <VDialog v-model="fileDialog" width="1024" @update:model-value="(val) => !val && onCancel()" >
-    <template #activator="{ props: fileProps }" >
-      <VBtn prepend-icon="mdi-file-upload" v-bind="fileProps" variant="flat" color="primary" size="x-large" title="Upload New File" class="px-4 flex-grow-1" >Upload a File</VBtn>
-    </template>
     <VCard class="py-3">
-      <VForm @submit.prevent="fileUploadModal" @update:model-value="(val) => formIsValid = val">
+      <VForm @submit.prevent="multiFileUploadModal" @update:model-value="(val) => formIsValid = val">
         <VCardTitle class="w-100 d-inline-flex justify-space-between text-h5">
-          <div>Upload File to <span class="font-italic">{{path ? path : 'Root folder'}}</span></div>
+          <div>Upload {{uploadFile.length > 1 ? uploadFile.length : ''}} file(s) to <span class="font-italic">{{dropFilesForm.path ? dropFilesForm.path : 'Root folder'}}</span></div>
           <VBtn icon="mdi-close" title="Close" data-dismiss="modal" variant="text" @click="onCancel" />
         </VCardTitle>
         <VCardText>
-          <VFileInput v-model="uploadFile" :rules="requiredRule" clearable label="Upload File" />
+          <VFileInput v-model="uploadFile" multiple disabled label="Selected Files" class="showInput"/>
         </VCardText>
         <VCardActions class="d-flex justify-end px-3">
           <VTooltip location="start" :text="formError" >
@@ -29,18 +26,15 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { computed, onUpdated, ref } from "vue";
 import { convertObjectToMultiFormData } from '../../helpers/axiosHelper';
-/**
- * @typedef {Object} resource
- * @property {String} name
- * @property {String} id
- */
 /**
  * @typedef {object} Props
  * @property {ReturnType<import("@cloudbolt/js-sdk").createApi>} Props.api - The authenticated API instance
- * @property {String} Props.path - The current S3 Bucket item's full path
  * @property {Object} Props.resource - The S3 Bucket resource
+ * @property {Boolean} Props.dropModal - Boolean for enabling the file-drop modal
+ * @property {Array} Props.dropFiles - Array of files from the file-drop
+ * @property {Object} Props.dropFilesForm - Form for the file-drop upload
  * 
  */
 /** @type {Props} */
@@ -49,47 +43,60 @@ const props = defineProps({
     type: Object,
     required: true,
   },
-  path: {
-    type: String,
-    default: ''
-  },
   resource: {
+    type: Object,
+    default: () => {}
+  },
+  dropModal: {
+    type: Boolean,
+    default: false
+  },
+  dropFiles: {
+    type: Array,
+    default: () => []
+  },
+  dropFilesForm: {
     type: Object,
     default: () => {}
   }
 });
 
-const emit = defineEmits(["update:closeDialog", "update:submitted"]);
+const emit = defineEmits(["update:submitted", "update:clear"]);
 const isUploading = ref(false)
 const uploadFile = ref([])
-const uploadFileForm = ref({
-  bucket_name: props.resource.name,
-  path: props.path
-}) 
 const formIsValid = ref(false)
 const formError = ref()
 const fileDialog = ref(false)
-const requiredRule = [(value) => value.length > 0 || 'This field is required']
+const isMultiFileDrop = computed(() => props.dropFiles && props.dropFiles.length > 0)
 
 const onCancel = () => {
-  emit("update:closeDialog");
+  emit("update:clear")
   fileDialog.value = false
   formError.value = ''
   uploadFile.value = []
 }
 
-async function fileUploadModal() {
+onUpdated(() => {
+  if (isMultiFileDrop.value && props.dropFilesForm && props.dropModal) {
+    fileDialog.value = true
+    uploadFile.value = props.dropFiles
+  }
+})
+
+async function multiFileUploadModal() {
   try {
     isUploading.value = true
-    const formData = convertObjectToMultiFormData(uploadFileForm.value, uploadFile.value, 'file')
-    // Because this function is `async`, we can use `await` to wait for the API call to finish.
-    // Alternatively, we could use `.then()` and `.catch()` to handle the response.
-    // https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Asynchronous/Promises
-    const response = await props.api.base.instance.post(`http://localhost:8001/ajax/s3-upload-new-object/${props.resource.id}/`,  formData)
+    for (const file of props.dropFiles) {
+      const formData = convertObjectToMultiFormData(props.dropFilesForm, [file], 'file')
+      // Because this function is `async`, we can use `await` to wait for the API call to finish.
+      // Alternatively, we could use `.then()` and `.catch()` to handle the response.
+      // https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Asynchronous/Promises
+      const response = await props.api.base.instance.post(`http://localhost:8001/ajax/s3-upload-new-object/${props.resource.id}/`,  formData)
+      console.log('Uploaded File ', {response})
+    }
     emit("update:submitted")
+    emit("update:clear")
     isUploading.value = false
-    console.log('Upload File ', {response})
-    emit("update:closeDialog");
     fileDialog.value = false
     uploadFile.value = []
   } catch (error) {

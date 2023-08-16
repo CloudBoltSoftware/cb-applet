@@ -32,7 +32,7 @@
             </template>
           </VTooltip>
           <VBtn prepend-icon="mdi-close" variant="flat" size="large" class="px-4 mx-2" @click="onCancel">Cancel</VBtn>
-          <VBtn :loading="isSubmitting"  :disabled="!formIsValid"  prepend-icon="mdi-folder-plus" type=submit variant="flat" color="primary" size="large" class="px-4">Create
+          <VBtn :loading="isSubmitting"  :disabled="!formIsValid"  :width="isSubmitting ? '150' : '100'" prepend-icon="mdi-folder-plus" type=submit variant="flat" color="primary" size="large" class="px-4">Create
             <template #loader>Submitting…</template>
           </VBtn>
         </VCardAction>

@@ -6,16 +6,17 @@
     <VForm @submit.prevent="deleteModal">
       <VCard class="py-3" density="compact">
         <VCardTitle class="w-100 d-inline-flex justify-space-between text-h5">
-          <span>
-            <VIcon
-            color="error"
-            icon="mdi-alert"
-            class="text-h5"
-          /> Delete Confirmation</span>
+          <span>Delete Confirmation</span>
           <VBtn icon="mdi-close" title="Close this dialog" data-dismiss="modal" variant="text" @click="deleteDialog = false"/>
         </VCardTitle>
         <VCardText class="py-0 ml-3">
-          <p class="text-h6">Are you sure you want to delete?</p>
+          <p class="text-h6">
+            <VIcon
+              color="error"
+              icon="mdi-alert"
+              class="text-h5"
+            />
+            Are you sure you want to delete?</p>
           <p class="text-body-1">Note: If you have selected a folder, all objects in that folder will also be deleted.</p>    
         </VCardText>
         <VCardAction class="d-flex justify-end px-3">

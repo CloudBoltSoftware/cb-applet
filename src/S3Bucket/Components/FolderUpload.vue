@@ -19,7 +19,9 @@
             </template>
           </VTooltip>
           <VBtn prepend-icon="mdi-close" variant="flat" size="large" class="px-4 mx-2" @click="onCancel" >Cancel</VBtn>
-          <VBtn prepend-icon="mdi-folder-upload" :disabled="!formIsValid" type=submit variant="flat" color="primary" size="large" class="px-4" >Upload to S3</VBtn>
+          <VBtn :loading="isUploading" prepend-icon="mdi-folder-upload" :disabled="!formIsValid" type=submit variant="flat" color="primary" size="large" class="px-4" >Upload to S3
+            <template #loader>Uploading...</template>
+          </VBtn>
         </VCardActions>
       </VForm>
     </VCard>
@@ -57,6 +59,7 @@ const props = defineProps({
 });
 
 const emit = defineEmits(["update:closeDialog", "update:submitted"]);
+const isUploading = ref(false)
 const uploadFolder = ref()
 const uploadFolderForm = ref({
   bucket_name: props.resource.name,
@@ -76,12 +79,14 @@ const onCancel = () => {
 
 async function folderUploadModal() {
   try {
+    isUploading.value = true
     const  formData = convertObjectToMultiFormData(uploadFolderForm.value, uploadFolder.value, 'folder')
     // Because this function is `async`, we can use `await` to wait for the API call to finish.
     // Alternatively, we could use `.then()` and `.catch()` to handle the response.
     // https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Asynchronous/Promises
     const response = await props.api.base.instance.post(`http://localhost:8001/ajax/s3-upload-new-folder/${props.resource.id}/`,  formData)
     emit("update:submitted")
+    isUploading.value = false
     console.log('Upload Folder ', {response})
     emit("update:closeDialog");
     folderDialog.value = false
@@ -91,6 +96,7 @@ async function folderUploadModal() {
     console.error(error);
     formError.value = `(${error.code}) ${error.name}: ${error.message}`
     formIsValid.value = false
+    isUploading.value = false
   }
 }
 </script>

@@ -28,7 +28,7 @@
         :item="item.raw"
         :fetch-selection="fetchSelection"
         />
-        <div v-else class="ml-2">{{ item.raw.name }}</div>
+        <div v-else class="ml-4">{{ item.raw.name }}</div>
       </td>
     </template> 
     <template #[`item.last_modified`]="{ item }">

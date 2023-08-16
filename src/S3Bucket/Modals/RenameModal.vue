@@ -25,7 +25,7 @@
             </template>
           </VTooltip>
           <VBtn prepend-icon="mdi-close" variant="flat" size="large" class="px-4 mx-2" @click="onCancel">Cancel</VBtn>
-          <VBtn :loading="isSubmitting" :disabled="!formIsValid" type="submit" variant="flat" color="primary" size="large" class="px-4">Rename
+          <VBtn :loading="isSubmitting" :disabled="!formIsValid" type="submit" variant="flat" color="primary" size="large" :width="isSubmitting ? '150' : '100'" class="px-4">Rename
             <template #loader>Submitting…</template>
           </VBtn>
         </VCardActions>  

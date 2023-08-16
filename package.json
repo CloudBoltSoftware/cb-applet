@@ -18,13 +18,17 @@
       },
       {
         "name": "s3_file_manager",
-        "minimum_version": "8.6",
+        "minimum_version": "1.0",
         "maximum_version": ""
       }
     ],
     "met_targets": {
       "cui": {
-        "fullPage": [{"slug": "s3-browser"}],
+        "fullPage": [
+          {
+            "slug": "s3-browser"
+          }
+        ],
         "all": [
           "preNavItems"
         ],
@@ -62,6 +66,7 @@
     "test": "echo \"Error: no test runner specified. CloudBolt suggests using vitest.\" && exit 1"
   },
   "dependencies": {
+    "@vueuse/core": "^10.3.0",
     "camelcase": "^7.0.1",
     "vuetify": "^3.1.13"
   },

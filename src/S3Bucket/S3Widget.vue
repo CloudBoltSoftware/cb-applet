@@ -18,6 +18,7 @@
         @update:modelValue="getResourceSelection"
       />
     </div>
+    <VProgressLinear v-if="preLoadedResource && isLoading" indeterminate class="mt-3" color="blue-darken-4" rounded />
     <BucketDisplay 
       v-if="bucketDetails"
       :api="api"
@@ -55,6 +56,7 @@ const props = defineProps({
 const buckets = ref()
 const bucketDetails = ref()
 const isFlat = ref()
+const isLoading = ref(false)
 const preLoadedResource = computed(() => buckets.value && props.context.resource && buckets.value.find((bucket) => bucket.name === props.context.resource.name))
 
 //  TODO Handle CSRF Token
@@ -83,10 +85,12 @@ const getBuckets = async () => {
 
 const getResourceSelection = async (resource) => {
   try {
+    isLoading.value = true
     const response = await props.api.base.instance.get(`http://localhost:8001/ajax/s3-browser-info/${resource.id}/`)
     console.log('getResourceSelection', {response})
     bucketDetails.value = response.data
     isFlat.value = response.data.state.flat
+    isLoading.value = false
   } catch (error) {
     // When using API calls, it's a good idea to catch errors and meaningfully display them.
     // In this case, we'll just log the error to the console.
