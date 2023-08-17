@@ -10,7 +10,7 @@
       <VBtnGroup>
         <DownloadButton :api="api" :resource-id="resource.id" :location="location" :selected-items="selectedItems" />
         <DeleteModal :api="api" :state="state" :resource-id="resource.id" :selected-items="selectedItems" @update:refreshResource="refreshResource" />
-        <MultiFileUpload v-if="dropModal" :api="api" :resource="resource" :drop-modal="dropModal" :drop-files="dropFiles" :drop-files-form="dropFilesForm" @update:submitted="refreshResource" @update:clear="() => dropModal = !dropModal"/>
+        <MultiFileModal v-if="dropModal" :api="api" :resource="resource" :drop-modal="dropModal" :drop-files="dropFiles" :drop-files-form="dropFilesForm" @update:submitted="refreshResource" @update:clear="() => dropModal = !dropModal"/>
         <UploadModal :api="api" :resource="resource" :path="state.full_path" :drop-files="dropFiles" :drop-files-form="dropFilesForm" :refresh-resource="refreshResource"/>
         <CreateModal :api="api" :resource="resource" :state="state" @update:refreshResource="refreshResource"/>
         <VBtn v-if="isFlat" icon="mdi-folder-eye" title="Toggle Folder View" size="x-large" @click="fetchFlattenedView"/>
@@ -34,7 +34,6 @@
           :data-table-items="dataTableItems"
           :selected-items="selectedItems"
           :fetch-selection="fetchSelection"
-          :update-resource-selection="updateResourceSelection"
           :refresh-resource="refreshResource"
           @update:items="(val) => selectedItems = val"
           />
@@ -49,10 +48,10 @@ import { computed, onUnmounted, ref } from "vue";
 import { convertObjectToFormData } from '../helpers/axiosHelper';
 import BucketBreadcrumbs from "./Components/BucketBreadcrumbs.vue";
 import DownloadButton from "./Components/DownloadButton.vue";
-import MultiFileUpload from './Components/MultiFileUpload.vue';
 import NestedTable from "./Components/NestedTable.vue";
 import CreateModal from "./Modals/CreateModal.vue";
 import DeleteModal from "./Modals/DeleteModal.vue";
+import MultiFileModal from './Modals/MultiFileModal.vue';
 import UploadModal from "./Modals/UploadModal.vue";
 
 /**
@@ -62,7 +61,6 @@ import UploadModal from "./Modals/UploadModal.vue";
  * @property {Object} Props.resource - The S3 Bucket resource
  * @property {Object} Props.state - The selected S3 Bucket state
  * @property {Function} Props.updateResourceSelection - Function to replace The S3 Bucket resource
- * @property {Function} Props.refreshResource - Function to fetch the selected S3 Bucket
  */
 /** @type {Props} */
 const props = defineProps({
@@ -86,10 +84,6 @@ const props = defineProps({
     type: Function,
     default: () => {},
   },
-  refreshResource: {
-    type: Function,
-    default: () => {},
-  },
   isFlat: {
     type: Boolean,
     required: true
@@ -97,7 +91,7 @@ const props = defineProps({
 });
 
 const emit = defineEmits(["update:updateFlatten"]);
-// TODO - Update when Version mode is restored
+// TODO CMP-127 - Update when Version mode is restored
 const hasVersionMode = ref(false)
 const isVersionMode = ref(false)
 const isLoading = ref(false)
@@ -109,6 +103,21 @@ const dataTableItems = computed(() => {
   } 
   return list.filter((item) => !item.is_file ? item : item.is_delete_marker ? false : item )
 })
+
+const currentPathForm = computed(() => {
+  const currentPath = props.state.path_dirs[props.state.path_dirs.length - 1]
+  if (currentPath) {
+    return {
+      path: currentPath.path,
+      name: currentPath.name
+    }
+  } 
+  return {
+    path: '',
+    name: ''
+  }
+})
+
 const dropZoneRef = ref(null)
 const dropError = ref()
 const dropModal = ref(false)
@@ -127,9 +136,7 @@ const onDrop = (files) => {
     clearError()
   }
 }
-
 const { isOverDropZone } = useDropZone(dropZoneRef, onDrop)
-
 const clearError = () => setTimeout(() => dropError.value = false, 5000)
 
 const fetchFlattenedView = async () => {
@@ -163,6 +170,11 @@ const fetchSelection = async (form) => {
     // In this case, we'll just log the error to the console.
     console.log({error})
   }
+}
+
+const refreshResource = async () => {
+  // Time delay to give the backend time to update. Re-fetches current location
+  setTimeout(fetchSelection(currentPathForm.value), 4000)
 }
 
 onUnmounted(clearTimeout(clearError))

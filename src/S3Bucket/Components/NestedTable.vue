@@ -23,7 +23,7 @@
           color="blue-darken-3"
           class="align-self-center"
         />
-        <BucketButton 
+        <FolderButton 
         v-if="!item.raw.is_file"
         :item="item.raw"
         :fetch-selection="fetchSelection"
@@ -81,7 +81,7 @@
 import { ref } from "vue";
 import OverviewModal from "../Modals/OverviewModal.vue";
 import RenameModal from "../Modals/RenameModal.vue";
-import BucketButton from "./BucketButton.vue";
+import FolderButton from "./FolderButton.vue";
 import RestoreButton from "./RestoreButton.vue";
 /**
  * @typedef {Object} Props
@@ -94,8 +94,7 @@ import RestoreButton from "./RestoreButton.vue";
  * @property {Array} Props.dataTableItems - The array of the items for the dataTable
  * @property {Array} Props.selectedItems - The array of the selected dataTable items
  * @property {Function} Props.updatedSelectedItems - Function to update the array of the selected table items
- * @property {Function} Props.updateResourceSelection - Function to replace the S3 Bucket resource
- * @property {Function} Props.refreshResource - Function to refresh the selected S3 Bucket
+ * @property {Function} Props.refreshResource - Function to refresh the current selected S3 Bucket
  * @property {Function} Props.fetchSelection - Function to fetch the selection
  */
 /** @type {Props} */
@@ -140,10 +139,6 @@ defineProps({
     type: Function,
     default: () => {},
   },
-  updateResourceSelection: {
-    type: Function,
-    default: () => {},
-  },
   refreshResource: {
     type: Function,
     default: () => {},
@@ -179,7 +174,7 @@ const parseDate = (entry) => {
   return `${modifiedDate}  ${modifiedTime}`
 }
 
-// TODO - Re-enable once Version updates are fixed. Requires download_url
+// TODO CMP-127 - Re-enable once Version updates are fixed. Requires download_url
 const downloadFile = (url) => {
   // TODO Better Decoding needed
   const adjustedUrl = url.replace(/&amp;/g,'&')

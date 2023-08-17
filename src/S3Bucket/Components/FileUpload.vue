@@ -3,10 +3,10 @@
     <template #activator="{ props: fileProps }" >
       <VBtn prepend-icon="mdi-file-upload" v-bind="fileProps" variant="flat" color="primary" size="x-large" title="Upload New File" class="px-4 flex-grow-1" >Upload a File</VBtn>
     </template>
-    <VCard class="py-3">
+    <VCard class="pa-3">
       <VForm @submit.prevent="fileUploadModal" @update:model-value="(val) => formIsValid = val">
         <VCardTitle class="w-100 d-inline-flex justify-space-between text-h5">
-          <div>Upload File to <span class="font-italic">{{path ? path : 'Root folder'}}</span></div>
+          <div>Upload file to <span class="font-italic">{{path ? path : 'Root folder'}}</span></div>
           <VBtn icon="mdi-close" title="Close" data-dismiss="modal" variant="text" @click="onCancel" />
         </VCardTitle>
         <VCardText>
@@ -39,7 +39,7 @@ import { convertObjectToMultiFormData } from '../../helpers/axiosHelper';
 /**
  * @typedef {object} Props
  * @property {ReturnType<import("@cloudbolt/js-sdk").createApi>} Props.api - The authenticated API instance
- * @property {String} Props.path - The current S3 Bucket item's full path
+ * @property {String} Props.path - The S3 Bucket item's full path
  * @property {Object} Props.resource - The S3 Bucket resource
  * 
  */

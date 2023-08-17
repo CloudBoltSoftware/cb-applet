@@ -3,7 +3,7 @@
     <template #activator="{ props: overviewProps }" >
       <VBtn v-bind="overviewProps" icon="mdi-information" title="Details" />
     </template>
-    <VCard class="py-3">
+    <VCard class="pa-3">
       <VCardTitle class="d-inline-flex justify-space-between pb-0">
         <VTabs v-model="tab" slider-color="black" height="50px" selected-class="bg-primary text-white" >
           <VTab class="active tab-btn" value="overview" size="x-large">Overview</VTab>
@@ -68,7 +68,7 @@ defineProps({
 
 const tab = ref(null)
 const overviewDialog = ref(false)
-// TODO - Re-enable once Version updates are fixed.
+// TODO CMP-127 - Re-enable once Version updates are fixed.
 const hasVersionMode = ref(false)
 </script>
 <style scoped></style>

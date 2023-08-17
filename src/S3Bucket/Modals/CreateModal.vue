@@ -3,10 +3,10 @@
     <template #activator="{ props: createProps }" >
       <VBtn v-bind="createProps" icon="mdi-folder-plus" title="Add New Folder" size="x-large"/>
     </template>
-    <VCard class="py-3">
+    <VCard class="pa-3">
       <VForm @submit.prevent="submitCreateModal" @update:model-value="(val) => formIsValid = val">
         <VCardTitle class="w-100 d-inline-flex justify-space-between text-h5">
-          <div>Create Folder at <span class="font-italic">{{ state.full_path ? state.full_path : 'Root folder'}}</span></div>
+          <div>Create folder at <span class="font-italic">{{ state.full_path ? state.full_path : 'Root folder'}}</span></div>
           <VBtn icon="mdi-close" title="Close this dialog" variant="text" @click="onCancel"/>
         </VCardTitle>
         <VCardText>
@@ -32,7 +32,7 @@
             </template>
           </VTooltip>
           <VBtn prepend-icon="mdi-close" variant="flat" size="large" class="px-4 mx-2" @click="onCancel">Cancel</VBtn>
-          <VBtn :loading="isSubmitting"  :disabled="!formIsValid"  :width="isSubmitting ? '150' : '100'" prepend-icon="mdi-folder-plus" type=submit variant="flat" color="primary" size="large" class="px-4">Create
+          <VBtn :loading="isSubmitting"  :disabled="!formIsValid"  :width="isSubmitting ? '150' : '100'" prepend-icon="mdi-folder-plus" type=submit variant="flat" color="primary" size="large" class="pr-4 pl-6">Create
             <template #loader>Submitting…</template>
           </VBtn>
         </VCardAction>
@@ -91,8 +91,8 @@ const onCancel = () => {
 
 async function submitCreateModal() {
   try {
-    const formData = convertObjectToFormData(createFolderForm.value)
     isSubmitting.value = true
+    const formData = convertObjectToFormData(createFolderForm.value)
     // Because this function is `async`, we can use `await` to wait for the API call to finish.
     // Alternatively, we could use `.then()` and `.catch()` to handle the response.
     // https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Asynchronous/Promises

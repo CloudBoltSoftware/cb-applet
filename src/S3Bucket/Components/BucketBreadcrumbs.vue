@@ -18,8 +18,8 @@ import { computed } from "vue";
 import { VBreadcrumbsItem } from "vuetify/lib/components/index.mjs";
 /**
  * @typedef {Object} Props
- * @property {Object} Props.name - The selected S3 Bucket name
- * @property {Object} Props.state - The selected S3 Bucket state
+ * @property {Object} Props.name - The S3 Bucket name
+ * @property {Object} Props.state - The S3 Bucket state
  * @property {Function} Props.fetchSelection - Function to fetch the selected S3 Bucket path
  */
 /** @type {Props} */

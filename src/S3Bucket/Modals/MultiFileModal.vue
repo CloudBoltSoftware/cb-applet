@@ -1,6 +1,6 @@
 <template>
   <VDialog v-model="fileDialog" width="1024" @update:model-value="(val) => !val && onCancel()" >
-    <VCard class="py-3">
+    <VCard class="pa-3">
       <VForm @submit.prevent="multiFileUploadModal" @update:model-value="(val) => formIsValid = val">
         <VCardTitle class="w-100 d-inline-flex justify-space-between text-h5">
           <div>Upload {{uploadFile.length > 1 ? uploadFile.length : ''}} file(s) to <span class="font-italic">{{dropFilesForm.path ? dropFilesForm.path : 'Root folder'}}</span></div>

@@ -1,6 +1,8 @@
 <template>
-  <NavbarView v-if="area.includes('Nav')" />
-  <div v-else-if="removed" />
+  <!-- Re-comment the NavbarView and `import NavbarView` to add a direct Navbar link to the fullpage app S3 Bucket Browser -->
+  <!-- <NavbarView v-if="area.includes('Nav')" /> -->
+  <!-- Change v-if below to v-else-if after re-adding NavbarView-->
+  <div v-if="removed" />
   <VProgressCircular v-else-if="loading" indeterminate class="ma-3" />
   <div v-else class="ma-3">
     <S3Widget :api="api" :context="context" />
@@ -10,7 +12,7 @@
 <script setup>
 import { onUnmounted, ref } from "vue";
 import { VProgressCircular } from "vuetify/lib/components/index.mjs";
-import NavbarView from "./NavbarView/NavbarView.vue";
+// import NavbarView from "./NavbarView/NavbarView.vue";
 import S3Widget from "./S3Bucket/S3Widget.vue";
 
 /**

@@ -3,7 +3,7 @@
     <template #activator="{ props: renameProps }" >
       <VBtn v-bind="renameProps" icon="mdi-pencil-circle" title="Rename"/>
     </template>
-    <VCard class="py-3">
+    <VCard class="pa-3">
       <VForm @submit.prevent="renameObject" @update:model-value="(val) => formIsValid = val" >
         <VCardTitle class="w-100 d-inline-flex justify-space-between text-h5">
           Rename Object

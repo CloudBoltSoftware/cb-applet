@@ -13,10 +13,9 @@
 
 <script setup>
 import { computed, onUpdated, ref } from "vue";
-
 /**
  * @typedef {Object} Props
- * @property {Object} Props.item - The current S3 Bucket item
+ * @property {Object} Props.item - The current S3 Bucket folder item 
  * @property {Function} Props.fetchSelection - Function to fetch the selected S3 Bucket path
  */
 /** @type {Props} */

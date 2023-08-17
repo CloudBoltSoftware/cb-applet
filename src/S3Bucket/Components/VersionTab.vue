@@ -62,8 +62,8 @@ import RestoreButton from "./RestoreButton.vue";
 /**
  * @typedef {Object} Props
  * @property {ReturnType<import("@cloudbolt/js-sdk").createApi>} Props.api - The authenticated API instance
- * @property {Object} Props.sourceItem - The selected S3 Bucket item
- * @property {String} Props.location - The selected S3 Bucket location
+ * @property {Object} Props.sourceItem - The S3 Bucket item
+ * @property {String} Props.location - The S3 Bucket location
  * @property {Object} Props.resource - The S3 Bucket resource
  * @property {Function} Props.refreshResource - Function to replace The S3 Bucket resource
  */
@@ -91,7 +91,7 @@ const props = defineProps({
     default: () => {},
   },
 });
-// TODO - Re-enable once Version updates are fixed. Update to handle versioning
+// TODO CMP-127 - Re-enable once Version updates are fixed. Update to handle versioning
 const isLoading = ref(false)
 const versionInfo = ref()
 const versionMessage = ref('')

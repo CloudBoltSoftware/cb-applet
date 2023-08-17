@@ -9,7 +9,7 @@ import { convertObjectToFormData } from '../../helpers/axiosHelper';
 /**
  * @typedef {Object} Props
  * @property {ReturnType<import("@cloudbolt/js-sdk").createApi>} Props.api - The authenticated API instance
- * @property {Object} Props.item - The selected S3 Bucket item
+ * @property {Object} Props.item - The S3 Bucket file item
  * @property {Object} Props.resourceId - The S3 Bucket resource id
  */
 /** @type {Props} */
@@ -30,7 +30,8 @@ const props = defineProps({
 });
 
 const emit = defineEmits(["update:refreshResource"]);
-//  TODO This button does not yet work in the example
+// TODO CMP-127 - This button requires versioning and additional work 
+// Currently is disabled in the example
 const retoreItemForm = computed(() => ({
   key: props.item.key,
   path: props.item.path,

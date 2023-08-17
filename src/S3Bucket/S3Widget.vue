@@ -18,7 +18,7 @@
         @update:modelValue="getResourceSelection"
       />
     </div>
-    <VProgressLinear v-if="preLoadedResource && isLoading" indeterminate class="mt-3" color="blue-darken-4" rounded />
+    <VProgressLinear v-if="!bucketDetails && isLoading" indeterminate class="mt-3" color="blue-darken-4" rounded />
     <BucketDisplay 
       v-if="bucketDetails"
       :api="api"
@@ -27,7 +27,6 @@
       :resource="bucketDetails?.resource"
       :state="bucketDetails?.state"
       :update-resource-selection="updateResourceSelection"
-      :refresh-resource="refreshResource"
       @update:updateFlatten="() => isFlat = !isFlat" />
   </VSheet>
 </template>
@@ -39,7 +38,7 @@ import BucketDisplay from './BucketDisplay.vue';
 /**
  * @typedef {Object} Props
  * @property {ReturnType<import("@cloudbolt/js-sdk").createApi>} Props.api - The authenticated API instance
- * @property {Object} Props.context - The applet context, on Resource Tab view contains current resource info
+ * @property {Object} Props.context - The applet context (on Resource Tab view contains current resource info)
  */
 /** @type {Props} */
 const props = defineProps({
@@ -59,16 +58,14 @@ const isFlat = ref()
 const isLoading = ref(false)
 const preLoadedResource = computed(() => buckets.value && props.context.resource && buckets.value.find((bucket) => bucket.name === props.context.resource.name))
 
-//  TODO Handle CSRF Token
+//  TODO CMP-54 Handle CSRF Token
+// Currently users must visit the dashboard before the CUI
 let token = sessionStorage.getItem("csrfToken");
 if (token) {
-  console.log({token})
   // eslint-disable-next-line vue/no-mutating-props
   props.api.base.instance.defaults.headers.common['X-CSRFTOKEN'] = token
-}
-
-const refreshResource = async (resource = bucketDetails.value.resource) => {
-  setTimeout(getResourceSelection(resource), 4000)
+} else {
+  console.log('Error, no token found. Please navigate to the dashboard to automatically set the token before returning to the CUI')
 }
 
 const getBuckets = async () => {
