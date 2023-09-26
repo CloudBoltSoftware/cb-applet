@@ -19,11 +19,31 @@
     ],
     "met_targets": {
       "cui": {
-        "fullPage": [{"slug": "my-url"}],
-        "resourcesDetailsPaneDiskList": ["preTable", "postTable", "expandedCellFoot"],
-        "resourcesDetailsPaneNetworks": ["preTable", "postTable", "expandedCellHead"],
-        "resourceDetailsDiskList": ["preTable", "postTable", "expandedCellFoot"],
-        "resourceDetailsNetworks": ["preTable", "postTable", "expandedCellHead"],
+        "fullPage": [
+          {
+            "slug": "my-url"
+          }
+        ],
+        "resourcesDetailsPaneDiskList": [
+          "preTable",
+          "postTable",
+          "expandedCellFoot"
+        ],
+        "resourcesDetailsPaneNetworks": [
+          "preTable",
+          "postTable",
+          "expandedCellHead"
+        ],
+        "resourceDetailsDiskList": [
+          "preTable",
+          "postTable",
+          "expandedCellFoot"
+        ],
+        "resourceDetailsNetworks": [
+          "preTable",
+          "postTable",
+          "expandedCellHead"
+        ],
         "resourceDetailsTabs": [
           {
             "resourceTypes": [
@@ -70,7 +90,7 @@
   },
   "devDependencies": {
     "@cloudbolt/js-sdk": "^0.6.2",
-    "@cloudbolt/xui-packager": "^1.1.0",
+    "@cloudbolt/xui-packager": "^1.1.1-beta.0",
     "@rollup/plugin-node-resolve": "^15.0.2",
     "@vitejs/plugin-vue": "^4.2.3",
     "eslint": "^8.42.0",
