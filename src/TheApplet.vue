@@ -27,12 +27,12 @@
 
   <!-- 
     Applets have access to any Vue component library you'd like to add. We suggest Vuetify,
-    which is included here and in the CUI and will make your applet look at home in the CUI.
+    which is included here and in the SSP and will make your applet look at home in the SSP.
     It has a lot of great components, including this loading indicator.
     See more in Vuetify's Documentation: https://vuetifyjs.com/en/components/progress-circular/
 
     This class (ma-3) is a Vuetify utility class that adds some spacing.
-    Vuetify is a great UI library that's included in the CUI.
+    Vuetify is a great UI library that's included in the SSP.
     For more information on this class and others: https://vuetifyjs.com/en/styles/spacing/
    -->
   <VProgressCircular v-else-if="loading" indeterminate class="ma-3" />

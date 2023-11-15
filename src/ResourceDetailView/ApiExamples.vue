@@ -66,7 +66,7 @@ import ExampleWebhook from "./ExampleWebhook.vue";
 /**
  * @typedef {object} Props
  * @property {ReturnType<import("@cloudbolt/js-sdk").createApi>} Props.api - The authenticated API instance
- * @property {object} Props.resource - The resource context provided to the component
+ * @property {object} Props.resource - The resource provided to the component, fetched at the parent component
  */
 /** @type {Props} */
 const props = defineProps({
@@ -107,7 +107,7 @@ const updateResponseLoading = (newValue) => {
  * To identify and work with the resource provided, we will pull specific attributes from the resource prop.
  */
 const resourceId = computed(() => props.resource.id);
-const resourceIsServer = computed(() => props.resource.rawType === "SERVER");
+const resourceIsServer = computed(() => props.resource.type === "SERVER");
 </script>
 
 <!-- These styles won't affect anything outside this component -->
