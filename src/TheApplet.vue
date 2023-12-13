@@ -175,6 +175,8 @@ const props = defineProps({
  * However, they won't be reactive to any changes they receive. Read more about that in MainView.vue.
  * Any code run at this level will only run once when the applet is loaded.
  */
+// Disabling the warning below because this a template literal, not props destructuring
+// eslint-disable-next-line vue/no-setup-props-destructure
 console.log(
   `This applet is being loaded on the ${props.page} page in the ${props.area} area by ${props.user.username}`
 );
