@@ -1,24 +1,24 @@
 {
-  "name": "cui-applet",
+  "name": "ssp-applet",
   "xuiConfig": {
-    "name": "cui-applet",
+    "name": "ssp-applet",
     "id": "APL-12345678",
-    "icon": "xui/src/cui-applet.png",
-    "met_description": "Hello World applet for extending the CloudBolt CUI",
-    "met_label": "CUI Applet Hello World",
+    "icon": "xui/src/ssp-applet.png",
+    "met_description": "Hello World applet for extending the CloudBolt SSP and HUI",
+    "met_label": "SSP Applet Hello World",
     "met_is_applet": true,
     "met_entry_point": "static/main.es.js",
     "met_maximum_version_required": "",
-    "met_minimum_version_required": "2023.1.1",
+    "met_minimum_version_required": "2023.5.1",
     "met_required_ui_extensions": [
       {
-        "name": "cui",
-        "minimum_version": "2023.3.58",
+        "name": "ssp",
+        "minimum_version": "2023.5.1",
         "maximum_version": ""
       }
     ],
     "met_targets": {
-      "cui": {
+      "ssp": {
         "fullPage": [
           {
             "slug": "my-url"
@@ -59,6 +59,28 @@
         "all": [
           "preNavItems"
         ]
+      },
+      "hui": {
+        "fullPage": [
+          {
+            "label": "Demo Applet",
+            "position": [
+              "post-nav-resources"
+            ]
+          }
+        ],
+        "resourceDetailsTabs": [
+          {
+            "resourceTypes": [
+              "service",
+              "server"
+            ],
+            "label": "Custom Applet",
+            "position": [
+              "post-jobs-tab"
+            ]
+          }
+        ]
       }
     }
   },
@@ -86,11 +108,11 @@
   },
   "dependencies": {
     "camelcase": "^7.0.1",
-    "vuetify": "^3.1.13"
+    "vuetify": "^3.4.7"
   },
   "devDependencies": {
     "@cloudbolt/js-sdk": "^0.6.2",
-    "@cloudbolt/xui-packager": "^1.1.1",
+    "@cloudbolt/xui-packager": "^1.1.2",
     "@rollup/plugin-node-resolve": "^15.0.2",
     "@vitejs/plugin-vue": "^4.2.3",
     "eslint": "^8.42.0",

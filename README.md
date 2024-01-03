@@ -1,6 +1,6 @@
 # CB Applet
 
-CB Applets extend the CloudBolt UI using Vue.js with Vuetify component library. Currently these only work for the Consumer UI (aka CUI). Applets can target multiple/specific areas/pages to render custom components. They receive data from CloudBolt via props and are developed using modern, standard UI development workflows.
+CB Applets extend the CloudBolt UI using Vue.js with Vuetify component library. These work extensively through the Self-Service Portal (SSP) and in certain places on the Cloudbolt HUI. Applets can target multiple/specific areas/pages to render custom components. They receive data from CloudBolt via props and are developed using modern, standard UI development workflows.
 
 This project can be used as a starting point for CloudBolt customers who want to develop their own Applets.
 
@@ -10,12 +10,12 @@ This project can be used as a starting point for CloudBolt customers who want to
 1. Create a copy of this repo. Three options:
    - Create a local clone of this repo
    - Use [Github's template feature](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-repository-from-a-template) to create a new repo
-   - [Fork this repo](https://docs.github.com/en/get-started/quickstart/fork-a-repo) to create a new linked repo. (This is recommended in order to easily receive future changes from this repo) 
+   - [Fork this repo](https://docs.github.com/en/get-started/quickstart/fork-a-repo) to create a new linked repo. (This is recommended in order to easily receive future changes from this repo)
 1. Run `npm install` to install dependencies.
 1. Set a unique name and ID for the applet in `package.json` (see the [Metadata Configuration](#metadata-packagejson-configuration) section below).
 1. Build a production version of the applet with the command `npm run build`.
 1. Upload the built zip from the `xui/dist` folder to CloudBolt in the Admin UI Extensions interface.
-1. Visit the CUI to see your new Applet at the top of the page. Congratulations! You've built and installed a CB Applet from scratch!
+1. Visit the SSP to see your new Applet at the top of the page. Congratulations! You've built and installed a CB Applet from scratch!
 
 ## Getting Help
 
@@ -29,7 +29,7 @@ Conventions in this project are based on the [Vue.js style guide](https://vuejs.
 
 ## Development
 
-Build the applet with `npm run build`. Then, upload the zip file to CloudBolt via the UI Extensions interface. Refresh the `cui` to see your changes.
+Build the applet with `npm run build`. Then, upload the zip file to CloudBolt via the UI Extensions interface. Refresh the `ssp` to see your changes.
 
 ### Dev Mode
 
@@ -43,14 +43,14 @@ Prerequisites:
 
 Run the script `npm run build:dev`. This watches for file changes and auto-builds the applet when changes are saved. It then copies files to subfolders in `xui/src/tmp/devtools`. To use use these files:
 
-1. In Chrome, navigate to the CUI.
+1. In Chrome, navigate to the SSP.
 1. Open the devtools and navigate to the Sources tab's Overrides panel.
 1. Click "Select folder for overrides".
 1. Select the `xui/src/tmp/devtools` folder.
 1. Click "Allow" when prompted.
-1. Navigate to the CUI and refresh the page.
+1. Navigate to the SSP and refresh the page.
 
-You should see your local version of the applet. You can now make changes to the applet and see them reflected in the CUI upon a page refresh without having to upload a new zip to CloudBolt.
+You should see your local version of the applet. You can now make changes to the applet and see them reflected in the SSP upon a page refresh without having to upload a new zip to CloudBolt.
 
 See [this article](https://developer.chrome.com/blog/new-in-devtools-65/#overrides) for more information on how Chrome overrides work.
 
@@ -73,24 +73,24 @@ Near the top of package.json is `xuiConfig`. This is used for metadata in the bu
 {
   ...
   "xuiConfig": {
-    "name": "cui-applet",
+    "name": "ssp-applet",
     "id": "APL-12345678",
-    "icon": "xui/cui-applet.png",
-    "met_description": "Hello World applet for extending the CloudBolt CUI",
-    "met_label": "CUI Applet Hello World",
+    "icon": "xui/ssp-applet.png",
+    "met_description": "Hello World applet for extending the CloudBolt SSP",
+    "met_label": "SSP Applet Hello World",
     "met_is_applet": true,
     "met_entry_point": "static/main.es.js",
     "met_maximum_version_required": "",
-    "met_minimum_version_required": "2023.1.1",
+    "met_minimum_version_required": "2023.5.1",
     "met_required_ui_extensions": [
       {
-        "name": "cui",
-        "minimum_version": "2023.1.0",
+        "name": "ssp",
+        "minimum_version": "2023.5.1",
         "maximum_version": ""
       }
     ],
     "met_targets": {
-      "cui": {
+      "ssp": {
         "resourceDetail": [
           "postActions"
         ],
@@ -122,46 +122,74 @@ Fields of note:
 
 #### \* `met_targets` note
 
-CloudBolt applications interpret this field to determine where to render applets. The CUI uses the following format:
+CloudBolt applications interpret this field to determine where to render applets. The SSP and HUI use the following formats:
 
 ```json
 {
-  "cui": {
+  "ssp": {
     "pageName": ["target1", "target2"],
     "anotherPageName": ["all"],
     "all": ["target3"]
+  },
+  "hui": {
+    "fullPage": {
+      "label": "Applet Label",
+      "position": ["huiTarget1", "huiTarget2"]
+    },
+    "all": ["huiTarget3"]
   }
 }
 ```
 
-In this example, the page called `pageName` will render in the `target1` and `target2` targets. the page called `anotherPageName` will render the applet in all targets. All pages will have the applet rendered in the `target3` target if the page has a `target3`. This is especially useful for cross-app additions, like footers or navigation items added to every page.
+In this example, the page called `pageName` will render in the `target1` and `target2` targets. The page called `anotherPageName` will render the applet in all targets. All pages will have the applet rendered in the `target3` target if the page has a `target3`. This is especially useful for cross-app additions, like footers or navigation items added to every page.
+The HUI targets will differ on specific page and target names available and more closely match the exceptions listed below.
 
-There will be a list of targets for the CUI in official documentation. However, all targets are discoverable by creating a simple applet that runs console.logs out the `page` and `area` props of the `TheApplet` component and setting the `met_targets` to `{"cui": {"all": ["all"]}}`.
+There will be a list of targets for the SSP and HUI in official documentation. However, all targets are discoverable by creating a simple applet that runs console.logs out the `page` and `area` props of the `TheApplet` component and setting the `met_targets` to `{"ssp": {"all": ["all"]}, "hui": {"all": ["all"]}}`
 
 Two exceptions to this target discoverability are represented by these examples:
 
 ```json
 {
-  "cui": {
-    "fullPage": [{"slug": "my-url"}],
+  "ssp": {
+    "fullPage": [{ "slug": "my-url" }],
     "resourceDetailsTabs": [
       {
         "resourceTypes": ["service"],
         "label": "Additional Info"
       }
     ]
+  },
+  "hui": {
+    "fullPage": {
+      "label": "Custom Applet",
+      "position": ["user-dropdown"],
+    "resourceDetailsTabs": [
+      {
+        "resourceTypes": ["s3_bucket", "server"],
+        "label": "Custom Applet",
+        "position": ["post-jobs-tab"]
+      }
+    ]
   }
 }
 ```
 
-`resourceDetailsTabs` is a special target that will render the applet as a tab on the resource details page. It should be an array of a single configuration object with two optional fields:
+`resourceDetailsTabs` is a special target that will render the applet as a tab on the resource details page. It should be an array of a single configuration object with optional fields depending on if the target is on the SSP or HUI:
 
 - `resourceTypes` is an array of resource type names that the tab should be rendered for (defaults to `['all']`).
 - `label` is the label that will be displayed on the tab (defaults to the applet's `met_label`).
+- `position` (HUI only) an array that informs where the tab will render among the other existing tabs
 
-`fullPage` is a special target that will render the applet on the full page. It should be an array of a single configuration object with one field:
+`fullPage` is a special target that will render the applet on the full page. The configuration differs between SSP and HUI usage
 
-- `slug` is the string that will become the applet's url for the page that will be rendered (example applet will render at `https://my.cloudbolt.url/cui/applet/my-url`)
+On the SSP, it should be an array of a single configuration object with one field:
+
+- `slug` is the string that will become the applet's url for the page that will be rendered (example applet will render at `https://my.cloudbolt.url/ssp/applet/my-url`)
+
+On the HUI, it should be array of a single configuration object that contains two fields:
+
+- `label` is the string that will become the applet's label text in the navigation menus
+- `position` is an array of strings that determine where in the navigation the applet link renders (example applet will render a link `Custom Applet` inside the user-dropdown menu)
 
 ## Repo Contents
 
