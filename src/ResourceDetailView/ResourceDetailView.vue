@@ -57,7 +57,7 @@ async function fetchResource() {
       }
     );
     // Logging and saving the combined props resource and response to our local ref
-    console.log('Fetch resource response:', { ...resource, ...response });
+    console.log("Fetch resource response:", { ...resource, ...response });
     currentResource.value = { ...resource, ...response };
   } catch (error) {
     // When using API calls, it's a good idea to catch errors and meaningfully display them.
