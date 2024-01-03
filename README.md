@@ -81,11 +81,11 @@ Near the top of package.json is `xuiConfig`. This is used for metadata in the bu
     "met_is_applet": true,
     "met_entry_point": "static/main.es.js",
     "met_maximum_version_required": "",
-    "met_minimum_version_required": "2023.1.1",
+    "met_minimum_version_required": "2023.5.1",
     "met_required_ui_extensions": [
       {
         "name": "ssp",
-        "minimum_version": "2023.1.0",
+        "minimum_version": "2023.5.1",
         "maximum_version": ""
       }
     ],
@@ -132,17 +132,19 @@ CloudBolt applications interpret this field to determine where to render applets
     "all": ["target3"]
   },
   "hui": {
-    "huiPageName": ["huiTarget1", "huiTarget2"],
-    "anotherHuiPageName": ["all"],
+    "fullPage": {
+      "label": "Applet Label",
+      "position": ["huiTarget1", "huiTarget2"]
+    },
     "all": ["huiTarget3"]
   }
 }
 ```
 
-In this example, for both the SSP and the HUI, the page called `pageName` will render in the `target1` and `target2` targets. the page called `anotherPageName` will render the applet in all targets. All pages will have the applet rendered in the `target3` target if the page has a `target3`. This is especially useful for cross-app additions, like footers or navigation items added to every page.
-The HUI targets mimics the SSP format, but may differ on specific page and target names available.
+In this example, the page called `pageName` will render in the `target1` and `target2` targets. The page called `anotherPageName` will render the applet in all targets. All pages will have the applet rendered in the `target3` target if the page has a `target3`. This is especially useful for cross-app additions, like footers or navigation items added to every page.
+The HUI targets will differ on specific page and target names available and more closely match the exceptions listed below.
 
-There will be a list of targets for the SSP and HUI in official documentation. However, all targets are discoverable by creating a simple applet that runs console.logs out the `page` and `area` props of the `TheApplet` component and setting the `met_targets` to `{"ssp": {"all": ["all"]}}`.
+There will be a list of targets for the SSP and HUI in official documentation. However, all targets are discoverable by creating a simple applet that runs console.logs out the `page` and `area` props of the `TheApplet` component and setting the `met_targets` to `{"ssp": {"all": ["all"]}, "hui": {"all": ["all"]}}`
 
 Two exceptions to this target discoverability are represented by these examples:
 
@@ -158,6 +160,9 @@ Two exceptions to this target discoverability are represented by these examples:
     ]
   },
   "hui": {
+    "fullPage": {
+      "label": "Custom Applet",
+      "position": ["user-dropdown"],
     "resourceDetailsTabs": [
       {
         "resourceTypes": ["s3_bucket", "server"],
@@ -175,9 +180,16 @@ Two exceptions to this target discoverability are represented by these examples:
 - `label` is the label that will be displayed on the tab (defaults to the applet's `met_label`).
 - `position` (HUI only) an array that informs where the tab will render among the other existing tabs
 
-`fullPage` (SSP only) is a special target that will render the applet on the full page. It should be an array of a single configuration object with one field:
+`fullPage` is a special target that will render the applet on the full page. The configuration differs between SSP and HUI usage
+
+On the SSP, it should be an array of a single configuration object with one field:
 
 - `slug` is the string that will become the applet's url for the page that will be rendered (example applet will render at `https://my.cloudbolt.url/ssp/applet/my-url`)
+
+On the HUI, it should be array of a single configuration object that contains two fields:
+
+- `label` is the string that will become the applet's label text in the navigation menus
+- `position` is an array of strings that determine where in the navigation the applet link renders (example applet will render a link `Custom Applet` inside the user-dropdown menu)
 
 ## Repo Contents
 
