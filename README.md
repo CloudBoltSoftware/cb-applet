@@ -38,8 +38,12 @@ When developing, it's useful to have the applet auto-build and to see your chang
 Prerequisites:
 
 - Google Chrome
-- An environment variable "VITE_CB_URL" set to the url for your cloudbolt instance. The easiest way to do this is by creating a file in this project root called `.env.local` with the line: `export VITE_CB_URL=https://my.cloudbolt.url`
 - A version of this applet must be uploaded to CloudBolt and enabled for your user.
+- An environment variable "VITE_CB_URL" set to the url for your Cloudbolt instance. The easiest way to do this is to:
+  1. Create a file in this project root called `.env.local`
+  1. Add the line: `export VITE_CB_URL=<the localhost path your dev runs on>` to the file. 
+  1. Save the file
+      - e.g. `export VITE_CB_URL=http://localhost:8001`
 
 Run the script `npm run build:dev`. This watches for file changes and auto-builds the applet when changes are saved. It then copies files to subfolders in `xui/src/tmp/devtools`. To use use these files:
 

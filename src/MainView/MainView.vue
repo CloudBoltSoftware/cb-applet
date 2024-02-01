@@ -26,7 +26,7 @@
 </template>
 
 <script setup>
-import camelCase from "camelCase";
+import camelCase from "camelcase";
 import {
   computed,
   defineProps,
