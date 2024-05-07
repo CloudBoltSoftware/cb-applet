@@ -1,25 +1,24 @@
 # CB Applet
 
-CB Applets extend the CloudBolt UI using Vue.js with Vuetify component library. These work extensively through the Self-Service Portal (SSP) and in certain places on the Cloudbolt HUI. Applets can target multiple/specific areas/pages to render custom components. They receive data from CloudBolt via props and are developed using modern, standard UI development workflows.
+CloudBolt customers can use CB Applets to extend the CloudBolt UI using the popular Vue.js framework and Vuetify component library. Applets can achieve a consistent look and feel with the rest of the CloudBolt UI using open-ended, modern development practices and tooling.
 
-This project can be used as a starting point for CloudBolt customers who want to develop their own Applets.
+Applets receive data from CloudBolt via Vue props and can query any available CloudBolt data using REST API calls using the [CloudBolt JS SDK](https://github.com/CloudBoltSoftware/js-sdk). Customers can create additional CloudBolt REST APIs using Inbound WebHooks for additional data. Further, Applets are entirely open-ended and can be used to create new pages, add new components to existing pages, or even create new integrations with unrelated systems.
 
 ## Getting Started
 
-1. Install Node.js (see `.nvmrc` for the recommended version).
+This guide assumes you are developing CB Applets on your local workstation. If you are developing remotely on a CloudBolt server, you won't be able to use the dev mode described below without extra steps. However, you can still use the rest of the guide to build and customize your applet.
+
+1. Install Node.js (see `.nvmrc` file for the recommended version). Alternately, install something like [nvm](https://github.com/nvm-sh/nvm) to manage your node installations.
 1. Create a copy of this repo. Three options:
    - Create a local clone of this repo
    - Use [Github's template feature](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-repository-from-a-template) to create a new repo
    - [Fork this repo](https://docs.github.com/en/get-started/quickstart/fork-a-repo) to create a new linked repo. (This is recommended in order to easily receive future changes from this repo)
-1. Run `npm install` to install dependencies.
+1. Delete any existing `node_modules` folder.
+1. Run `npm install` to install dependencies specified in the `package.json` file into a `node_modules` folder. If you are new to npm, see the [npm documentation](https://docs.npmjs.com/cli/v7/commands/npm-install) for more information.
 1. Set a unique name and ID for the applet in `package.json` (see the [Metadata Configuration](#metadata-packagejson-configuration) section below).
 1. Build a production version of the applet with the command `npm run build`.
 1. Upload the built zip from the `xui/dist` folder to CloudBolt in the Admin UI Extensions interface.
 1. Visit the SSP to see your new Applet at the top of the page. Congratulations! You've built and installed a CB Applet from scratch!
-
-## Getting Help
-
-The main support forum for CB Applets is hosted in Github [Discussions](https://github.com/CloudBoltSoftware/cb-applet/discussions) within this repo. Ask questions, request enhancements, share best practices, and discuss applets with CloudBolt and the CloudBolt community.
 
 ## Customizing the Applet
 
@@ -27,9 +26,7 @@ The main component is [TheApplet.vue](./src/TheApplet.vue). Start there to see s
 
 Conventions in this project are based on the [Vue.js style guide](https://vuejs.org/style-guide/) using the Composition API and the `<script setup>` syntax. This is vue's recommended approach for new projects.
 
-## Development
-
-Build the applet with `npm run build`. Then, upload the zip file to CloudBolt via the UI Extensions interface. Refresh the `ssp` to see your changes.
+For API calls to CloudBolt, use the [CloudBolt JS SDK](https://github.com/CloudBoltSoftware/js-sdk). Usage examples are included throughout this repo and the SDK's documentation.
 
 ### Dev Mode
 
@@ -37,13 +34,14 @@ When developing, it's useful to have the applet auto-build and to see your chang
 
 Prerequisites:
 
+- Working on your local workstation (or having mapped the CloudBolt server's filesystem to your local workstation)
 - Google Chrome
 - A version of this applet must be uploaded to CloudBolt and enabled for your user.
 - An environment variable "VITE_CB_URL" set to the url for your Cloudbolt instance. The easiest way to do this is to:
   1. Create a file in this project root called `.env.local`
-  1. Add the line: `export VITE_CB_URL=<the localhost path your dev runs on>` to the file. 
+  1. Add the line: `export VITE_CB_URL=<the localhost path your dev runs on>` to the file.
   1. Save the file
-      - e.g. `export VITE_CB_URL=http://localhost:8001`
+     - e.g. `export VITE_CB_URL=http://localhost:8001`
 
 Run the script `npm run build:dev`. This watches for file changes and auto-builds the applet when changes are saved. It then copies files to subfolders in `xui/src/tmp/devtools`. To use use these files:
 
@@ -194,6 +192,10 @@ On the HUI, it should be array of a single configuration object that contains tw
 
 - `label` is the string that will become the applet's label text in the navigation menus
 - `position` is an array of strings that determine where in the navigation the applet link renders (example applet will render a link `Custom Applet` inside the user-dropdown menu)
+
+## Getting Help
+
+The main support forum for CB Applets is hosted in Github [Discussions](https://github.com/CloudBoltSoftware/cb-applet/discussions) within this repo. Ask questions, request enhancements, share best practices, and discuss applets with CloudBolt and the CloudBolt community. You can also reach out directly to your CloudBolt contacts for help.
 
 ## Repo Contents
 
